@@ -1,30 +1,17 @@
-import { UserProfile } from "./components/UserProfile";
-import { useAppSelector } from "./store/hooks";
+import { BrowserRouter as Router, Routes, Route } from 'react-router';
+
+import { AppLayout } from './layout/AppLayout';
+import Home from './pages/Home';
 
 export const App: React.FC = () => {
-  // Component Cha trực tiếp kết nối Redux Store
-  // Và chỉ cho phép CHÍNH NÓ re-render khi age > 25
-  const age = useAppSelector(
-    (state) => state.user.age,
-    (previousAge, currentAge) => {
-      // Nếu age <= 25: Ép trả về true -> Chặn App re-render
-      if (currentAge <= 25) {
-        return true;
-      }
-      // Khi age > 25: So sánh giá trị bình thường
-      return previousAge === currentAge;
-    }
-  );
-  console.log("--> Component CHA (UserProfile) đã Render!");
-
   return (
-    <section id="center">
-      <div>
-        <UserProfile />
-        <h1>Get started</h1>
-        <p>Tuổi được lắng nghe ở App: {age}</p>
-      </div>
-    </section>
+    <Router>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index path="/" element={<Home />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 };
 
