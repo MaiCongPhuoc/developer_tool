@@ -42,6 +42,13 @@ const valueColorClass = (value: JsonPrimitive): string => {
 
 const punctuationClass = 'text-gray-500 dark:text-gray-400';
 
+// Placeholder rỗng, kích thước đúng bằng nút mũi tên (h-6 w-6) - đặt ở đầu
+// các dòng "lá" (không có nút thu gọn) để nội dung của chúng thẳng cột với
+// các node "container" cùng cấp (vốn có thêm nút mũi tên ở đầu dòng).
+const ToggleSpacer = () => (
+  <span className="inline-block h-6 w-6 shrink-0" aria-hidden="true" />
+);
+
 const PropertyKey = ({ propertyKey }: { propertyKey?: string | number }) => {
   if (propertyKey === undefined) return null;
   return (
@@ -114,12 +121,15 @@ const JsonContainerNode = ({
   // Object/array rỗng: không có gì để thu gọn -> không hiện mũi tên
   if (entries.length === 0) {
     return (
-      <div className="font-mono text-sm">
-        <PropertyKey propertyKey={propertyKey} />
-        <span className={punctuationClass}>
-          {openBracket}
-          {closeBracket}
-          {!isLast && ','}
+      <div className="flex items-center gap-1 font-mono text-sm">
+        <ToggleSpacer />
+        <span className="whitespace-nowrap">
+          <PropertyKey propertyKey={propertyKey} />
+          <span className={punctuationClass}>
+            {openBracket}
+            {closeBracket}
+            {!isLast && ','}
+          </span>
         </span>
       </div>
     );
@@ -131,7 +141,7 @@ const JsonContainerNode = ({
         <button
           type="button"
           onClick={() => dispatch(toggleCollapse(pathKey))}
-          aria-label={isCollapsed ? 'Mở rộng node' : 'Thu gọn node'}
+          aria-label={isCollapsed ? 'Expand node' : 'Collapse node'}
           aria-expanded={!isCollapsed}
           className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
         >
@@ -143,7 +153,7 @@ const JsonContainerNode = ({
             ›
           </span>
         </button>
-        <span>
+        <span className="whitespace-nowrap">
           <PropertyKey propertyKey={propertyKey} />
           <span className={punctuationClass}>
             {isCollapsed
@@ -166,9 +176,12 @@ const JsonContainerNode = ({
               />
             ))}
           </div>
-          <div className={punctuationClass}>
-            {closeBracket}
-            {!isLast && ','}
+          <div className="flex items-center gap-1">
+            <ToggleSpacer />
+            <span className={punctuationClass}>
+              {closeBracket}
+              {!isLast && ','}
+            </span>
           </div>
         </>
       )}
@@ -193,50 +206,53 @@ const JsonLeafNode = ({ path, propertyKey, value, isLast }: LeafNodeProps) => {
   };
 
   return (
-    <div className="flex items-baseline font-mono text-sm">
-      <PropertyKey propertyKey={propertyKey} />
-      {/* input không kiểm soát (uncontrolled): mỗi khi `literal` đổi do 1 nguồn
-          bên ngoài (sửa ở ô Input rồi bấm lại Format JSON, hoặc chính giá trị
-          này vừa được commit), `key` đổi theo -> React tạo hẳn 1 input mới với
-          defaultValue mới, thay vì phải dùng useEffect để đồng bộ state thủ công. */}
-      <input
-        key={literal}
-        defaultValue={literal}
-        onBlur={(e) => commit(e.target.value)}
-        onChange={(e) => {
-          // Gõ tới đâu, giãn rộng theo tới đó (tính theo số ký tự vì input
-          // dùng font-mono). min-w-0 + flex-shrink (mặc định của flex item)
-          // ở dưới sẽ tự chặn lại nếu độ rộng này vượt quá phần còn trống
-          // của dòng, để không bị tràn ra ngoài khung Formatted Output.
-          e.currentTarget.style.width = `${Math.max(
-            e.currentTarget.value.length,
-            2
-          )}ch`;
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.currentTarget.blur();
-          }
-          if (e.key === 'Escape') {
-            e.currentTarget.value = literal;
-            e.currentTarget.style.width = `${Math.max(literal.length, 2)}ch`;
-            e.currentTarget.blur();
-          }
-        }}
-        style={{
-          width: `${Math.max(literal.length, 2)}ch`,
-          // Tailwind Preflight đặt box-sizing: border-box mặc định, khiến viền
-          // (border) 1px của input bị tính lấn vào đúng phần chữ (width theo
-          // ch chỉ vừa đủ chữ, không còn chỗ cho border) -> hụt mất 1 chút ký
-          // tự cuối. Đổi riêng input này sang content-box để border cộng
-          // thêm ra ngoài, không đụng vào vùng hiển thị chữ.
-          boxSizing: 'content-box',
-        }}
-        className={`${valueColorClass(
-          value
-        )} min-w-0 rounded border border-transparent bg-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none dark:hover:border-gray-600`}
-      />
-      {!isLast && <span className={punctuationClass}>,</span>}
+    <div className="flex items-center gap-1 font-mono text-sm">
+      <ToggleSpacer />
+      <span className="inline-flex min-w-0 items-baseline whitespace-nowrap">
+        <PropertyKey propertyKey={propertyKey} />
+        {/* input không kiểm soát (uncontrolled): mỗi khi `literal` đổi do 1 nguồn
+            bên ngoài (sửa ở ô Input rồi bấm lại Format JSON, hoặc chính giá trị
+            này vừa được commit), `key` đổi theo -> React tạo hẳn 1 input mới với
+            defaultValue mới, thay vì phải dùng useEffect để đồng bộ state thủ công. */}
+        <input
+          key={literal}
+          defaultValue={literal}
+          onBlur={(e) => commit(e.target.value)}
+          onChange={(e) => {
+            // Gõ tới đâu, giãn rộng theo tới đó (tính theo số ký tự vì input
+            // dùng font-mono). min-w-0 + flex-shrink (mặc định của flex item)
+            // ở dưới sẽ tự chặn lại nếu độ rộng này vượt quá phần còn trống
+            // của dòng, để không bị tràn ra ngoài khung Formatted Output.
+            e.currentTarget.style.width = `${Math.max(
+              e.currentTarget.value.length,
+              2
+            )}ch`;
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.currentTarget.blur();
+            }
+            if (e.key === 'Escape') {
+              e.currentTarget.value = literal;
+              e.currentTarget.style.width = `${Math.max(literal.length, 2)}ch`;
+              e.currentTarget.blur();
+            }
+          }}
+          style={{
+            width: `${Math.max(literal.length, 2)}ch`,
+            // Tailwind Preflight đặt box-sizing: border-box mặc định, khiến viền
+            // (border) 1px của input bị tính lấn vào đúng phần chữ (width theo
+            // ch chỉ vừa đủ chữ, không còn chỗ cho border) -> hụt mất 1 chút ký
+            // tự cuối. Đổi riêng input này sang content-box để border cộng
+            // thêm ra ngoài, không đụng vào vùng hiển thị chữ.
+            boxSizing: 'content-box',
+          }}
+          className={`${valueColorClass(
+            value
+          )} min-w-0 rounded border border-transparent bg-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none dark:hover:border-gray-600`}
+        />
+        {!isLast && <span className={punctuationClass}>,</span>}
+      </span>
     </div>
   );
 };

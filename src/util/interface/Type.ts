@@ -15,3 +15,25 @@ export type JsonValue =
   | { [key: string]: JsonValue };
 // Đường dẫn từ root tới 1 node, vd ['features', 0] = root.features[0]
 export type JsonPath = (string | number)[];
+
+// Dữ liệu cho cây XML có thể thu gọn/sửa (XmlTreeView)
+export type XmlElementNode = {
+  type: 'element';
+  tagName: string;
+  attributes: Record<string, string>;
+  children: XmlNode[];
+};
+
+export type XmlTextNode = {
+  type: 'text';
+  value: string;
+};
+
+export type XmlNode = XmlElementNode | XmlTextNode;
+// Đường dẫn từ root tới 1 phần tử trên cây XML (mảng chỉ số con), vd [0, 1]
+export type XmlPath = number[];
+// Vị trí cụ thể cần sửa trên cây XML: nội dung text của 1 thẻ dạng lá
+// (vd <year>2005</year>), hoặc giá trị của 1 attribute
+export type XmlEditTarget =
+  | { kind: 'text'; path: XmlPath }
+  | { kind: 'attribute'; path: XmlPath; attrName: string };

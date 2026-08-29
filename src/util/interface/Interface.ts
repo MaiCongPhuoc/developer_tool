@@ -15,3 +15,12 @@ export interface JsonFormatterState {
   // key = JSON.stringify(đường dẫn node), value = true nếu node đó đang bị thu gọn
   collapsedPaths: Record<string, boolean>;
 }
+
+export interface XmlFormatterState {
+  inputXml: string;
+  formattedXml: string;
+  error: string | null;
+  copied: boolean;
+  // key = JSON.stringify(đường dẫn node, vd [0,1]), value = true nếu đang bị thu gọn
+  collapsedPaths: Record<string, boolean>;
+}

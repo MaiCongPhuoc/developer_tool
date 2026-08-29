@@ -88,7 +88,7 @@ export const jsonFormatterSlice = createSlice({
     },
     formatJson: (state) => {
       if (!state.inputJson.trim()) {
-        state.error = 'Vui lòng nhập chuỗi JSON.';
+        state.error = 'Please enter a JSON string.';
         state.formattedJson = '';
         return;
       }
@@ -102,8 +102,8 @@ export const jsonFormatterSlice = createSlice({
       } catch (err: unknown) {
         state.error =
           err instanceof Error
-            ? `Lỗi cú pháp JSON: ${err.message}`
-            : 'Lỗi cú pháp JSON không xác định.';
+            ? `JSON syntax error: ${err.message}`
+            : 'Unknown JSON syntax error.';
         state.formattedJson = '';
       }
     },
