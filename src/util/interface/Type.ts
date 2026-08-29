@@ -37,3 +37,12 @@ export type XmlPath = number[];
 export type XmlEditTarget =
   | { kind: 'text'; path: XmlPath }
   | { kind: 'attribute'; path: XmlPath; attrName: string };
+
+// Các kiểu dữ liệu dùng cho trang JWT Encoder/Decoder (Encryption.tsx).
+// Chỉ hỗ trợ họ HMAC (đối xứng, cùng 1 secret để ký và verify) vì Web Crypto
+// API dùng được thẳng trên trình duyệt, không cần cài thêm thư viện. Các
+// thuật toán bất đối xứng (RS256, ES256...) cần cặp khoá public/private nên
+// tạm chưa hỗ trợ.
+export type JwtAlgorithm = 'HS256' | 'HS384' | 'HS512';
+export type JwtMode = 'encode' | 'decode';
+export type JwtSignatureStatus = 'valid' | 'invalid' | 'unverified';

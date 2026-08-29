@@ -2,12 +2,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import sidebarReducer from './slices/sidebarSlice';
 import jsonFormatterReducer from './slices/jsonFormatterSlice';
 import xmlFormatterReducer from './slices/xmlFormatterSlice';
+import jwtReducer from './slices/jwtSlice';
+import decryptionReducer from './slices/decryptionSlice';
 
 export const store = configureStore({
   reducer: {
     sidebar: sidebarReducer, // Gom các slices vào đây
     jsonFormatter: jsonFormatterReducer,
     xmlFormatter: xmlFormatterReducer,
+    jwt: jwtReducer,
+    decryption: decryptionReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

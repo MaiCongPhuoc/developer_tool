@@ -9,11 +9,14 @@ import {
   parsePreservingBigInt,
   stringifyPreservingBigInt,
 } from '@/util/bigIntJson';
-
-type JsonContainer = JsonValue[] | { [key: string]: JsonValue };
-
-const isContainer = (value: JsonValue): value is JsonContainer =>
-  value !== null && typeof value === 'object';
+import {
+  isJsonContainer as isContainer,
+  jsonPunctuationClass as punctuationClass,
+  jsonValueColorClass as valueColorClass,
+  JsonPropertyKey as PropertyKey,
+  JsonToggleSpacer as ToggleSpacer,
+  type JsonContainer,
+} from './JsonTreePrimitives';
 
 // Thử parse lại y hệt cú pháp JSON (true/false/null/số/"chuỗi có ngoặc kép").
 // Gõ gì không hợp lệ JSON thì coi nguyên văn phần vừa gõ là 1 chuỗi thường.
@@ -30,33 +33,6 @@ const parseEditedValue = (text: string): JsonPrimitive => {
   } catch {
     return text;
   }
-};
-
-const valueColorClass = (value: JsonPrimitive): string => {
-  if (typeof value === 'string') return 'text-amber-700 dark:text-amber-400';
-  if (typeof value === 'number' || typeof value === 'bigint')
-    return 'text-emerald-600 dark:text-emerald-400';
-  if (typeof value === 'boolean') return 'text-purple-600 dark:text-purple-400';
-  return 'text-gray-500 dark:text-gray-400'; // null
-};
-
-const punctuationClass = 'text-gray-500 dark:text-gray-400';
-
-// Placeholder rỗng, kích thước đúng bằng nút mũi tên (h-6 w-6) - đặt ở đầu
-// các dòng "lá" (không có nút thu gọn) để nội dung của chúng thẳng cột với
-// các node "container" cùng cấp (vốn có thêm nút mũi tên ở đầu dòng).
-const ToggleSpacer = () => (
-  <span className="inline-block h-6 w-6 shrink-0" aria-hidden="true" />
-);
-
-const PropertyKey = ({ propertyKey }: { propertyKey?: string | number }) => {
-  if (propertyKey === undefined) return null;
-  return (
-    <>
-      <span className="text-blue-600 dark:text-blue-400">"{propertyKey}"</span>
-      <span className={punctuationClass}>: </span>
-    </>
-  );
 };
 
 type NodeProps = {
