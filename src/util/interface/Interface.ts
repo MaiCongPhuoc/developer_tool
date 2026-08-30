@@ -1,4 +1,10 @@
-import type { JwtAlgorithm, JwtMode, JwtSignatureStatus } from './Type';
+import type {
+  JwtAlgorithm,
+  JwtMode,
+  JwtSignatureStatus,
+  TextDiffRow,
+  TextDiffStats,
+} from './Type';
 
 export interface SidebarState {
   isExpanded: boolean;
@@ -67,4 +73,15 @@ export interface DummyTextState {
   generatedText: string;
   error: string | null;
   copied: boolean;
+}
+
+// Trang Text Compare: so sánh 2 đoạn text theo dòng (giống WinMerge). rows là
+// kết quả đã tính sẵn (khi bấm Compare), component chỉ cần đọc và tô màu chứ
+// không tự tính lại mỗi lần render.
+export interface TextCompareState {
+  leftText: string;
+  rightText: string;
+  rows: TextDiffRow[];
+  stats: TextDiffStats | null;
+  error: string | null;
 }

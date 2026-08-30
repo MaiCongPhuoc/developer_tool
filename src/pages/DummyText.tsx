@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import LoadingIndicator from '@/components/LoadingIndicator';
+import { useDelayedAction } from '@/hook/useDelayedAction';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   clearDummyText,
@@ -17,6 +19,7 @@ const DummyText = () => {
   const { charCount, generatedText, error, copied } = useAppSelector(
     (state) => state.dummyText
   );
+  const { loading, run, cancel } = useDelayedAction();
 
   // State sống trong Redux nên tồn tại xuyên suốt cả app, không tự mất khi
   // chuyển route như useState thường làm -> phải chủ động xoá mỗi khi vào
@@ -25,9 +28,10 @@ const DummyText = () => {
     dispatch(clearDummyText());
   }, [dispatch]);
 
-  // Sinh đoạn text mẫu theo số ký tự đã nhập
+  // Sinh đoạn text mẫu theo số ký tự đã nhập - trễ RESULT_DELAY_MS để hiện
+  // khung chờ trước khi trả kết quả, xem lý do ở useDelayedAction.
   const handleGenerate = () => {
-    dispatch(generateText());
+    run(() => dispatch(generateText()));
   };
 
   // Sao chép kết quả
@@ -40,6 +44,7 @@ const DummyText = () => {
 
   // Xóa nội dung
   const handleClear = () => {
+    cancel();
     dispatch(clearDummyText());
   };
 
@@ -70,9 +75,10 @@ const DummyText = () => {
           <button
             type="button"
             onClick={handleGenerate}
-            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
+            disabled={loading}
+            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Generate Text
+            {loading ? 'Processing...' : 'Generate Text'}
           </button>
           <button
             type="button"
@@ -95,9 +101,12 @@ const DummyText = () => {
           <div className="flex flex-wrap gap-2 justify-between items-center">
             <label className={labelClass}>
               Generated Text
-              {generatedText && ` (${generatedText.length} characters)`}:
+              {!loading &&
+                generatedText &&
+                ` (${generatedText.length} characters)`}
+              :
             </label>
-            {generatedText && (
+            {!loading && generatedText && (
               <button
                 type="button"
                 onClick={handleCopy}
@@ -108,7 +117,9 @@ const DummyText = () => {
             )}
           </div>
           <div className="w-full h-64 sm:h-80 overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
-            {generatedText ? (
+            {loading ? (
+              <LoadingIndicator />
+            ) : generatedText ? (
               <p className="text-sm text-gray-800 dark:text-gray-100 whitespace-pre-wrap break-words">
                 {generatedText}
               </p>

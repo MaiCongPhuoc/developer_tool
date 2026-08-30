@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+import LoadingIndicator from '@/components/LoadingIndicator';
 import XmlTreeView from '@/components/XmlTreeView';
+import { useDelayedAction } from '@/hook/useDelayedAction';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   clearXml,
@@ -13,6 +15,7 @@ const XML = () => {
   const { inputXml, formattedXml, error, copied } = useAppSelector(
     (state) => state.xmlFormatter
   );
+  const { loading, run, cancel } = useDelayedAction();
 
   // State sống trong Redux nên tồn tại xuyên suốt cả app, không tự mất khi
   // chuyển route như useState thường làm -> phải chủ động xoá mỗi khi vào
@@ -21,9 +24,10 @@ const XML = () => {
     dispatch(clearXml());
   }, [dispatch]);
 
-  // Format XML (Prettify)
+  // Format XML (Prettify) - trễ RESULT_DELAY_MS để hiện khung chờ trước khi
+  // trả kết quả, xem lý do ở useDelayedAction.
   const handleFormat = () => {
-    dispatch(formatXml());
+    run(() => dispatch(formatXml()));
   };
 
   // Sao chép kết quả
@@ -36,6 +40,7 @@ const XML = () => {
 
   // Xóa nội dung
   const handleClear = () => {
+    cancel();
     dispatch(clearXml());
   };
 
@@ -51,9 +56,10 @@ const XML = () => {
           <button
             type="button"
             onClick={handleFormat}
-            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
+            disabled={loading}
+            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Format XML
+            {loading ? 'Processing...' : 'Format XML'}
           </button>
           <button
             type="button"
@@ -92,7 +98,7 @@ const XML = () => {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Formatted Output:
               </label>
-              {formattedXml && (
+              {!loading && formattedXml && (
                 <button
                   type="button"
                   onClick={handleCopy}
@@ -103,7 +109,9 @@ const XML = () => {
               )}
             </div>
             <div className="w-full h-64 sm:h-80 xl:h-96 overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
-              {formattedXml ? (
+              {loading ? (
+                <LoadingIndicator />
+              ) : formattedXml ? (
                 <XmlTreeView />
               ) : (
                 <p className="text-sm text-gray-400 dark:text-gray-500">

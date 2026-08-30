@@ -46,3 +46,34 @@ export type XmlEditTarget =
 export type JwtAlgorithm = 'HS256' | 'HS384' | 'HS512';
 export type JwtMode = 'encode' | 'decode';
 export type JwtSignatureStatus = 'valid' | 'invalid' | 'unverified';
+
+// Các kiểu dữ liệu dùng cho trang Text Compare (so sánh 2 đoạn text theo
+// dòng, hiển thị song song 2 khung giống WinMerge).
+export type TextDiffLineType = 'equal' | 'delete' | 'insert' | 'replace';
+
+// 1 token (từ / khoảng trắng / ký tự khác) bên trong 1 dòng bị sửa (replace),
+// dùng để tô sáng đúng phần khác nhau thay vì tô nguyên cả dòng.
+export type TextDiffWordOp = {
+  type: 'equal' | 'delete' | 'insert';
+  value: string;
+};
+
+// 1 dòng trong kết quả so sánh, đã ghép cặp giữa 2 bên để hiển thị song song.
+// leftLine/rightLine = null nghĩa là bên đó không có dòng tương ứng (thuần
+// thêm hoặc thuần xoá dòng). leftWords/rightWords chỉ có khi type = 'replace'.
+export type TextDiffRow = {
+  type: TextDiffLineType;
+  leftLine: string | null;
+  rightLine: string | null;
+  leftLineNumber: number | null;
+  rightLineNumber: number | null;
+  leftWords?: TextDiffWordOp[];
+  rightWords?: TextDiffWordOp[];
+};
+
+export type TextDiffStats = {
+  equal: number;
+  inserted: number;
+  deleted: number;
+  modified: number;
+};

@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import LoadingIndicator from '@/components/LoadingIndicator';
+import { useDelayedAction } from '@/hook/useDelayedAction';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   clearJwt,
@@ -79,6 +81,7 @@ const Encryption = () => {
     error,
     copied,
   } = useAppSelector((state) => state.jwt);
+  const { loading, run, cancel } = useDelayedAction();
 
   // State sống trong Redux nên tồn tại xuyên suốt cả app, không tự mất khi
   // chuyển route như useState thường làm -> phải chủ động xoá mỗi khi vào
@@ -88,11 +91,23 @@ const Encryption = () => {
   }, [dispatch]);
 
   const handleModeChange = (nextMode: JwtMode) => {
+    cancel();
     dispatch(setMode(nextMode));
   };
 
   const handleClear = () => {
+    cancel();
     dispatch(clearJwt());
+  };
+
+  // Encode/Decode JWT - trễ RESULT_DELAY_MS để hiện khung chờ trước khi trả
+  // kết quả, xem lý do ở useDelayedAction.
+  const handleEncode = () => {
+    run(() => dispatch(encodeJwt()));
+  };
+
+  const handleDecode = () => {
+    run(() => dispatch(decodeJwt()));
   };
 
   const handleCopy = async (text: string) => {
@@ -203,29 +218,36 @@ const Encryption = () => {
               </div>
               <button
                 type="button"
-                onClick={() => dispatch(encodeJwt())}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
+                onClick={handleEncode}
+                disabled={loading}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Generate JWT
+                {loading ? 'Processing...' : 'Generate JWT'}
               </button>
             </div>
 
-            {encodedToken && (
-              <div className="flex flex-col space-y-2">
-                <div className="flex flex-wrap gap-2 justify-between items-center">
-                  <label className={labelClass}>Encoded Token:</label>
-                  <button
-                    type="button"
-                    onClick={() => handleCopy(encodedToken)}
-                    className="text-xs px-2.5 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-300 transition"
-                  >
-                    {copied ? 'Copied!' : 'Copy Output'}
-                  </button>
-                </div>
-                <div className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
-                  <ColoredToken token={encodedToken} />
-                </div>
+            {loading ? (
+              <div className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+                <LoadingIndicator />
               </div>
+            ) : (
+              encodedToken && (
+                <div className="flex flex-col space-y-2">
+                  <div className="flex flex-wrap gap-2 justify-between items-center">
+                    <label className={labelClass}>Encoded Token:</label>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(encodedToken)}
+                      className="text-xs px-2.5 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-300 transition"
+                    >
+                      {copied ? 'Copied!' : 'Copy Output'}
+                    </button>
+                  </div>
+                  <div className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+                    <ColoredToken token={encodedToken} />
+                  </div>
+                </div>
+              )
             )}
           </div>
         ) : (
@@ -256,14 +278,21 @@ const Encryption = () => {
               </div>
               <button
                 type="button"
-                onClick={() => dispatch(decodeJwt())}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
+                onClick={handleDecode}
+                disabled={loading}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Decode JWT
+                {loading ? 'Processing...' : 'Decode JWT'}
               </button>
             </div>
 
-            {decodedHeader && decodedPayload && (
+            {loading && (
+              <div className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+                <LoadingIndicator />
+              </div>
+            )}
+
+            {!loading && decodedHeader && decodedPayload && (
               <>
                 {signatureStatus && (
                   <div className="flex flex-wrap items-center gap-2">

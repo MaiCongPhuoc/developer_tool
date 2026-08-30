@@ -23,21 +23,13 @@ const navItems: NavItem[] = [
   },
   {
     icon: '',
-    name: 'Dummy-Text',
+    name: 'Dummy Text',
     path: '/dummy-text',
   },
   {
-    name: 'Tables',
     icon: '',
-    subItems: [{ name: 'Basic Tables', path: '/basic-tables', pro: false }],
-  },
-  {
-    name: 'Pages',
-    icon: '',
-    subItems: [
-      { name: 'Blank Page', path: '/blank', pro: false },
-      { name: '404 Error', path: '/error-404', pro: false },
-    ],
+    name: 'Text Compare',
+    path: '/text-compare',
   },
 ];
 

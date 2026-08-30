@@ -6,6 +6,7 @@ import XML from './pages/XML';
 import SQL from './pages/SQL';
 import Encryption from './pages/Encryption';
 import DummyText from './pages/DummyText';
+import TextCompare from './pages/TextCompare';
 
 export const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ export const App: React.FC = () => {
           <Route index path="/sql" element={<SQL />} />
           <Route index path="/encryption" element={<Encryption />} />
           <Route index path="/dummy-text" element={<DummyText />} />
+          <Route index path="/text-compare" element={<TextCompare />} />
         </Route>
       </Routes>
     </Router>
