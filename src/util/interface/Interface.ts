@@ -53,7 +53,12 @@ export interface JwtState {
   expiresAt: string | null;
   isExpired: boolean | null;
   error: string | null;
-  copied: boolean;
+  // Trang này có NHIỀU nút "Copy" riêng biệt (Header/Payload/Encoded Token) -
+  // dùng 1 cờ boolean chung sẽ khiến bấm Copy ở 1 nút làm TẤT CẢ các nút khác
+  // cũng đổi chữ thành "Copied!" theo. Lưu lại đúng field nào vừa được copy
+  // (hoặc null nếu chưa copy gì / đã hết hạn hiển thị) để mỗi nút tự so sánh
+  // với field của chính nó.
+  copiedField: 'encoded' | 'header' | 'payload' | null;
 }
 
 // Trang SQL Formatter: chỉ cần định dạng lại chuỗi SQL cho đẹp (không có

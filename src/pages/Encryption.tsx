@@ -7,7 +7,8 @@ import {
   decodeJwt,
   encodeJwt,
   setAlgorithm,
-  setCopied,
+  setCopiedField,
+  setError,
   setHeaderInput,
   setMode,
   setPayloadInput,
@@ -79,7 +80,7 @@ const Encryption = () => {
     expiresAt,
     isExpired,
     error,
-    copied,
+    copiedField,
   } = useAppSelector((state) => state.jwt);
   const { loading, run, cancel } = useDelayedAction();
 
@@ -110,11 +111,25 @@ const Encryption = () => {
     run(() => dispatch(decodeJwt()));
   };
 
-  const handleCopy = async (text: string) => {
+  // `field` xác định ĐÚNG nút Copy nào vừa được bấm (encoded token / header /
+  // payload) - nếu không, dùng chung 1 cờ "copied" cho cả 3 nút sẽ khiến bấm
+  // Copy ở 1 nút làm TẤT CẢ các nút khác cũng đổi chữ thành "Copied!" theo,
+  // dù chỉ có 1 nội dung thực sự được ghi vào clipboard.
+  const handleCopy = async (
+    text: string,
+    field: 'encoded' | 'header' | 'payload'
+  ) => {
     if (!text) return;
-    await navigator.clipboard.writeText(text);
-    dispatch(setCopied(true));
-    setTimeout(() => dispatch(setCopied(false)), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      dispatch(setCopiedField(field));
+      setTimeout(() => dispatch(setCopiedField(null)), 2000);
+    } catch {
+      // Clipboard API có thể bị từ chối (trang không phải HTTPS, trình
+      // duyệt chặn quyền, tab mất focus...) - báo lỗi rõ ràng lên banner đỏ
+      // thay vì âm thầm không làm gì, khiến người dùng tưởng đã copy thành công.
+      dispatch(setError('Could not copy to clipboard. Please copy the text manually.'));
+    }
   };
 
   return (
@@ -237,10 +252,10 @@ const Encryption = () => {
                     <label className={labelClass}>Encoded Token:</label>
                     <button
                       type="button"
-                      onClick={() => handleCopy(encodedToken)}
+                      onClick={() => handleCopy(encodedToken, 'encoded')}
                       className="text-xs px-2.5 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-300 transition"
                     >
-                      {copied ? 'Copied!' : 'Copy Output'}
+                      {copiedField === 'encoded' ? 'Copied!' : 'Copy Output'}
                     </button>
                   </div>
                   <div className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
@@ -322,10 +337,10 @@ const Encryption = () => {
                       <label className={labelClass}>Header:</label>
                       <button
                         type="button"
-                        onClick={() => handleCopy(decodedHeader)}
+                        onClick={() => handleCopy(decodedHeader, 'header')}
                         className="text-xs px-2.5 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-300 transition"
                       >
-                        {copied ? 'Copied!' : 'Copy'}
+                        {copiedField === 'header' ? 'Copied!' : 'Copy'}
                       </button>
                     </div>
                     <pre className="w-full h-40 overflow-auto p-3 font-mono text-sm border rounded-lg bg-white text-rose-600 dark:bg-gray-900 dark:border-gray-700 dark:text-rose-400">
@@ -337,10 +352,10 @@ const Encryption = () => {
                       <label className={labelClass}>Payload:</label>
                       <button
                         type="button"
-                        onClick={() => handleCopy(decodedPayload)}
+                        onClick={() => handleCopy(decodedPayload, 'payload')}
                         className="text-xs px-2.5 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-300 transition"
                       >
-                        {copied ? 'Copied!' : 'Copy'}
+                        {copiedField === 'payload' ? 'Copied!' : 'Copy'}
                       </button>
                     </div>
                     <pre className="w-full h-40 overflow-auto p-3 font-mono text-sm border rounded-lg bg-white text-purple-600 dark:bg-gray-900 dark:border-gray-700 dark:text-purple-400">

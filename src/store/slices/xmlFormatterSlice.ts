@@ -45,6 +45,9 @@ export const xmlFormatterSlice = createSlice({
   reducers: {
     setInputXml: (state, action: PayloadAction<string>) => {
       state.inputXml = action.payload;
+      // Xoá lỗi cũ khi người dùng sửa lại input, tránh banner lỗi lần Format
+      // trước còn sót lại trong lúc nội dung đã đổi khác.
+      state.error = null;
     },
     formatXml: (state) => {
       if (!state.inputXml.trim()) {
@@ -57,6 +60,10 @@ export const xmlFormatterSlice = createSlice({
         const parsed = parseXml(state.inputXml);
         state.formattedXml = stringifyXml(parsed);
         state.error = null;
+        // Xoá trạng thái thu gọn cũ - node ở cùng path của XML mới (nếu cấu
+        // trúc khác hẳn XML trước) không nên tự "thừa hưởng" trạng thái thu
+        // gọn/mở rộng của lần Format trước.
+        state.collapsedPaths = {};
       } catch (err: unknown) {
         state.error =
           err instanceof Error
@@ -92,15 +99,28 @@ export const xmlFormatterSlice = createSlice({
           action.payload.target,
           action.payload.value
         );
-        if (!applied) return;
+        if (!applied) {
+          state.error = 'Could not apply this edit. Please re-format and try again.';
+          return;
+        }
 
         state.formattedXml = stringifyXml(parsed);
         state.inputXml = stringifyXmlCompact(parsed);
         state.error = null;
       } catch {
         // formattedXml hiện không hợp lệ để parse lại (không nên xảy ra vì
-        // cây chỉ hiển thị khi formattedXml hợp lệ) -> bỏ qua, không sửa gì
+        // cây chỉ hiển thị khi formattedXml hợp lệ, nhưng vẫn có thể xảy ra
+        // nếu target gửi lên không khớp với cây hiện tại) - báo lỗi rõ ràng
+        // cho người dùng thay vì âm thầm bỏ qua, khiến họ tưởng đã sửa thành
+        // công trong khi giá trị không hề đổi.
+        state.error = 'Could not apply this edit. Please re-format and try again.';
       }
+    },
+    // Đặt thông báo lỗi trực tiếp - dùng cho các lỗi phát sinh NGOÀI luồng
+    // format/edit chính (vd Copy vào clipboard thất bại) nhưng vẫn cần hiện
+    // lên cùng 1 banner đỏ để người dùng luôn thấy lỗi, không bị "nuốt" âm thầm.
+    setError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
   },
 });
@@ -110,6 +130,7 @@ export const {
   formatXml,
   clearXml,
   setCopied,
+  setError,
   toggleCollapse,
   updateXmlValue,
 } = xmlFormatterSlice.actions;

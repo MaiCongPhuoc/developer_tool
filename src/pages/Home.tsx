@@ -7,6 +7,7 @@ import {
   clearJson,
   formatJson,
   setCopied,
+  setError,
   setInputJson,
 } from '@/store/slices/jsonFormatterSlice';
 
@@ -33,9 +34,16 @@ const Home = () => {
   // Sao chép kết quả
   const handleCopy = async () => {
     if (!formattedJson) return;
-    await navigator.clipboard.writeText(formattedJson);
-    dispatch(setCopied(true));
-    setTimeout(() => dispatch(setCopied(false)), 2000);
+    try {
+      await navigator.clipboard.writeText(formattedJson);
+      dispatch(setCopied(true));
+      setTimeout(() => dispatch(setCopied(false)), 2000);
+    } catch {
+      // Clipboard API có thể bị từ chối (trang không phải HTTPS, trình
+      // duyệt chặn quyền, tab mất focus...) - báo lỗi rõ ràng lên banner đỏ
+      // thay vì âm thầm không làm gì, khiến người dùng tưởng đã copy thành công.
+      dispatch(setError('Could not copy to clipboard. Please copy the text manually.'));
+    }
   };
 
   // Xóa nội dung

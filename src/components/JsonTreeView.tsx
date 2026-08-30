@@ -29,7 +29,13 @@ const parseEditedValue = (text: string): JsonPrimitive => {
   }
 
   try {
-    return JSON.parse(text) as JsonPrimitive;
+    const parsed: JsonValue = JSON.parse(text);
+    // Ô này chỉ dành cho giá trị "lá" (string/number/boolean/null). Nếu
+    // người dùng gõ 1 object/array literal hợp lệ (vd "{}" hoặc "[1,2]"),
+    // KHÔNG trả thẳng object/array đó ra - nếu không, giá trị lá sẽ bất ngờ
+    // biến thành 1 node container ở lần render kế tiếp, phá vỡ hợp đồng kiểu
+    // JsonPrimitive. Coi như gõ 1 chuỗi thường trong trường hợp này.
+    return isContainer(parsed) ? text : parsed;
   } catch {
     return text;
   }

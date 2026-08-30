@@ -13,7 +13,15 @@ const elementToNode = (el: Element): XmlElementNode => {
   for (const child of Array.from(el.childNodes)) {
     if (child.nodeType === Node.ELEMENT_NODE) {
       children.push(elementToNode(child as Element));
-    } else if (child.nodeType === Node.TEXT_NODE) {
+    } else if (
+      // CDATA (<![CDATA[...]]>) mang dữ liệu thật giống hệt text node, chỉ
+      // khác cú pháp khai báo - phải gộp chung với TEXT_NODE ở đây, nếu không
+      // nội dung CDATA sẽ không rơi vào bất kỳ nhánh nào, bị loại khỏi
+      // `children` hoàn toàn và biến mất sau khi format (vd cả 1 thẻ có CDATA
+      // bị format lại thành thẻ tự đóng rỗng).
+      child.nodeType === Node.TEXT_NODE ||
+      child.nodeType === Node.CDATA_SECTION_NODE
+    ) {
       const text = child.textContent ?? '';
       if (text.trim()) {
         children.push({ type: 'text', value: text.trim() });

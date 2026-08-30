@@ -36,9 +36,21 @@ const stripTrailingCommas = (json: string): string => {
     }
 
     if (char === ',' && !inString) {
+      // Bỏ qua cả khoảng trắng LẪN các dấu phẩy khác phía sau (không chỉ 1
+      // khoảng trắng) - để xử lý đúng nhiều dấu phẩy thừa liên tiếp (vd
+      // "[1,2,,]"). Nếu chỉ nhìn ký tự không-khoảng-trắng kế tiếp, dấu phẩy
+      // đứng ngay trước 1 dấu phẩy khác (không phải "}"/"]") sẽ bị coi nhầm
+      // là "không thừa" và giữ lại, khiến chuỗi sau khi "dọn" vẫn còn 1 dấu
+      // phẩy thừa trước "}"/"]" và JSON.parse vẫn báo lỗi.
       let next = i + 1;
       while (next < json.length && /\s/.test(json[next])) {
         next++;
+      }
+      while (next < json.length && json[next] === ',') {
+        next++;
+        while (next < json.length && /\s/.test(json[next])) {
+          next++;
+        }
       }
       if (json[next] === '}' || json[next] === ']') {
         continue;
@@ -85,20 +97,33 @@ export const jsonFormatterSlice = createSlice({
   reducers: {
     setInputJson: (state, action: PayloadAction<string>) => {
       state.inputJson = action.payload;
+      // Xoá thông báo lỗi cũ ngay khi người dùng bắt đầu sửa lại input - nếu
+      // không, lỗi của lần Format trước sẽ tiếp tục hiển thị (có thể không
+      // còn đúng với nội dung mới) cho tới khi bấm Format lần nữa.
+      state.error = null;
     },
     formatJson: (state) => {
-      if (!state.inputJson.trim()) {
+      // Notepad trên Windows lưu file "UTF-8 with BOM" rất phổ biến khi gõ
+      // tiếng Việt, để lại 1 ký tự BOM (U+FEFF) ẩn ở đầu chuỗi. `.trim()` coi
+      // BOM là khoảng trắng nên input vẫn "trông" không rỗng, nhưng
+      // `JSON.parse` gốc lại không chấp nhận BOM và báo lỗi cú pháp dù JSON
+      // phía sau hoàn toàn hợp lệ - nên cắt bỏ BOM trước khi parse.
+      const input = state.inputJson.replace(/^﻿/, '');
+
+      if (!input.trim()) {
         state.error = 'Please enter a JSON string.';
         state.formattedJson = '';
         return;
       }
 
       try {
-        const parsed = parsePreservingBigInt(
-          stripTrailingCommas(state.inputJson)
-        );
+        const parsed = parsePreservingBigInt(stripTrailingCommas(input));
         state.formattedJson = stringifyPreservingBigInt(parsed, 2);
         state.error = null;
+        // Format lại (không phải Clear) vẫn phải xoá trạng thái thu gọn cũ -
+        // nếu không, node ở cùng path với JSON mới (dù cấu trúc khác hẳn) sẽ
+        // "thừa hưởng" nhầm trạng thái thu gọn/mở rộng của JSON trước đó.
+        state.collapsedPaths = {};
       } catch (err: unknown) {
         state.error =
           err instanceof Error
@@ -139,8 +164,18 @@ export const jsonFormatterSlice = createSlice({
         state.error = null;
       } catch {
         // formattedJson hiện không hợp lệ để parse lại (không nên xảy ra vì
-        // cây chỉ hiển thị khi formattedJson hợp lệ) -> bỏ qua, không sửa gì
+        // cây chỉ hiển thị khi formattedJson hợp lệ, nhưng vẫn có thể xảy ra
+        // nếu path/giá trị gửi lên không khớp với cây hiện tại) - báo lỗi rõ
+        // ràng cho người dùng thay vì âm thầm bỏ qua, khiến họ tưởng đã sửa
+        // thành công trong khi giá trị không hề đổi.
+        state.error = 'Could not apply this edit. Please re-format and try again.';
       }
+    },
+    // Đặt thông báo lỗi trực tiếp - dùng cho các lỗi phát sinh NGOÀI luồng
+    // format/edit chính (vd Copy vào clipboard thất bại) nhưng vẫn cần hiện
+    // lên cùng 1 banner đỏ để người dùng luôn thấy lỗi, không bị "nuốt" âm thầm.
+    setError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
   },
 });
@@ -152,6 +187,7 @@ export const {
   setCopied,
   toggleCollapse,
   updateJsonValue,
+  setError,
 } = jsonFormatterSlice.actions;
 
 export default jsonFormatterSlice.reducer;

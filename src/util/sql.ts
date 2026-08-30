@@ -71,8 +71,12 @@ const HUGS_PREVIOUS = new Set([')', ',', ';', '.']);
 // Từ khoá 1 dòng: "--" và "#" là 2 kiểu comment chuẩn của MySQL; "//" không
 // phải cú pháp MySQL thật nhưng vẫn chấp nhận cho khoan dung (nhiều người
 // quen viết comment kiểu C/Java sẽ gõ nhầm).
+// Số ở dạng khoa học (vd "1e10", "1.5e-3") phải khớp nguyên khối TRƯỚC nhánh
+// số nguyên/thập phân thường - nếu không, phần mũ ("e10") bị tách thành 1
+// token "word" (định danh) riêng, khiến "1e10" bị chèn thêm khoảng trắng
+// thành "1 e10" khi in ra (sai giá trị so với input gốc).
 const TOKEN_REGEX =
-  /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`|--[^\n]*|#[^\n]*|\/\/[^\n]*|\/\*[\s\S]*?\*\/|\d+\.\d+|\d+|[\p{L}_][\p{L}\p{N}_$\p{M}]*|<=|>=|<>|!=|\|\||[(),;.]|\S/gu;
+  /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`|--[^\n]*|#[^\n]*|\/\/[^\n]*|\/\*[\s\S]*?\*\/|\d+\.\d+(?:[eE][+-]?\d+)?|\d+[eE][+-]?\d+|\d+|[\p{L}_][\p{L}\p{N}_$\p{M}]*|<=|>=|<>|!=|\|\||[(),;.]|\S/gu;
 
 // Comment 1 dòng ("--", "#", "//") ăn hết phần còn lại tới "\n" - khác với
 // comment khối "/* */" vốn có dấu đóng riêng nên không bao giờ "ăn lố".
@@ -238,6 +242,14 @@ const openParenPrefix = (tokens: SqlToken[], i: number, currentLine: string): st
 };
 
 const handleCloseParen = (ctx: FormatContext) => {
+  // ")" không có "(" mở tương ứng (parenStack đang rỗng) - trước đây bị bỏ
+  // qua âm thầm (vẫn in ra ")" bình thường), khiến câu SQL sai cấu trúc
+  // ngoặc trông như vẫn "format thành công". Báo lỗi rõ ràng thay vì im lặng
+  // bỏ qua, giống cách JSON/XML formatter báo lỗi cú pháp.
+  if (ctx.parenStack.length === 0) {
+    throw new Error("Unmatched closing parenthesis ')' with no corresponding '('.");
+  }
+
   const closed = ctx.parenStack.pop();
   ctx.parenDepth = Math.max(0, ctx.parenDepth - 1);
   if (closed) {
@@ -366,11 +378,25 @@ const processToken = (ctx: FormatContext, tokens: SqlToken[], i: number) => {
   return handlePlainToken(ctx, token, upper);
 };
 
+// Chuỗi ('...'/"..."/`...`) không có dấu đóng thì TOKEN_REGEX (yêu cầu cặp
+// đóng-mở đầy đủ) không khớp được cả cụm - dấu nháy mở lẻ loi rơi vào nhánh
+// bắt từng ký tự (`\S`), nên `classify` vẫn gán type 'string' cho nó nhưng
+// độ dài chỉ còn 1 ký tự (đúng bằng dấu nháy). Dựa vào dấu hiệu này để phát
+// hiện chuỗi bị thiếu dấu đóng, báo lỗi rõ ràng thay vì âm thầm tách vụn phần
+// còn lại của câu SQL thành từng ký tự một (output vỡ cấu trúc không báo lỗi).
+const findUnterminatedString = (tokens: SqlToken[]): SqlToken | undefined =>
+  tokens.find((t) => t.type === 'string' && t.text.length === 1);
+
 // Định dạng chuỗi SQL thành nhiều dòng, thụt lề 2 space (đồng bộ với cách
 // xml.ts đang thụt lề), từ khoá viết HOA.
 export const prettifySql = (sql: string): string => {
   const tokens = mergeKeywordPhrases(rescueOverreachingLineComment(tokenize(sql)));
   if (tokens.length === 0) return '';
+
+  const unterminated = findUnterminatedString(tokens);
+  if (unterminated) {
+    throw new Error(`Unterminated string literal starting with ${unterminated.text}`);
+  }
 
   const ctx = createContext();
   for (let i = 0; i < tokens.length; i += 1) {

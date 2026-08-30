@@ -7,6 +7,7 @@ import {
   generateText,
   setCharCount,
   setCopied,
+  setError,
 } from '@/store/slices/dummyTextSlice';
 
 const inputClass =
@@ -37,9 +38,16 @@ const DummyText = () => {
   // Sao chép kết quả
   const handleCopy = async () => {
     if (!generatedText) return;
-    await navigator.clipboard.writeText(generatedText);
-    dispatch(setCopied(true));
-    setTimeout(() => dispatch(setCopied(false)), 2000);
+    try {
+      await navigator.clipboard.writeText(generatedText);
+      dispatch(setCopied(true));
+      setTimeout(() => dispatch(setCopied(false)), 2000);
+    } catch {
+      // Clipboard API có thể bị từ chối (trang không phải HTTPS, trình
+      // duyệt chặn quyền, tab mất focus...) - báo lỗi rõ ràng lên banner đỏ
+      // thay vì âm thầm không làm gì, khiến người dùng tưởng đã copy thành công.
+      dispatch(setError('Could not copy to clipboard. Please copy the text manually.'));
+    }
   };
 
   // Xóa nội dung

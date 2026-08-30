@@ -147,8 +147,16 @@ export const decodeAndVerifyJwt = async (
   let isExpired: boolean | null = null;
   if (typeof parsedPayload.exp === 'number') {
     const expDate = new Date(parsedPayload.exp * 1000);
-    expiresAt = expDate.toISOString();
-    isExpired = expDate.getTime() < Date.now();
+    // "exp" quá lớn/quá nhỏ khiến mốc thời gian vượt phạm vi hợp lệ của
+    // `Date` (~±8.64e15 ms từ epoch) tạo ra Invalid Date - gọi
+    // `toISOString()` trên Invalid Date sẽ ném RangeError, làm hỏng toàn bộ
+    // kết quả decode (kể cả header/payload vốn đã parse thành công). Chỉ
+    // dùng "exp" khi nó tạo ra 1 Date hợp lệ; ngược lại bỏ qua thông tin hạn
+    // dùng (giữ expiresAt/isExpired = null) thay vì làm crash cả quá trình decode.
+    if (!Number.isNaN(expDate.getTime())) {
+      expiresAt = expDate.toISOString();
+      isExpired = expDate.getTime() < Date.now();
+    }
   }
 
   return {

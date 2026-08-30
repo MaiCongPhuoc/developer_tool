@@ -4,14 +4,28 @@ import type { JsonValue } from '@/util/interface/Type';
 // 64-bit), chỉ chính xác tới Number.MAX_SAFE_INTEGER (~9 * 10^15). Số nguyên
 // dài hơn sẽ bị làm tròn sai. 2 hàm dưới đây bọc lại JSON.parse/stringify để
 // những số nguyên vượt ngưỡng an toàn được giữ nguyên vẹn bằng kiểu BigInt.
-const BIGINT_PREFIX = '@@bigint:';
-const BIGINT_SUFFIX = '@@';
+//
+// Prefix/suffix được sinh NGẪU NHIÊN riêng cho mỗi lần gọi (thay vì 1 hằng số
+// cố định) để tránh trường hợp 1 chuỗi do người dùng nhập tình cờ trùng định
+// dạng marker (vd input có sẵn giá trị string "@@bigint:123@@") bị hiểu nhầm
+// thành BigInt. Với marker cố định, reviver không thể phân biệt được marker
+// "thật" (do chính markUnsafeIntegers sinh ra) với 1 chuỗi trùng lặp ngẫu
+// nhiên từ input - random hoá theo từng lần gọi khiến xác suất trùng gần như
+// bằng 0.
+const createMarker = () => {
+  const token = `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
+  return { prefix: `@@bigint:${token}:`, suffix: `:${token}@@` };
+};
 
 // Quét từng ký tự, bỏ qua phần nằm trong dấu nháy kép (chuỗi) - giống cách
 // stripTrailingCommas làm - để không đụng vào số nằm bên trong 1 chuỗi.
 // Số nguyên (không có dấu . hoặc e/E theo sau) vượt ngưỡng an toàn thì được
 // bọc thành 1 chuỗi đánh dấu, để reviver bên dưới nhận ra và đổi thành BigInt.
-const markUnsafeIntegers = (json: string): string => {
+const markUnsafeIntegers = (
+  json: string,
+  prefix: string,
+  suffix: string
+): string => {
   let result = '';
   let inString = false;
   let escapeNext = false;
@@ -45,12 +59,15 @@ const markUnsafeIntegers = (json: string): string => {
       }
 
       const isPlainInteger =
-        j > digitsStart && json[j] !== '.' && json[j] !== 'e' && json[j] !== 'E';
+        j > digitsStart &&
+        json[j] !== '.' &&
+        json[j] !== 'e' &&
+        json[j] !== 'E';
       const token = json.slice(i, j);
 
       result +=
         isPlainInteger && !Number.isSafeInteger(Number(token))
-          ? `"${BIGINT_PREFIX}${token}${BIGINT_SUFFIX}"`
+          ? `"${prefix}${token}${suffix}"`
           : token;
 
       i = j - 1;
@@ -63,27 +80,28 @@ const markUnsafeIntegers = (json: string): string => {
   return result;
 };
 
-export const parsePreservingBigInt = (json: string): JsonValue =>
-  JSON.parse(markUnsafeIntegers(json), (_key, value) =>
-    typeof value === 'string' &&
-    value.startsWith(BIGINT_PREFIX) &&
-    value.endsWith(BIGINT_SUFFIX)
-      ? BigInt(value.slice(BIGINT_PREFIX.length, -BIGINT_SUFFIX.length))
+export const parsePreservingBigInt = (json: string): JsonValue => {
+  const { prefix, suffix } = createMarker();
+  return JSON.parse(markUnsafeIntegers(json, prefix, suffix), (_key, value) =>
+    typeof value === 'string' && value.startsWith(prefix) && value.endsWith(suffix)
+      ? BigInt(value.slice(prefix.length, -suffix.length))
       : value
   ) as JsonValue;
+};
 
 export const stringifyPreservingBigInt = (
   value: JsonValue,
   space?: string | number
 ): string => {
+  const { prefix, suffix } = createMarker();
   const json = JSON.stringify(
     value,
-    (_key, val) =>
-      typeof val === 'bigint' ? `${BIGINT_PREFIX}${val}${BIGINT_SUFFIX}` : val,
+    (_key, val) => (typeof val === 'bigint' ? `${prefix}${val}${suffix}` : val),
     space
   );
+  const escapeForRegex = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return json.replace(
-    new RegExp(`"${BIGINT_PREFIX}(-?\\d+)${BIGINT_SUFFIX}"`, 'g'),
+    new RegExp(`"${escapeForRegex(prefix)}(-?\\d+)${escapeForRegex(suffix)}"`, 'g'),
     '$1'
   );
 };

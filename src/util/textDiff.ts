@@ -9,6 +9,17 @@ import type {
 const MAX_LINES_PER_SIDE = 5000;
 const MAX_LINE_PAIRS = 4_000_000;
 
+// So khớp mức TỪ (diffWords, bên dưới) cũng chạy LCS O(n*m) nhưng theo SỐ
+// TOKEN trong 1 CẶP DÒNG - độc lập với 2 giới hạn ở trên. 2 văn bản chỉ có 1
+// dòng DUY NHẤT mỗi bên (không hề xuống dòng, vd 1 dòng code đã minify dài
+// hàng trăm nghìn ký tự) vẫn lọt qua trót lọt 2 giới hạn trên (n=m=1 dòng)
+// nhưng có thể tách ra hàng trăm nghìn token/dòng, khiến diffArrays cấp phát
+// 1 Uint32Array khổng lồ và treo/crash tab. Giới hạn riêng số cặp token,
+// vượt ngưỡng thì bỏ qua so khớp mức từ CHO RIÊNG cặp dòng đó (vẫn hiển thị
+// nguyên dòng, chỉ là không tô đậm từng từ khác nhau) thay vì chặn luôn toàn
+// bộ kết quả so sánh.
+const MAX_WORD_PAIRS = 4_000_000;
+
 const splitLines = (text: string): string[] => text.split(/\r\n|\r|\n/);
 
 // Tách 1 dòng thành các token (chuỗi chữ/số liền nhau, chuỗi khoảng trắng,
@@ -73,8 +84,21 @@ function diffArrays<T>(a: T[], b: T[]): ArrayDiffOp<T>[] {
 const diffWords = (
   leftLine: string,
   rightLine: string
-): { leftWords: TextDiffWordOp[]; rightWords: TextDiffWordOp[] } => {
-  const ops = diffArrays(tokenize(leftLine), tokenize(rightLine));
+): {
+  leftWords: TextDiffWordOp[] | undefined;
+  rightWords: TextDiffWordOp[] | undefined;
+} => {
+  const leftTokens = tokenize(leftLine);
+  const rightTokens = tokenize(rightLine);
+
+  // Dòng quá dài (quá nhiều token) - bỏ qua so khớp mức từ cho riêng cặp
+  // dòng này, trả về undefined để nơi gọi hiển thị nguyên văn cả dòng thay
+  // vì cố tô từng từ (xem giải thích ở MAX_WORD_PAIRS).
+  if (leftTokens.length * rightTokens.length > MAX_WORD_PAIRS) {
+    return { leftWords: undefined, rightWords: undefined };
+  }
+
+  const ops = diffArrays(leftTokens, rightTokens);
 
   const leftWords: TextDiffWordOp[] = [];
   const rightWords: TextDiffWordOp[] = [];
@@ -108,13 +132,20 @@ export const compareTexts = (
   const leftLines = splitLines(leftText);
   const rightLines = splitLines(rightText);
 
-  if (
-    leftLines.length > MAX_LINES_PER_SIDE ||
-    rightLines.length > MAX_LINES_PER_SIDE ||
-    leftLines.length * rightLines.length > MAX_LINE_PAIRS
-  ) {
+  // Thông báo lỗi phải phản ánh ĐÚNG giới hạn thực sự bị vượt - trước đây
+  // luôn ghi cố định "max N lines per side" dù nguyên nhân có thể là do
+  // TÍCH số dòng 2 bên vượt ngưỡng (vd 4000 dòng x 1050 dòng), trong khi cả 2
+  // bên đều chưa vượt N dòng - khiến người dùng hiểu lầm về lý do bị chặn.
+  if (leftLines.length > MAX_LINES_PER_SIDE || rightLines.length > MAX_LINES_PER_SIDE) {
     throw new Error(
       `Text too large to compare (max ${MAX_LINES_PER_SIDE} lines per side).`
+    );
+  }
+  if (leftLines.length * rightLines.length > MAX_LINE_PAIRS) {
+    throw new Error(
+      `Text too large to compare (combined line count of both sides exceeds ${MAX_LINE_PAIRS.toLocaleString(
+        'en-US'
+      )}).`
     );
   }
 

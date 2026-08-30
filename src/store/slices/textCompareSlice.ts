@@ -16,9 +16,11 @@ export const textCompareSlice = createSlice({
   reducers: {
     setLeftText: (state, action: PayloadAction<string>) => {
       state.leftText = action.payload;
+      state.error = null;
     },
     setRightText: (state, action: PayloadAction<string>) => {
       state.rightText = action.payload;
+      state.error = null;
     },
     // So sánh 2 đoạn text hiện có trong state, kết quả lưu lại vào rows/stats
     compareText: (state) => {
