@@ -50,17 +50,11 @@ export interface JwtState {
   copied: boolean;
 }
 
-// Trang Decryption: chỉ giải mã JWT (không có mode encode như Encryption.tsx)
-// -> state đơn giản, 1 action chính, theo đúng kiểu XmlFormatterState.
-export interface DecryptionState {
-  tokenInput: string;
-  secret: string;
-  decodedHeader: string;
-  decodedPayload: string;
-  rawSignature: string;
-  signatureStatus: JwtSignatureStatus | null;
-  expiresAt: string | null;
-  isExpired: boolean | null;
+// Trang SQL Formatter: chỉ cần định dạng lại chuỗi SQL cho đẹp (không có
+// cấu trúc cây để sửa từng giá trị như JSON/XML) nên không cần collapsedPaths.
+export interface SqlFormatterState {
+  inputSql: string;
+  formattedSql: string;
   error: string | null;
   copied: boolean;
 }

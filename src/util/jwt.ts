@@ -115,8 +115,7 @@ export type JwtDecodeResult = {
 
 const supportedAlgorithms: JwtAlgorithm[] = ['HS256', 'HS384', 'HS512'];
 
-// Dùng chung cho cả trang Encryption (mode decode) lẫn trang Decryption:
-// tách + decode JWT, verify chữ ký bằng HMAC nếu có secret (thuật toán lấy
+// Tách + decode JWT, verify chữ ký bằng HMAC nếu có secret (thuật toán lấy
 // từ claim "alg" ghi sẵn trong header của token), và tính sẵn hạn dùng
 // (claim "exp") ngay tại đây để nơi gọi chỉ cần hiển thị.
 export const decodeAndVerifyJwt = async (

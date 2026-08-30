@@ -13,17 +13,13 @@ const navItems: NavItem[] = [
     subItems: [
       { name: 'JSON', path: '/', pro: false },
       { name: 'XML', path: '/xml', pro: false },
+      { name: 'SQL', path: '/sql', pro: false },
     ],
   },
   {
     icon: '',
     name: 'Encryption',
     path: '/encryption',
-  },
-  {
-    icon: '',
-    name: 'Decryption',
-    path: '/decryption',
   },
   {
     icon: '',

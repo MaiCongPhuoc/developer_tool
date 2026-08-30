@@ -2,8 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import sidebarReducer from './slices/sidebarSlice';
 import jsonFormatterReducer from './slices/jsonFormatterSlice';
 import xmlFormatterReducer from './slices/xmlFormatterSlice';
+import sqlFormatterReducer from './slices/sqlFormatterSlice';
 import jwtReducer from './slices/jwtSlice';
-import decryptionReducer from './slices/decryptionSlice';
 import dummyTextReducer from './slices/dummyTextSlice';
 
 export const store = configureStore({
@@ -11,8 +11,8 @@ export const store = configureStore({
     sidebar: sidebarReducer, // Gom các slices vào đây
     jsonFormatter: jsonFormatterReducer,
     xmlFormatter: xmlFormatterReducer,
+    sqlFormatter: sqlFormatterReducer,
     jwt: jwtReducer,
-    decryption: decryptionReducer,
     dummyText: dummyTextReducer,
   },
   middleware: (getDefaultMiddleware) =>

@@ -84,8 +84,7 @@ type DecodeResult = {
 // trong header - alg lạ (vd RS256, chưa hỗ trợ) thì báo invalid thay vì crash.
 // Claim "exp" (nếu có) được so với thời điểm decode ngay tại đây (trong thunk,
 // không phải lúc component render) để tránh gọi Date.now() trong render.
-// Logic thực sự nằm ở decodeAndVerifyJwt (util/jwt.ts), dùng chung với trang
-// Decryption để không lặp lại code.
+// Logic thực sự nằm ở decodeAndVerifyJwt (util/jwt.ts).
 export const decodeJwt = createAsyncThunk<DecodeResult, void, ThunkConfig>(
   'jwt/decode',
   async (_, { getState, rejectWithValue }) => {

@@ -1,8 +1,7 @@
 import type { JsonPrimitive, JsonValue } from '@/util/interface/Type';
 
-// Phần hiển thị dùng chung giữa JsonTreeView (cây JSON sửa được, gắn với
-// jsonFormatterSlice) và ReadOnlyJsonTree (cây JSON chỉ xem, dùng ở trang
-// Decryption) - tách ra để không lặp lại cách tô màu/thụt lề giữa 2 nơi.
+// Phần hiển thị dùng chung cho JsonTreeView (cây JSON sửa được, gắn với
+// jsonFormatterSlice) - tách ra để không lặp lại cách tô màu/thụt lề.
 
 export type JsonContainer = JsonValue[] | { [key: string]: JsonValue };
 
