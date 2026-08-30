@@ -50,17 +50,17 @@ const XML = () => {
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={handleClear}
-            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition"
-          >
-            Clear
-          </button>
-          <button
-            type="button"
             onClick={handleFormat}
             className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
           >
             Format XML
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition"
+          >
+            Clear
           </button>
         </div>
 

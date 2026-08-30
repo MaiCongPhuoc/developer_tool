@@ -4,6 +4,7 @@ import jsonFormatterReducer from './slices/jsonFormatterSlice';
 import xmlFormatterReducer from './slices/xmlFormatterSlice';
 import jwtReducer from './slices/jwtSlice';
 import decryptionReducer from './slices/decryptionSlice';
+import dummyTextReducer from './slices/dummyTextSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     xmlFormatter: xmlFormatterReducer,
     jwt: jwtReducer,
     decryption: decryptionReducer,
+    dummyText: dummyTextReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

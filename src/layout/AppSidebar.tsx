@@ -26,9 +26,9 @@ const navItems: NavItem[] = [
     path: '/decryption',
   },
   {
-    name: 'Forms',
     icon: '',
-    subItems: [{ name: 'Form Elements', path: '/form-elements', pro: false }],
+    name: 'Dummy-Text',
+    path: '/dummy-text',
   },
   {
     name: 'Tables',

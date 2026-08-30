@@ -64,3 +64,13 @@ export interface DecryptionState {
   error: string | null;
   copied: boolean;
 }
+
+// Trang Dummy Text: sinh đoạn text mẫu (Lorem Ipsum) theo đúng số ký tự nhập
+// vào. charCount giữ dạng string để bind trực tiếp vào input (giống các
+// trang khác), số thực sự dùng để sinh text được parse trong reducer.
+export interface DummyTextState {
+  charCount: string;
+  generatedText: string;
+  error: string | null;
+  copied: boolean;
+}

@@ -95,17 +95,17 @@ const Decryption = () => {
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={handleClear}
-            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition"
-          >
-            Clear
-          </button>
-          <button
-            type="button"
             onClick={handleDecode}
             className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
           >
             Decode Token
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition"
+          >
+            Clear
           </button>
         </div>
 
@@ -171,7 +171,9 @@ const Decryption = () => {
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
               <div className="flex flex-col space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className={labelClass}>Header (Formatted Output):</label>
+                  <label className={labelClass}>
+                    Header (Formatted Output):
+                  </label>
                   <button
                     type="button"
                     onClick={() => handleCopy(decodedHeader)}
@@ -186,7 +188,9 @@ const Decryption = () => {
               </div>
               <div className="flex flex-col space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className={labelClass}>Payload (Formatted Output):</label>
+                  <label className={labelClass}>
+                    Payload (Formatted Output):
+                  </label>
                   <button
                     type="button"
                     onClick={() => handleCopy(decodedPayload)}
