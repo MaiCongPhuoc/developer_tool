@@ -1,4 +1,5 @@
 import type {
+  FileCompareFile,
   JwtAlgorithm,
   JwtMode,
   JwtSignatureStatus,
@@ -89,4 +90,33 @@ export interface TextCompareState {
   rows: TextDiffRow[];
   stats: TextDiffStats | null;
   error: string | null;
+}
+
+// Trang File Compare: cùng dạng kết quả (rows/stats) với Text Compare, chỉ
+// khác nguồn dữ liệu 2 bên là file đã đọc thay vì text gõ tay. leftFile/
+// rightFile = null nghĩa là bên đó chưa chọn file.
+export interface FileCompareState {
+  leftFile: FileCompareFile | null;
+  rightFile: FileCompareFile | null;
+  rows: TextDiffRow[];
+  stats: TextDiffStats | null;
+  error: string | null;
+}
+
+// Trang UUID Generator: chỉ hỗ trợ UUID v4 (random) - đủ dùng cho hầu hết
+// nhu cầu và có sẵn crypto.randomUUID() trên trình duyệt, không cần thư viện
+// ngoài. count giữ dạng string để bind trực tiếp vào input (giống DummyText),
+// số thực sự dùng để sinh được parse trong reducer.
+export interface UuidState {
+  count: string;
+  uppercase: boolean;
+  hyphens: boolean;
+  braces: boolean;
+  uuids: string[];
+  error: string | null;
+  // Mỗi dòng kết quả có nút Copy riêng + 1 nút Copy All chung, nên tách 2 cờ
+  // riêng biệt (giống copiedField ở JwtState) để bấm Copy ở dòng này không
+  // làm dòng khác/nút Copy All hiện nhầm "Copied!" theo.
+  copiedIndex: number | null;
+  copiedAll: boolean;
 }

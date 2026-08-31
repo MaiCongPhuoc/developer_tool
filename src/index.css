@@ -6,6 +6,33 @@
   body {
     @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 ease-in-out;
   }
+
+  /* Đổi màu viền/ring một cách mượt (thay vì đổi tức thì) khi rê chuột vào
+     hoặc bấm (focus) vào textarea/input/select - áp dụng chung ở đây cho
+     TẤT CẢ các trang, thay vì phải lặp lại class transition ở từng trang.
+     Loại trừ input file/checkbox/radio vì các loại đó không hiển thị viền
+     theo cách này (input file luôn ẩn, checkbox/radio dùng icon riêng). */
+  textarea,
+  select,
+  input:not([type='file']):not([type='checkbox']):not([type='radio']) {
+    @apply transition-colors duration-200 ease-in-out;
+  }
+
+  /* !important vì nhiều trang gắn sẵn class border-color cố định (vd
+     dark:border-gray-700) ngay trên phần tử - class đó nằm ở layer
+     "utilities" nên luôn thắng rule ở layer "base" này dù có :hover, khiến
+     hover không đổi màu được trong dark mode nếu không có !important. */
+  textarea:hover,
+  select:hover,
+  input:not([type='file']):not([type='checkbox']):not([type='radio']):hover {
+    border-color: var(--color-blue-300) !important;
+  }
+
+  .dark textarea:hover,
+  .dark select:hover,
+  .dark input:not([type='file']):not([type='checkbox']):not([type='radio']):hover {
+    border-color: var(--color-blue-500) !important;
+  }
 }
 
 @theme {

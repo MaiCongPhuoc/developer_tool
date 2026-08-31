@@ -28,8 +28,16 @@ const navItems: NavItem[] = [
   },
   {
     icon: '',
-    name: 'Text Compare',
-    path: '/text-compare',
+    name: 'Compare',
+    subItems: [
+      { name: 'Text Compare', path: '/text-compare', pro: false },
+      { name: 'File Compare', path: '/file-compare', pro: false },
+    ],
+  },
+  {
+    icon: '',
+    name: 'UUID Generator',
+    path: '/uuid',
   },
 ];
 

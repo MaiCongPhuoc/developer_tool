@@ -6,6 +6,8 @@ import sqlFormatterReducer from './slices/sqlFormatterSlice';
 import jwtReducer from './slices/jwtSlice';
 import dummyTextReducer from './slices/dummyTextSlice';
 import textCompareReducer from './slices/textCompareSlice';
+import fileCompareReducer from './slices/fileCompareSlice';
+import uuidReducer from './slices/uuidSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
     jwt: jwtReducer,
     dummyText: dummyTextReducer,
     textCompare: textCompareReducer,
+    fileCompare: fileCompareReducer,
+    uuid: uuidReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

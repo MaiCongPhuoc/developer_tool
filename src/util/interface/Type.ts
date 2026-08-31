@@ -77,3 +77,12 @@ export type TextDiffStats = {
   deleted: number;
   modified: number;
 };
+
+// Trang File Compare: giống Text Compare nhưng nội dung lấy từ file .txt/.csv
+// người dùng chọn thay vì gõ tay. content đã đọc sẵn dạng text (FileReader)
+// để việc so sánh (compareTexts) dùng chung logic với Text Compare.
+export type FileCompareFile = {
+  name: string;
+  size: number;
+  content: string;
+};

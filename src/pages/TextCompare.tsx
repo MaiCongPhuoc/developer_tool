@@ -10,7 +10,7 @@ import {
 } from '@/store/slices/textCompareSlice';
 
 const textareaClass =
-  'w-full h-48 sm:h-56 p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
+  'w-full h-48 sm:h-64 lg:h-80 xl:h-96 p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
 
 const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 
@@ -47,6 +47,25 @@ const TextCompare = () => {
       </h1>
 
       <div className="space-y-4 rounded-xl border border-gray-200 p-4 shadow-sm dark:border-gray-800 dark:bg-gray-800/60 sm:p-6">
+        {/* Thanh công cụ */}
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={handleCompare}
+            disabled={loading}
+            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? 'Processing...' : 'Compare'}
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition"
+          >
+            Clear
+          </button>
+        </div>
+
         {/* Khu vực nhập 2 đoạn text cần so sánh */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           <div className="flex flex-col space-y-2">
@@ -67,25 +86,6 @@ const TextCompare = () => {
               className={textareaClass}
             />
           </div>
-        </div>
-
-        {/* Thanh công cụ */}
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={handleCompare}
-            disabled={loading}
-            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {loading ? 'Processing...' : 'Compare'}
-          </button>
-          <button
-            type="button"
-            onClick={handleClear}
-            className="flex-1 sm:flex-none min-w-30 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition"
-          >
-            Clear
-          </button>
         </div>
 
         {/* Thông báo lỗi nếu có */}
