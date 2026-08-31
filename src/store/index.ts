@@ -8,6 +8,7 @@ import dummyTextReducer from './slices/dummyTextSlice';
 import textCompareReducer from './slices/textCompareSlice';
 import fileCompareReducer from './slices/fileCompareSlice';
 import uuidReducer from './slices/uuidSlice';
+import passwordReducer from './slices/passwordSlice';
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     textCompare: textCompareReducer,
     fileCompare: fileCompareReducer,
     uuid: uuidReducer,
+    password: passwordReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -86,3 +86,11 @@ export type FileCompareFile = {
   size: number;
   content: string;
 };
+
+// Độ mạnh mật khẩu ước lượng theo số bit entropy (xem util/password.ts).
+export type PasswordStrength =
+  | 'very-weak'
+  | 'weak'
+  | 'fair'
+  | 'strong'
+  | 'very-strong';

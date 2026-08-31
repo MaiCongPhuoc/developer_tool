@@ -9,6 +9,7 @@ import DummyText from './pages/DummyText';
 import TextCompare from './pages/TextCompare';
 import FileCompare from './pages/FileCompare';
 import Uuid from './pages/Uuid';
+import PasswordGenerator from './pages/PasswordGenerator';
 
 export const App: React.FC = () => {
   return (
@@ -23,6 +24,11 @@ export const App: React.FC = () => {
           <Route index path="/text-compare" element={<TextCompare />} />
           <Route index path="/file-compare" element={<FileCompare />} />
           <Route index path="/uuid" element={<Uuid />} />
+          <Route
+            index
+            path="/password-generator"
+            element={<PasswordGenerator />}
+          />
         </Route>
       </Routes>
     </Router>

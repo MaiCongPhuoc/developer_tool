@@ -25,10 +25,7 @@ export const AppLayout: React.FC = () => {
             qua lại giữa các tool bên trong app không kích hoạt tải lại quảng
             cáo -> tránh bị Google hiểu nhầm là spam lượt xem. */}
         <div className="flex flex-col gap-4 p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-          {/* Top ad: từ lg trở lên đã nằm sẵn trong AppHeader (xem
-              AppHeader.tsx) nên ẩn khối này đi để khỏi lặp; mobile header
-              không đủ chỗ ngang nên vẫn hiện khối full-width ở đây. */}
-          <Adds label="Top ad" className="h-20 sm:h-24 w-full lg:hidden" />
+          <Adds label="Top ad" className="h-20 sm:h-24 w-full" />
 
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1 min-w-0">

@@ -3,6 +3,7 @@ import type {
   JwtAlgorithm,
   JwtMode,
   JwtSignatureStatus,
+  PasswordStrength,
   TextDiffRow,
   TextDiffStats,
 } from './Type';
@@ -119,4 +120,21 @@ export interface UuidState {
   // làm dòng khác/nút Copy All hiện nhầm "Copied!" theo.
   copiedIndex: number | null;
   copiedAll: boolean;
+}
+
+// Trang Password Generator: layout/state theo đúng pattern UuidState. Chỉ
+// sinh 1 mật khẩu mỗi lần (không bulk như UUID) vì đi kèm thanh đo độ mạnh -
+// hiện nhiều mật khẩu cùng lúc sẽ phải hiện nhiều thanh đo, không cần thiết.
+export interface PasswordGeneratorState {
+  length: string;
+  includeUppercase: boolean;
+  includeLowercase: boolean;
+  includeNumbers: boolean;
+  includeSymbols: boolean;
+  password: string;
+  // null = chưa generate lần nào; tính sẵn ở thunk lúc generate (giống cách
+  // JwtState tính sẵn expiresAt/isExpired) để component chỉ cần hiển thị.
+  strength: PasswordStrength | null;
+  error: string | null;
+  copied: boolean;
 }

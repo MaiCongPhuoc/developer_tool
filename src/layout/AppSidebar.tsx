@@ -39,6 +39,11 @@ const navItems: NavItem[] = [
     name: 'UUID Generator',
     path: '/uuid',
   },
+  {
+    icon: '',
+    name: 'Password Generator',
+    path: '/password-generator',
+  },
 ];
 
 const othersItems: NavItem[] = [

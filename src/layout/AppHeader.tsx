@@ -5,7 +5,6 @@ import { Link } from 'react-router';
 // import NotificationDropdown from '../components/header/NotificationDropdown';
 // import UserDropdown from '../components/header/UserDropdown';
 import { useSidebar } from '@/hook/useSidebar';
-import Adds from './Adds';
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -139,12 +138,6 @@ const AppHeader: React.FC = () => {
             </div>
           </div>
 
-          {/* Top ad nằm ngay trong header thay vì chiếm 1 khối riêng phía
-              dưới -> desktop thấy nội dung chính ngay, không bị đẩy xuống.
-              Chỉ hiện từ lg (header mobile xếp cột, không đủ chỗ ngang). */}
-          <div className="hidden lg:flex flex-1 lg:ml-4">
-            <Adds label="Top ad" className="h-11 w-full" />
-          </div>
         </div>
       </div>
     </header>

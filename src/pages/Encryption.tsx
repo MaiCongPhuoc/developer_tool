@@ -246,10 +246,10 @@ const Encryption = () => {
                 <LoadingIndicator />
               </div>
             ) : (
-              encodedToken && (
-                <div className="flex flex-col space-y-2">
-                  <div className="flex flex-wrap gap-2 justify-between items-center">
-                    <label className={labelClass}>Encoded Token:</label>
+              <div className="flex flex-col space-y-2">
+                <div className="flex flex-wrap gap-2 justify-between items-center">
+                  <label className={labelClass}>Encoded Token:</label>
+                  {encodedToken && (
                     <button
                       type="button"
                       onClick={() => handleCopy(encodedToken, 'encoded')}
@@ -257,12 +257,18 @@ const Encryption = () => {
                     >
                       {copiedField === 'encoded' ? 'Copied!' : 'Copy Output'}
                     </button>
-                  </div>
-                  <div className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
-                    <ColoredToken token={encodedToken} />
-                  </div>
+                  )}
                 </div>
-              )
+                <div className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+                  {encodedToken ? (
+                    <ColoredToken token={encodedToken} />
+                  ) : (
+                    <p className="text-sm text-gray-400 dark:text-gray-500">
+                      The encoded token will appear here...
+                    </p>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         ) : (
