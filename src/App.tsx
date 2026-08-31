@@ -10,6 +10,7 @@ import TextCompare from './pages/TextCompare';
 import FileCompare from './pages/FileCompare';
 import Uuid from './pages/Uuid';
 import PasswordGenerator from './pages/PasswordGenerator';
+import QrCode from './pages/QrCode';
 
 export const App: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ export const App: React.FC = () => {
             path="/password-generator"
             element={<PasswordGenerator />}
           />
+          <Route index path="/qr-code" element={<QrCode />} />
         </Route>
       </Routes>
     </Router>

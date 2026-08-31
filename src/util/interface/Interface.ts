@@ -138,3 +138,13 @@ export interface PasswordGeneratorState {
   error: string | null;
   copied: boolean;
 }
+
+// Trang QR Code Generator: sinh QR từ text/URL nhập vào, giữ sẵn cả bản PNG
+// (data URL, để <img> hiển thị VÀ tải trực tiếp) lẫn SVG (chuỗi markup, chỉ
+// dùng để tải - không hiển thị song song với PNG vì cùng 1 nội dung).
+export interface QrCodeState {
+  text: string;
+  qrCodeDataUrl: string;
+  qrCodeSvg: string;
+  error: string | null;
+}

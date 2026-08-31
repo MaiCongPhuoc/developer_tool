@@ -44,6 +44,11 @@ const navItems: NavItem[] = [
     name: 'Password Generator',
     path: '/password-generator',
   },
+  {
+    icon: '',
+    name: 'QR Code Generator',
+    path: '/qr-code',
+  },
 ];
 
 const othersItems: NavItem[] = [

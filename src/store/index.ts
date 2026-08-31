@@ -9,6 +9,7 @@ import textCompareReducer from './slices/textCompareSlice';
 import fileCompareReducer from './slices/fileCompareSlice';
 import uuidReducer from './slices/uuidSlice';
 import passwordReducer from './slices/passwordSlice';
+import qrCodeReducer from './slices/qrCodeSlice';
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     fileCompare: fileCompareReducer,
     uuid: uuidReducer,
     password: passwordReducer,
+    qrCode: qrCodeReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
