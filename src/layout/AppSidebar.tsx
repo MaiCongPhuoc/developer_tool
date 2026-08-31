@@ -49,6 +49,11 @@ const navItems: NavItem[] = [
     name: 'QR Code Generator',
     path: '/qr-code',
   },
+  {
+    icon: '',
+    name: 'Time / Timezone Converter',
+    path: '/time-converter',
+  },
 ];
 
 const othersItems: NavItem[] = [

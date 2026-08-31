@@ -94,3 +94,7 @@ export type PasswordStrength =
   | 'fair'
   | 'strong'
   | 'very-strong';
+
+// Đơn vị của Unix timestamp nhập vào trang Time / Timezone Converter - giây
+// (chuẩn Unix timestamp gốc) hoặc mili-giây (kiểu Date.now()/JS hay dùng).
+export type TimestampUnit = 'seconds' | 'milliseconds';

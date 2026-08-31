@@ -6,6 +6,7 @@ import type {
   PasswordStrength,
   TextDiffRow,
   TextDiffStats,
+  TimestampUnit,
 } from './Type';
 
 export interface SidebarState {
@@ -147,4 +148,20 @@ export interface QrCodeState {
   qrCodeDataUrl: string;
   qrCodeSvg: string;
   error: string | null;
+}
+
+// Trang Time / Timezone Converter: đổi Unix timestamp sang ngày giờ đọc được
+// theo 1 timezone chọn được, dùng thẳng Intl.DateTimeFormat của trình duyệt
+// (xem util/time.ts) - không cần thư viện ngoài (moment/date-fns/luxon...).
+export interface TimeConverterState {
+  timestamp: string;
+  unit: TimestampUnit;
+  timezone: string;
+  formatted: string;
+  isoUtc: string;
+  error: string | null;
+  // 2 kết quả (giờ địa phương theo timezone đã chọn / UTC ISO) có nút Copy
+  // riêng - giống copiedField ở JwtState, để bấm Copy ở dòng này không làm
+  // dòng kia hiện nhầm "Copied!" theo.
+  copiedField: 'formatted' | 'iso' | null;
 }

@@ -10,6 +10,7 @@ import fileCompareReducer from './slices/fileCompareSlice';
 import uuidReducer from './slices/uuidSlice';
 import passwordReducer from './slices/passwordSlice';
 import qrCodeReducer from './slices/qrCodeSlice';
+import timeConverterReducer from './slices/timeConverterSlice';
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     uuid: uuidReducer,
     password: passwordReducer,
     qrCode: qrCodeReducer,
+    timeConverter: timeConverterReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

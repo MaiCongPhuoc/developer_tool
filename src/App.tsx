@@ -11,6 +11,7 @@ import FileCompare from './pages/FileCompare';
 import Uuid from './pages/Uuid';
 import PasswordGenerator from './pages/PasswordGenerator';
 import QrCode from './pages/QrCode';
+import TimeConverter from './pages/TimeConverter';
 
 export const App: React.FC = () => {
   return (
@@ -31,6 +32,11 @@ export const App: React.FC = () => {
             element={<PasswordGenerator />}
           />
           <Route index path="/qr-code" element={<QrCode />} />
+          <Route
+            index
+            path="/time-converter"
+            element={<TimeConverter />}
+          />
         </Route>
       </Routes>
     </Router>
