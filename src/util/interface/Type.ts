@@ -98,3 +98,57 @@ export type PasswordStrength =
 // Đơn vị của Unix timestamp nhập vào trang Time / Timezone Converter - giây
 // (chuẩn Unix timestamp gốc) hoặc mili-giây (kiểu Date.now()/JS hay dùng).
 export type TimestampUnit = 'seconds' | 'milliseconds';
+
+// Các loại thành phần cú pháp regex mà util/regex.ts nhận diện được, dùng để
+// tô màu riêng từng loại trong bảng giải thích trên trang Regex Tester.
+export type RegexTokenType =
+  | 'anchor'
+  | 'quantifier'
+  | 'group'
+  | 'class'
+  | 'escape'
+  | 'alternation'
+  | 'literal'
+  | 'wildcard';
+
+export type RegexToken = {
+  type: RegexTokenType;
+  value: string;
+  description: string;
+};
+
+export type RegexMatchResult = {
+  match: string;
+  index: number;
+  // Nội dung các capturing group trong lần khớp này - undefined nếu group
+  // đó không tham gia khớp (vd nằm trong 1 nhánh alternation không được chọn).
+  groups: (string | undefined)[];
+};
+
+// Trang Unit Converter: nhiều nhóm đơn vị độc lập, mỗi nhóm có 1 bộ đơn vị và
+// công thức quy đổi riêng (xem util/units.ts, util/temperature.ts,
+// util/numberBase.ts, util/color.ts). fontSize khác các nhóm số học đơn giản
+// vì cần thêm 1 tham số "base font size" (px/rem/em/% vốn là đơn vị TƯƠNG
+// ĐỐI, không có hệ số quy đổi cố định như km/kg/byte). currency khác biệt:
+// không có hệ số cố định (tỷ giá đổi theo thời gian thực) nên phải gọi API
+// bên ngoài thay vì tính offline - xem util/currency.ts. temperature dùng
+// phép biến đổi AFFINE (nhân + cộng) chứ không chỉ nhân đơn thuần như
+// length/weight/storage. numberBase và color không phải quy đổi SỐ mà là
+// quy đổi CÁCH BIỂU DIỄN (hệ đếm / định dạng màu).
+export type UnitConverterCategory =
+  | 'length'
+  | 'weight'
+  | 'storage'
+  | 'fontSize'
+  | 'currency'
+  | 'temperature'
+  | 'numberBase'
+  | 'color';
+
+export type FontSizeUnit = 'px' | 'rem' | 'em' | '%';
+
+export type TemperatureUnit = 'celsius' | 'fahrenheit' | 'kelvin';
+
+export type NumberBaseUnit = 'decimal' | 'binary' | 'octal' | 'hexadecimal';
+
+export type ColorFormat = 'hex' | 'rgb' | 'hsl';

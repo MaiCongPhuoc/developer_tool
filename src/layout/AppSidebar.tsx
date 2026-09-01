@@ -54,6 +54,16 @@ const navItems: NavItem[] = [
     name: 'Time / Timezone Converter',
     path: '/time-converter',
   },
+  {
+    icon: '',
+    name: 'Regex Tester',
+    path: '/regex-tester',
+  },
+  {
+    icon: '',
+    name: 'Unit & Currency Converter',
+    path: '/unit-converter',
+  },
 ];
 
 const othersItems: NavItem[] = [

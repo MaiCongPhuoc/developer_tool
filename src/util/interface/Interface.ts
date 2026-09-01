@@ -4,9 +4,12 @@ import type {
   JwtMode,
   JwtSignatureStatus,
   PasswordStrength,
+  RegexMatchResult,
+  RegexToken,
   TextDiffRow,
   TextDiffStats,
   TimestampUnit,
+  UnitConverterCategory,
 } from './Type';
 
 export interface SidebarState {
@@ -164,4 +167,46 @@ export interface TimeConverterState {
   // riêng - giống copiedField ở JwtState, để bấm Copy ở dòng này không làm
   // dòng kia hiện nhầm "Copied!" theo.
   copiedField: 'formatted' | 'iso' | null;
+}
+
+// Trang Regex Tester: kiểm tra 1 pattern regex có khớp với đoạn text nhập
+// vào không, kèm bảng giải thích cú pháp (tokens) tự sinh - xem util/regex.ts.
+// Mỗi cờ flag (g/i/m/s/u/y) tách thành field boolean riêng để bind trực tiếp
+// vào từng checkbox, giống pattern includeUppercase/... của PasswordGeneratorState.
+export interface RegexTesterState {
+  pattern: string;
+  flagGlobal: boolean;
+  flagIgnoreCase: boolean;
+  flagMultiline: boolean;
+  flagDotAll: boolean;
+  flagUnicode: boolean;
+  flagSticky: boolean;
+  testText: string;
+  isMatch: boolean;
+  matches: RegexMatchResult[];
+  tokens: RegexToken[];
+  error: string | null;
+}
+
+// Trang Unit Converter: 4 nhóm đơn vị độc lập (length/weight/storage/
+// fontSize), mỗi nhóm tự quản lý fromUnit/toUnit riêng (xem util/units.ts).
+// basePx chỉ có ý nghĩa khi category = 'fontSize' (px/rem/em/% là đơn vị
+// tương đối, cần 1 mốc quy đổi) nhưng vẫn để phẳng trong state chung cho đơn
+// giản, giống cách JwtState gộp chung field của cả Encode lẫn Decode.
+export interface UnitConverterState {
+  category: UnitConverterCategory;
+  inputValue: string;
+  fromUnit: string;
+  toUnit: string;
+  basePx: string;
+  result: string;
+  error: string | null;
+  copied: boolean;
+  // Cache tỷ giá cho nhóm 'currency' - null nghĩa là CHƯA fetch lần nào
+  // trong phiên này. Cố ý KHÔNG bị xoá bởi clearUnitConverter (khác các field
+  // khác) để rời trang rồi quay lại không phải gọi lại API - chỉ mất khi
+  // reload lại cả trang thật (giống cách quảng cáo chỉ tải lại khi mở app/
+  // reload trang thật, xem project_ad_architecture).
+  currencyRates: Record<string, number> | null;
+  currencyRatesUpdatedAt: string | null;
 }

@@ -11,6 +11,8 @@ import uuidReducer from './slices/uuidSlice';
 import passwordReducer from './slices/passwordSlice';
 import qrCodeReducer from './slices/qrCodeSlice';
 import timeConverterReducer from './slices/timeConverterSlice';
+import regexReducer from './slices/regexSlice';
+import unitConverterReducer from './slices/unitConverterSlice';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +28,8 @@ export const store = configureStore({
     password: passwordReducer,
     qrCode: qrCodeReducer,
     timeConverter: timeConverterReducer,
+    regex: regexReducer,
+    unitConverter: unitConverterReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

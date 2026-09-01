@@ -12,6 +12,8 @@ import Uuid from './pages/Uuid';
 import PasswordGenerator from './pages/PasswordGenerator';
 import QrCode from './pages/QrCode';
 import TimeConverter from './pages/TimeConverter';
+import RegexTester from './pages/RegexTester';
+import UnitConverter from './pages/UnitConverter';
 
 export const App: React.FC = () => {
   return (
@@ -36,6 +38,12 @@ export const App: React.FC = () => {
             index
             path="/time-converter"
             element={<TimeConverter />}
+          />
+          <Route index path="/regex-tester" element={<RegexTester />} />
+          <Route
+            index
+            path="/unit-converter"
+            element={<UnitConverter />}
           />
         </Route>
       </Routes>
