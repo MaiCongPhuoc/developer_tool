@@ -36,18 +36,12 @@ const navItems: NavItem[] = [
   },
   {
     icon: '',
-    name: 'UUID Generator',
-    path: '/uuid',
-  },
-  {
-    icon: '',
-    name: 'Password Generator',
-    path: '/password-generator',
-  },
-  {
-    icon: '',
-    name: 'QR Code Generator',
-    path: '/qr-code',
+    name: 'Generator',
+    subItems: [
+      { name: 'UUID Generator', path: '/uuid', pro: false },
+      { name: 'Password Generator', path: '/password-generator', pro: false },
+      { name: 'QR Code Generator', path: '/qr-code', pro: false },
+    ],
   },
   {
     icon: '',
