@@ -13,6 +13,7 @@ import qrCodeReducer from './slices/qrCodeSlice';
 import timeConverterReducer from './slices/timeConverterSlice';
 import regexReducer from './slices/regexSlice';
 import unitConverterReducer from './slices/unitConverterSlice';
+import colorPickerReducer from './slices/colorPickerSlice';
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     timeConverter: timeConverterReducer,
     regex: regexReducer,
     unitConverter: unitConverterReducer,
+    colorPicker: colorPickerReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -152,3 +152,9 @@ export type TemperatureUnit = 'celsius' | 'fahrenheit' | 'kelvin';
 export type NumberBaseUnit = 'decimal' | 'binary' | 'octal' | 'hexadecimal';
 
 export type ColorFormat = 'hex' | 'rgb' | 'hsl';
+
+// Trang Color Picker: Tab "palette" dùng input[type=color]/preset swatch/gõ
+// tay HEX (mọi thao tác đều diễn ra trong trang, offline hoàn toàn). Tab
+// "eyedropper" dùng EyeDropper API gốc của trình duyệt để lấy màu 1 điểm ảnh
+// bất kỳ trên TOÀN MÀN HÌNH, kể cả ngoài trình duyệt - xem util/eyedropper.ts.
+export type ColorPickerTab = 'palette' | 'eyedropper';

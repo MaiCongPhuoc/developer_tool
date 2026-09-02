@@ -18,13 +18,7 @@ export const AppLayout: React.FC = () => {
         } ${isMobileOpen ? 'ml-0' : ''}`}
       >
         <AppHeader />
-        {/* 3 vị trí quảng cáo đặt cố định ở đây (ngoài <Outlet/>), KHÔNG đặt
-            trong từng trang: <Outlet/> bị unmount/mount lại mỗi khi đổi route,
-            còn khối bọc AppLayout thì tồn tại xuyên suốt cả phiên dùng app.
-            Nhờ vậy quảng cáo chỉ tải lại khi mở app / reload trang thật, chuyển
-            qua lại giữa các tool bên trong app không kích hoạt tải lại quảng
-            cáo -> tránh bị Google hiểu nhầm là spam lượt xem. */}
-        <div className="flex flex-col gap-4 p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+        <div className="flex flex-col gap-4 p-4 md:p-6">
           <Adds label="Top ad" className="h-20 sm:h-24 w-full" />
 
           <div className="flex flex-col lg:flex-row gap-4">

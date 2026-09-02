@@ -19,8 +19,13 @@ import type { JwtAlgorithm, JwtMode } from '@/util/interface/Type';
 
 const algorithms: JwtAlgorithm[] = ['HS256', 'HS384', 'HS512'];
 
+// Không gộp sẵn chiều cao vào đây vì Token input (chế độ Decode) cần chiều
+// cao NHỎ HƠN Header/Payload input (chế độ Encode) - xếp 2 class chiều cao
+// khác nhau (result-box-h / result-box-h-sm) vào CÙNG 1 class dùng chung sẽ
+// đụng độ CSS (cả 2 cùng set thuộc tính height, thứ tự nào thắng phụ thuộc
+// thứ tự @utility được định nghĩa chứ không phải thứ tự trong className).
 const textareaClass =
-  'w-full h-40 p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
+  'w-full p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
 
 const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500';
@@ -189,7 +194,7 @@ const Encryption = () => {
                 <textarea
                   value={headerInput}
                   onChange={(e) => dispatch(setHeaderInput(e.target.value))}
-                  className={textareaClass}
+                  className={`${textareaClass} result-box-h`}
                   spellCheck={false}
                 />
               </div>
@@ -198,7 +203,7 @@ const Encryption = () => {
                 <textarea
                   value={payloadInput}
                   onChange={(e) => dispatch(setPayloadInput(e.target.value))}
-                  className={textareaClass}
+                  className={`${textareaClass} result-box-h`}
                   spellCheck={false}
                 />
               </div>
@@ -279,7 +284,7 @@ const Encryption = () => {
                 value={tokenInput}
                 onChange={(e) => dispatch(setTokenInput(e.target.value))}
                 placeholder="Paste your JWT here... e.g. eyJhbGciOi...header.eyJzdWIi...payload.signature"
-                className={`${textareaClass} h-28`}
+                className={`${textareaClass} result-box-h-sm`}
                 spellCheck={false}
               />
             </div>
@@ -349,7 +354,7 @@ const Encryption = () => {
                         {copiedField === 'header' ? 'Copied!' : 'Copy'}
                       </button>
                     </div>
-                    <pre className="w-full h-40 overflow-auto p-3 font-mono text-sm border rounded-lg bg-white text-rose-600 dark:bg-gray-900 dark:border-gray-700 dark:text-rose-400">
+                    <pre className="w-full result-box-h overflow-auto p-3 font-mono text-sm border rounded-lg bg-white text-rose-600 dark:bg-gray-900 dark:border-gray-700 dark:text-rose-400">
                       {decodedHeader}
                     </pre>
                   </div>
@@ -364,7 +369,7 @@ const Encryption = () => {
                         {copiedField === 'payload' ? 'Copied!' : 'Copy'}
                       </button>
                     </div>
-                    <pre className="w-full h-40 overflow-auto p-3 font-mono text-sm border rounded-lg bg-white text-purple-600 dark:bg-gray-900 dark:border-gray-700 dark:text-purple-400">
+                    <pre className="w-full result-box-h overflow-auto p-3 font-mono text-sm border rounded-lg bg-white text-purple-600 dark:bg-gray-900 dark:border-gray-700 dark:text-purple-400">
                       {decodedPayload}
                     </pre>
                   </div>

@@ -164,7 +164,7 @@ const Uuid = () => {
               </button>
             )}
           </div>
-          <div className="w-full h-64 sm:h-80 overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+          <div className="w-full result-box-h overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
             {loading ? (
               <LoadingIndicator />
             ) : uuids.length > 0 ? (

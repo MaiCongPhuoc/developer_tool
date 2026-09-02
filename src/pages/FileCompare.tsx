@@ -23,7 +23,7 @@ const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 type FileSide = 'left' | 'right';
 
 const dropZoneBaseClass =
-  'flex h-48 sm:h-64 lg:h-80 xl:h-96 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-center transition';
+  'flex result-box-h w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-center transition';
 
 const FileCompare = () => {
   const dispatch = useAppDispatch();
@@ -308,7 +308,7 @@ const FileCompare = () => {
           )}
           <div
             className={`w-full overflow-auto border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700 ${
-              loading || stats ? 'h-72 sm:h-96 xl:h-128' : ''
+              loading || stats ? 'result-box-h' : ''
             }`}
           >
             <FileCompareView

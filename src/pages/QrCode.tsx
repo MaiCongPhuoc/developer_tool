@@ -18,7 +18,7 @@ import {
 } from '@/util/qrcode';
 
 const textareaClass =
-  'w-full h-28 p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
+  'w-full result-box-h-sm p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
 
 const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 

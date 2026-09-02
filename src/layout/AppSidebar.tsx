@@ -58,6 +58,11 @@ const navItems: NavItem[] = [
     name: 'Unit & Currency Converter',
     path: '/unit-converter',
   },
+  {
+    icon: '',
+    name: 'Color Picker',
+    path: '/color-picker',
+  },
 ];
 
 const othersItems: NavItem[] = [

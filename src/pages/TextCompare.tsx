@@ -10,7 +10,7 @@ import {
 } from '@/store/slices/textCompareSlice';
 
 const textareaClass =
-  'w-full h-48 sm:h-64 lg:h-80 xl:h-96 p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
+  'w-full result-box-h p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
 
 const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 
@@ -118,7 +118,7 @@ const TextCompare = () => {
           </div>
           <div
             className={`w-full overflow-auto border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700 ${
-              loading || stats ? 'h-72 sm:h-96 xl:h-128' : ''
+              loading || stats ? 'result-box-h' : ''
             }`}
           >
             <TextCompareView loading={loading} />

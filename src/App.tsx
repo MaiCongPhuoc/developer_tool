@@ -14,6 +14,7 @@ import QrCode from './pages/QrCode';
 import TimeConverter from './pages/TimeConverter';
 import RegexTester from './pages/RegexTester';
 import UnitConverter from './pages/UnitConverter';
+import ColorPicker from './pages/ColorPicker';
 
 export const App: React.FC = () => {
   return (
@@ -45,6 +46,7 @@ export const App: React.FC = () => {
             path="/unit-converter"
             element={<UnitConverter />}
           />
+          <Route index path="/color-picker" element={<ColorPicker />} />
         </Route>
       </Routes>
     </Router>

@@ -20,7 +20,7 @@ const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 font-mono';
 
 const textareaClass =
-  'w-full h-40 p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
+  'w-full result-box-h-sm p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
 
 const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 
@@ -249,7 +249,7 @@ const RegexTester = () => {
                 "sẽ xuất hiện ở đây..." của các trang trước (UUID, Password...) */}
             <div className="flex flex-col space-y-2">
               <label className={labelClass}>Highlighted Text:</label>
-              <div className="w-full max-h-64 overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+              <div className="w-full result-box-max-h overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
                 {hasTested ? (
                   <p className="whitespace-pre-wrap break-words font-mono text-sm text-gray-800 dark:text-gray-100">
                     {testText
@@ -277,7 +277,7 @@ const RegexTester = () => {
                   : ''}
                 :
               </label>
-              <div className="w-full max-h-64 overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+              <div className="w-full result-box-max-h overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
                 {!hasTested ? (
                   <p className="text-sm text-gray-400 dark:text-gray-500">
                     Matches will appear here after you click Test...
@@ -321,7 +321,7 @@ const RegexTester = () => {
             {/* Bảng giải thích cú pháp regex */}
             <div className="flex flex-col space-y-2">
               <label className={labelClass}>Syntax Explanation:</label>
-              <div className="w-full max-h-72 overflow-auto border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+              <div className="w-full result-box-max-h overflow-auto border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
                 {hasTested ? (
                   <ul className="divide-y divide-gray-100 dark:divide-gray-800">
                     {tokens.map((token, i) => (

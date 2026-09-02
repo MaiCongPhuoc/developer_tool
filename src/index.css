@@ -47,6 +47,33 @@
   --color-brand-500: #3b82f6;
 }
 
+/* Chiều cao co giãn theo chiều cao MÀN HÌNH (không phải theo breakpoint
+   chiều rộng như h-64 sm:h-80 xl:h-96 trước đây) - trên màn hình cao hơn
+   (2560x1440, 3440x1440...) các khung textarea/kết quả sẽ tự cao hơn thay vì
+   giữ nguyên 1 mức cố định, để lại khoảng trắng thừa phía dưới. Dùng clamp()
+   để vẫn có sàn tối thiểu (không quá thấp trên viewport thấp/mobile ngang)
+   và trần tối đa (không quá cao trên màn hình cực cao). 32rem trong công
+   thức calc() là ước lượng chiều cao phần "khung sườn" phía trên/dưới khung
+   này (header, quảng cáo, tiêu đề trang, toolbar, nhãn, padding) - áp dụng
+   chung 1 mức cho mọi trang thay vì tính riêng từng trang, nên không tuyệt
+   đối khớp pixel ở mọi trang nhưng cải thiện rõ rệt so với chiều cao cố
+   định trước đó. */
+@utility result-box-h {
+  height: clamp(16rem, calc(100vh - 32rem), 44rem);
+}
+
+/* Bản nhỏ hơn cho các khung phụ (input JSON header/payload, ô nhập URL...)
+   không cần chiếm nhiều chỗ như khung kết quả chính. */
+@utility result-box-h-sm {
+  height: clamp(10rem, calc(100vh - 46rem), 20rem);
+}
+
+/* Bản max-height cho danh sách có thể ngắn hơn khung (không nên ép cao cố
+   định khi ít nội dung) nhưng vẫn cần giới hạn không phình quá to. */
+@utility result-box-max-h {
+  max-height: clamp(16rem, calc(100vh - 32rem), 44rem);
+}
+
 @utility menu-item {
   @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
 }

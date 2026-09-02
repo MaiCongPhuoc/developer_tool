@@ -96,7 +96,7 @@ const Home = () => {
               value={inputJson}
               onChange={(e) => dispatch(setInputJson(e.target.value))}
               placeholder='Paste your JSON string here... e.g. {"name": "John", "age": 30}'
-              className="w-full h-64 sm:h-80 xl:h-96 p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none"
+              className="w-full result-box-h p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none"
             />
           </div>
 
@@ -116,7 +116,7 @@ const Home = () => {
                 </button>
               )}
             </div>
-            <div className="w-full h-64 sm:h-80 xl:h-96 overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
+            <div className="w-full result-box-h overflow-auto p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700">
               {loading ? (
                 <LoadingIndicator />
               ) : formattedJson ? (

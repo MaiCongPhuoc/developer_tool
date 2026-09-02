@@ -168,3 +168,20 @@ export const getColorPreviewHex = (
     return null;
   }
 };
+
+// Dùng cho ống hút màu trên ảnh tải lên (util/imagePixel.ts) - đọc pixel từ
+// canvas ra {r,g,b} rồi cần đổi sang HEX để hiển thị/lưu vào state, tái dùng
+// đúng logic formatHex thay vì viết lại phép đổi số sang hex ở nơi khác.
+export const rgbToHex = (r: number, g: number, b: number): string =>
+  formatHex({ r, g, b });
+
+export type AllColorFormats = { hex: string; rgb: string; hsl: string };
+
+// Dùng cho trang Color Picker: từ 1 mã HEX (luôn hợp lệ vì tới từ
+// input[type=color]/EyeDropper/preset - không phải người dùng gõ tay) suy ra
+// đồng thời cả 3 cách biểu diễn để hiển thị song song, không cần người dùng
+// tự chuyển đổi qua lại như ở Unit Converter.
+export const getAllColorFormats = (hex: string): AllColorFormats => {
+  const rgb = parseHex(hex);
+  return { hex: formatHex(rgb), rgb: formatRgb(rgb), hsl: formatHsl(rgb) };
+};

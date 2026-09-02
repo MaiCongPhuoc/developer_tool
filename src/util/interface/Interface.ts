@@ -1,4 +1,5 @@
 import type {
+  ColorPickerTab,
   FileCompareFile,
   JwtAlgorithm,
   JwtMode,
@@ -209,4 +210,21 @@ export interface UnitConverterState {
   // reload trang thật, xem project_ad_architecture).
   currencyRates: Record<string, number> | null;
   currencyRatesUpdatedAt: string | null;
+}
+
+// Trang Color Picker: hex là màu ĐANG ÁP DỤNG (nguồn có thể từ
+// input[type=color], preset swatch, ống hút màu trên ảnh, gõ tay + Apply,
+// hoặc mặc định #000000 lúc mới vào trang/bấm Clear) - luôn là 1 mã hex hợp
+// lệ, không bao giờ null. hexInput là giá trị THÔ người dùng đang gõ trong ô
+// nhập tay ở tab Palette, có thể tạm thời không hợp lệ trước khi bấm Apply
+// (giống cặp inputValue/basePx ở UnitConverterState).
+export interface ColorPickerState {
+  tab: ColorPickerTab;
+  hex: string;
+  hexInput: string;
+  copiedField: 'hex' | 'rgb' | 'hsl' | null;
+  error: string | null;
+  // Ảnh do người dùng tải lên (data URL) để dùng ống hút màu trên đó - chỉ
+  // có ý nghĩa ở tab 'eyedropper'. null nghĩa là chưa tải ảnh nào.
+  uploadedImage: string | null;
 }
