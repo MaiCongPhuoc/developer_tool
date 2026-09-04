@@ -14,6 +14,8 @@ import timeConverterReducer from './slices/timeConverterSlice';
 import regexReducer from './slices/regexSlice';
 import unitConverterReducer from './slices/unitConverterSlice';
 import colorPickerReducer from './slices/colorPickerSlice';
+import markdownReducer from './slices/markdownSlice';
+import htmlPreviewReducer from './slices/htmlPreviewSlice';
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +34,8 @@ export const store = configureStore({
     regex: regexReducer,
     unitConverter: unitConverterReducer,
     colorPicker: colorPickerReducer,
+    markdown: markdownReducer,
+    htmlPreview: htmlPreviewReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

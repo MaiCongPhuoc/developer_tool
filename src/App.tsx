@@ -15,6 +15,8 @@ import TimeConverter from './pages/TimeConverter';
 import RegexTester from './pages/RegexTester';
 import UnitConverter from './pages/UnitConverter';
 import ColorPicker from './pages/ColorPicker';
+import MarkdownPreviewer from './pages/MarkdownPreviewer';
+import HtmlPreviewer from './pages/HtmlPreviewer';
 
 export const App: React.FC = () => {
   return (
@@ -47,6 +49,12 @@ export const App: React.FC = () => {
             element={<UnitConverter />}
           />
           <Route index path="/color-picker" element={<ColorPicker />} />
+          <Route
+            index
+            path="/markdown-previewer"
+            element={<MarkdownPreviewer />}
+          />
+          <Route index path="/html-converter" element={<HtmlPreviewer />} />
         </Route>
       </Routes>
     </Router>

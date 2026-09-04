@@ -228,3 +228,25 @@ export interface ColorPickerState {
   // có ý nghĩa ở tab 'eyedropper'. null nghĩa là chưa tải ảnh nào.
   uploadedImage: string | null;
 }
+
+// Trang Markdown Previewer: render THEO THỜI GIAN THỰC (không qua nút bấm/
+// delay như các trang khác) - markdown đổi tới đâu, preview cập nhật tới đó,
+// nên không cần field "loading"/"result" tách riêng như các trang có nút
+// Generate/Convert.
+export interface MarkdownPreviewState {
+  markdown: string;
+  copiedField: 'markdown' | 'html' | null;
+  error: string | null;
+}
+
+// Trang HTML Previewer: chỉ MỘT ô nhập duy nhất (khác Markdown Previewer có
+// 2 khung markdown/preview tách biệt) - người dùng tự viết cả HTML lẫn CSS
+// (<style>) và JavaScript (<script>) lồng trong cùng 1 đoạn mã, y hệt xem
+// "View Source" của 1 trang thật. copiedField chỉ còn 1 lựa chọn ('html') vì
+// preview CHÍNH LÀ render trực tiếp của html - không có bản "kết quả" nào
+// khác để copy riêng như markdown -> HTML.
+export interface HtmlPreviewState {
+  html: string;
+  copiedField: 'html' | null;
+  error: string | null;
+}

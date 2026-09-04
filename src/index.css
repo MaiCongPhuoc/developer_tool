@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -138,4 +139,66 @@
 
 @utility menu-dropdown-badge-inactive {
   @apply bg-brand-50 group-hover:bg-brand-100 dark:bg-brand-500/15 dark:group-hover:bg-brand-500/20;
+}
+
+/* Tô màu cú pháp cho code block trong Markdown Previewer (rehype-highlight
+   gắn các class .hljs-* này vào <span> bên trong <code>). Chỉ cần MỘT bảng
+   màu duy nhất (không có biến thể dark:) vì nền của <pre> trong
+   @tailwindcss/typography luôn tối ở CẢ chế độ "prose" lẫn "prose-invert"
+   (xem biến --tw-prose-pre-bg/--tw-prose-invert-pre-bg trong chính plugin -
+   đều là màu tối), nên chữ sáng màu luôn đọc được trên đó. */
+.hljs-comment,
+.hljs-quote {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-type {
+  color: #ff7b72;
+}
+
+.hljs-string,
+.hljs-doctag,
+.hljs-addition {
+  color: #a5d6ff;
+}
+
+.hljs-number {
+  color: #79c0ff;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id {
+  color: #d2a8ff;
+  font-weight: 600;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-template-variable {
+  color: #ffa657;
+}
+
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-tag {
+  color: #7ee787;
+}
+
+.hljs-deletion {
+  color: #ffa198;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
 }

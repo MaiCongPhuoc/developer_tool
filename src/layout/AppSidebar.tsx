@@ -45,8 +45,11 @@ const navItems: NavItem[] = [
   },
   {
     icon: '',
-    name: 'Time / Timezone Converter',
-    path: '/time-converter',
+    name: 'Converter',
+    subItems: [
+      { name: 'Time / Timezone', path: '/time-converter', pro: false },
+      { name: 'Unit & Currency', path: '/unit-converter', pro: false },
+    ],
   },
   {
     icon: '',
@@ -55,13 +58,16 @@ const navItems: NavItem[] = [
   },
   {
     icon: '',
-    name: 'Unit & Currency Converter',
-    path: '/unit-converter',
+    name: 'Color Picker',
+    path: '/color-picker',
   },
   {
     icon: '',
-    name: 'Color Picker',
-    path: '/color-picker',
+    name: 'Previewer',
+    subItems: [
+      { name: 'Markdown Previewer', path: '/markdown-previewer', pro: false },
+      { name: 'HTML Previewer', path: '/html-converter', pro: false },
+    ],
   },
 ];
 
