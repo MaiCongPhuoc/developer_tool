@@ -1,6 +1,7 @@
 import type {
   ColorPickerTab,
   FileCompareFile,
+  ImageOutputFormat,
   JwtAlgorithm,
   JwtMode,
   JwtSignatureStatus,
@@ -248,5 +249,30 @@ export interface MarkdownPreviewState {
 export interface HtmlPreviewState {
   html: string;
   copiedField: 'html' | null;
+  error: string | null;
+}
+
+// Trang Image Compressor: nén ảnh ngay trong trình duyệt bằng Canvas API gốc
+// (xem util/imageCompressor.ts), không cần thư viện ngoài. originalXxx lưu
+// lại ảnh gốc y hệt lúc tải lên (để hiển thị so sánh trước/sau và để nén lại
+// khi đổi tuỳ chọn); compressedXxx chỉ có giá trị SAU khi bấm Compress - null
+// nghĩa là chưa nén lần nào (hoặc vừa chọn ảnh mới, xem setOriginalImage).
+export interface ImageCompressorState {
+  originalName: string | null;
+  originalType: string | null;
+  originalSize: number | null;
+  originalDataUrl: string | null;
+  originalWidth: number | null;
+  originalHeight: number | null;
+  format: ImageOutputFormat;
+  // Giữ dạng string để bind trực tiếp vào input range/text (giống pattern
+  // count/length của UuidState/PasswordGeneratorState), số thực sự dùng để
+  // nén được parse + validate ở component trước khi gọi compressImage.
+  quality: string;
+  maxDimension: string;
+  compressedDataUrl: string | null;
+  compressedSize: number | null;
+  compressedWidth: number | null;
+  compressedHeight: number | null;
   error: string | null;
 }

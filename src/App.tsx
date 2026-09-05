@@ -17,6 +17,7 @@ import UnitConverter from './pages/UnitConverter';
 import ColorPicker from './pages/ColorPicker';
 import MarkdownPreviewer from './pages/MarkdownPreviewer';
 import HtmlPreviewer from './pages/HtmlPreviewer';
+import ImageCompressor from './pages/ImageCompressor';
 
 export const App: React.FC = () => {
   return (
@@ -55,6 +56,11 @@ export const App: React.FC = () => {
             element={<MarkdownPreviewer />}
           />
           <Route index path="/html-converter" element={<HtmlPreviewer />} />
+          <Route
+            index
+            path="/image-compressor"
+            element={<ImageCompressor />}
+          />
         </Route>
       </Routes>
     </Router>

@@ -63,6 +63,11 @@ const navItems: NavItem[] = [
   },
   {
     icon: '',
+    name: 'Image Compressor',
+    path: '/image-compressor',
+  },
+  {
+    icon: '',
     name: 'Previewer',
     subItems: [
       { name: 'Markdown Previewer', path: '/markdown-previewer', pro: false },

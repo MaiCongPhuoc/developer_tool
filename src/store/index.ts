@@ -16,6 +16,7 @@ import unitConverterReducer from './slices/unitConverterSlice';
 import colorPickerReducer from './slices/colorPickerSlice';
 import markdownReducer from './slices/markdownSlice';
 import htmlPreviewReducer from './slices/htmlPreviewSlice';
+import imageCompressorReducer from './slices/imageCompressorSlice';
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ export const store = configureStore({
     colorPicker: colorPickerReducer,
     markdown: markdownReducer,
     htmlPreview: htmlPreviewReducer,
+    imageCompressor: imageCompressorReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

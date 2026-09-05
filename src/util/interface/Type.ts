@@ -158,3 +158,8 @@ export type ColorFormat = 'hex' | 'rgb' | 'hsl';
 // "eyedropper" dùng EyeDropper API gốc của trình duyệt để lấy màu 1 điểm ảnh
 // bất kỳ trên TOÀN MÀN HÌNH, kể cả ngoài trình duyệt - xem util/eyedropper.ts.
 export type ColorPickerTab = 'palette' | 'eyedropper';
+
+// Trang Image Compressor: 3 định dạng xuất ảnh hỗ trợ nén bằng
+// canvas.toDataURL() gốc của trình duyệt. JPEG/WebP là lossy (có tham số
+// quality), PNG luôn lossless nên bỏ qua quality - xem util/imageCompressor.ts.
+export type ImageOutputFormat = 'image/jpeg' | 'image/webp' | 'image/png';
