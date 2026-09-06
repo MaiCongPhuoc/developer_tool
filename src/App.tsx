@@ -18,6 +18,7 @@ import ColorPicker from './pages/ColorPicker';
 import MarkdownPreviewer from './pages/MarkdownPreviewer';
 import HtmlPreviewer from './pages/HtmlPreviewer';
 import ImageCompressor from './pages/ImageCompressor';
+import ImageFormatConverter from './pages/ImageFormatConverter';
 
 export const App: React.FC = () => {
   return (
@@ -60,6 +61,11 @@ export const App: React.FC = () => {
             index
             path="/image-compressor"
             element={<ImageCompressor />}
+          />
+          <Route
+            index
+            path="/image-format-converter"
+            element={<ImageFormatConverter />}
           />
         </Route>
       </Routes>

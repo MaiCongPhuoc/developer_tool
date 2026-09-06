@@ -276,3 +276,40 @@ export interface ImageCompressorState {
   compressedHeight: number | null;
   error: string | null;
 }
+
+// Trang Image Format Converter: đổi đuôi ảnh (jpg/png/webp) và tuỳ chọn xoá
+// nền theo màu (chroma-key đơn giản, không phải xoá nền bằng AI) - xem
+// util/imageFormatConverter.ts. originalXxx lưu ảnh gốc y hệt lúc tải lên
+// (giống ImageCompressorState); convertedXxx chỉ có giá trị SAU khi bấm
+// Convert - null nghĩa là chưa convert lần nào (hoặc vừa chọn ảnh mới).
+// removeBackground CHỈ có tác dụng khi targetFormat hỗ trợ kênh alpha
+// (png/webp) - JPEG không có alpha nên reducer setTargetFormat tự tắt cờ này
+// khi người dùng chuyển sang JPEG, tránh trạng thái "đã tick nhưng vô nghĩa".
+export interface ImageFormatConverterState {
+  originalName: string | null;
+  originalType: string | null;
+  originalSize: number | null;
+  originalDataUrl: string | null;
+  originalWidth: number | null;
+  originalHeight: number | null;
+  targetFormat: ImageOutputFormat;
+  // Chỉ có tác dụng với JPEG/WebP (lossy) - giữ dạng string để bind trực
+  // tiếp vào input range, giống pattern quality của ImageCompressorState.
+  quality: string;
+  removeBackground: boolean;
+  // Màu được coi là "nền" để xoá - mặc định trắng vì đa số ảnh sản
+  // phẩm/logo dùng nền trắng phẳng.
+  bgColor: string;
+  // Ngưỡng sai khác màu tính theo % (0-100) - giữ dạng string để bind trực
+  // tiếp vào input range, giống pattern quality ở trên.
+  bgTolerance: string;
+  convertedDataUrl: string | null;
+  convertedSize: number | null;
+  convertedWidth: number | null;
+  convertedHeight: number | null;
+  // Định dạng THẬT SỰ được trình duyệt xuất ra - khác targetFormat trong
+  // trường hợp hiếm gặp trình duyệt không hỗ trợ encode định dạng yêu cầu
+  // (giống actualFormat của util/imageCompressor.ts).
+  convertedFormat: ImageOutputFormat | null;
+  error: string | null;
+}

@@ -68,6 +68,11 @@ const navItems: NavItem[] = [
   },
   {
     icon: '',
+    name: 'Image Format Converter',
+    path: '/image-format-converter',
+  },
+  {
+    icon: '',
     name: 'Previewer',
     subItems: [
       { name: 'Markdown Previewer', path: '/markdown-previewer', pro: false },
