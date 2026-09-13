@@ -1,5 +1,6 @@
 import type {
   ColorPickerTab,
+  DocumentFormat,
   FileCompareFile,
   ImageOutputFormat,
   JwtAlgorithm,
@@ -311,5 +312,38 @@ export interface ImageFormatConverterState {
   // trường hợp hiếm gặp trình duyệt không hỗ trợ encode định dạng yêu cầu
   // (giống actualFormat của util/imageCompressor.ts).
   convertedFormat: ImageOutputFormat | null;
+  error: string | null;
+}
+
+// Trang Document Format: chuyển đổi giữa Word/Excel/PDF/PowerPoint bằng các
+// thư viện xử lý file văn phòng (mammoth, docx, xlsx, pdfjs-dist, jsPDF,
+// pptxgenjs...) - xem util/documentConverter.ts. Khác ImageFormatConverterState
+// ở 2 điểm: (1) originalFormat được TỰ PHÁT HIỆN từ file tải lên (không phải
+// người dùng chọn) vì mỗi định dạng nguồn cần 1 thư viện đọc khác nhau; (2)
+// previewHtml/previewImageDataUrl thay cho việc hiển thị thẳng <img
+// src={originalDataUrl}> như ảnh, vì Word/Excel/PDF không tự render được
+// trong thẻ <img> - phải "dịch" qua HTML (mammoth/xlsx) hoặc ảnh canvas
+// (pdfjs) trước.
+export interface DocumentConverterState {
+  originalName: string | null;
+  originalType: string | null;
+  originalSize: number | null;
+  // Toàn bộ byte gốc của file tải lên, dạng base64 data URL - giữ nguyên
+  // pattern originalDataUrl của ImageFormatConverterState dù đây không phải
+  // ảnh, để "quản lý state giống các trang trước" (Redux, không phải
+  // File/Blob sống ngoài Redux). Được giải mã lại thành ArrayBuffer khi cần
+  // xử lý thật (xem util/documentConverter.ts).
+  originalDataUrl: string | null;
+  originalFormat: DocumentFormat | null;
+  // Bản xem trước: HTML (Word đã đổi qua mammoth, hoặc bảng Excel qua
+  // XLSX.utils.sheet_to_html) - null nếu nguồn là PDF hoặc chưa có file.
+  previewHtml: string | null;
+  // Bản xem trước: ảnh trang đầu tiên (chỉ PDF, vẽ qua canvas của pdfjs) -
+  // null nếu nguồn không phải PDF hoặc chưa có file.
+  previewImageDataUrl: string | null;
+  targetFormat: DocumentFormat;
+  convertedDataUrl: string | null;
+  convertedSize: number | null;
+  convertedFileName: string | null;
   error: string | null;
 }

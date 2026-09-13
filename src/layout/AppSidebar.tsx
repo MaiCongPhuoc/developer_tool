@@ -49,6 +49,8 @@ const navItems: NavItem[] = [
     subItems: [
       { name: 'Time / Timezone', path: '/time-converter', pro: false },
       { name: 'Unit & Currency', path: '/unit-converter', pro: false },
+      { name: 'Image Format', path: '/image-format-converter', pro: false },
+      { name: 'Document Format', path: '/document-converter', pro: false },
     ],
   },
   {
@@ -65,11 +67,6 @@ const navItems: NavItem[] = [
     icon: '',
     name: 'Image Compressor',
     path: '/image-compressor',
-  },
-  {
-    icon: '',
-    name: 'Image Format Converter',
-    path: '/image-format-converter',
   },
   {
     icon: '',

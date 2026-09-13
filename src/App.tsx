@@ -19,6 +19,7 @@ import MarkdownPreviewer from './pages/MarkdownPreviewer';
 import HtmlPreviewer from './pages/HtmlPreviewer';
 import ImageCompressor from './pages/ImageCompressor';
 import ImageFormatConverter from './pages/ImageFormatConverter';
+import DocumentConverter from './pages/DocumentConverter';
 
 export const App: React.FC = () => {
   return (
@@ -39,17 +40,9 @@ export const App: React.FC = () => {
             element={<PasswordGenerator />}
           />
           <Route index path="/qr-code" element={<QrCode />} />
-          <Route
-            index
-            path="/time-converter"
-            element={<TimeConverter />}
-          />
+          <Route index path="/time-converter" element={<TimeConverter />} />
           <Route index path="/regex-tester" element={<RegexTester />} />
-          <Route
-            index
-            path="/unit-converter"
-            element={<UnitConverter />}
-          />
+          <Route index path="/unit-converter" element={<UnitConverter />} />
           <Route index path="/color-picker" element={<ColorPicker />} />
           <Route
             index
@@ -57,15 +50,16 @@ export const App: React.FC = () => {
             element={<MarkdownPreviewer />}
           />
           <Route index path="/html-converter" element={<HtmlPreviewer />} />
-          <Route
-            index
-            path="/image-compressor"
-            element={<ImageCompressor />}
-          />
+          <Route index path="/image-compressor" element={<ImageCompressor />} />
           <Route
             index
             path="/image-format-converter"
             element={<ImageFormatConverter />}
+          />
+          <Route
+            index
+            path="/document-converter"
+            element={<DocumentConverter />}
           />
         </Route>
       </Routes>

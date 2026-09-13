@@ -11,7 +11,14 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
+    "docx": "^9.7.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "jszip": "^3.10.2",
+    "mammoth": "^1.12.3",
     "mermaid": "^11.17.2",
+    "pdfjs-dist": "^6.3.289",
+    "pptxgenjs": "^4.0.1",
     "qrcode": "^1.5.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -19,7 +26,8 @@
     "react-redux": "^9.3.0",
     "react-router": "^8.3.0",
     "rehype-highlight": "^7.0.2",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.20",

@@ -163,3 +163,14 @@ export type ColorPickerTab = 'palette' | 'eyedropper';
 // canvas.toDataURL() gốc của trình duyệt. JPEG/WebP là lossy (có tham số
 // quality), PNG luôn lossless nên bỏ qua quality - xem util/imageCompressor.ts.
 export type ImageOutputFormat = 'image/jpeg' | 'image/webp' | 'image/png';
+
+// Trang Document Format: 4 định dạng văn phòng hỗ trợ chuyển đổi (xem
+// util/documentConverter.ts). 'pptx' KHÔNG BAO GIỜ là định dạng NGUỒN được -
+// không có thư viện JS miễn phí nào đọc được nội dung .pptx có sẵn, nên trang
+// này chỉ TẠO MỚI file PowerPoint (từ docx/xlsx/pdf), không đọc ngược lại.
+export type DocumentFormat = 'docx' | 'xlsx' | 'pdf' | 'pptx';
+
+// Mức độ giữ được định dạng gốc sau khi convert - hiển thị như 1 "badge" cạnh
+// nút chọn định dạng đích để người dùng biết trước kết quả sẽ như thế nào,
+// tránh hiểu nhầm "PDF -> Word" cũng giữ nguyên bảng biểu/layout như file gốc.
+export type DocumentConversionQuality = 'high' | 'basic' | 'image';
