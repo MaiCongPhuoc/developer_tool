@@ -315,15 +315,24 @@ export interface ImageFormatConverterState {
   error: string | null;
 }
 
+// Xem trước 1 sheet Excel - dùng làm 1 "tab" trong khung xem trước, giống
+// đúng cách Excel thật chia từng sheet thành 1 tab riêng ở cuối màn hình
+// (xem DocumentConverter.tsx) thay vì gộp chung mọi sheet vào 1 khối cuộn dài.
+export type DocumentPreviewSheet = {
+  name: string;
+  html: string;
+};
+
 // Trang Document Format: chuyển đổi giữa Word/Excel/PDF/PowerPoint bằng các
 // thư viện xử lý file văn phòng (mammoth, docx, xlsx, pdfjs-dist, jsPDF,
 // pptxgenjs...) - xem util/documentConverter.ts. Khác ImageFormatConverterState
 // ở 2 điểm: (1) originalFormat được TỰ PHÁT HIỆN từ file tải lên (không phải
 // người dùng chọn) vì mỗi định dạng nguồn cần 1 thư viện đọc khác nhau; (2)
-// previewHtml/previewImageDataUrl thay cho việc hiển thị thẳng <img
-// src={originalDataUrl}> như ảnh, vì Word/Excel/PDF không tự render được
-// trong thẻ <img> - phải "dịch" qua HTML (mammoth/xlsx) hoặc ảnh canvas
-// (pdfjs) trước.
+// previewHtml/previewXlsxSheets/previewImageDataUrl thay cho việc hiển thị
+// thẳng <img src={originalDataUrl}> như ảnh, vì Word/Excel/PDF không tự
+// render được trong thẻ <img> - phải "dịch" qua HTML (mammoth/xlsx) hoặc ảnh
+// canvas (pdfjs) trước. CHỈ ĐÚNG 1 trong 3 field previewHtml/previewXlsxSheets/
+// previewImageDataUrl có giá trị tại 1 thời điểm, tuỳ originalFormat.
 export interface DocumentConverterState {
   originalName: string | null;
   originalType: string | null;
@@ -335,11 +344,17 @@ export interface DocumentConverterState {
   // xử lý thật (xem util/documentConverter.ts).
   originalDataUrl: string | null;
   originalFormat: DocumentFormat | null;
-  // Bản xem trước: HTML (Word đã đổi qua mammoth, hoặc bảng Excel qua
-  // XLSX.utils.sheet_to_html) - null nếu nguồn là PDF hoặc chưa có file.
+  // Bản xem trước: HTML (chỉ Word, toàn bộ nội dung dạng 1 khối cuộn liên
+  // tục - Word không có khái niệm "trang/sheet" tách biệt để chia tab như
+  // Excel/PDF) - null nếu nguồn không phải Word hoặc chưa có file.
   previewHtml: string | null;
-  // Bản xem trước: ảnh trang đầu tiên (chỉ PDF, vẽ qua canvas của pdfjs) -
-  // null nếu nguồn không phải PDF hoặc chưa có file.
+  // Bản xem trước CHIA THEO SHEET (chỉ Excel, mỗi phần tử là 1 tab) - null
+  // nếu nguồn không phải Excel hoặc chưa có file.
+  previewXlsxSheets: DocumentPreviewSheet[] | null;
+  // Bản xem trước: ảnh của TRANG ĐANG XEM (chỉ PDF, vẽ qua canvas của
+  // pdfjs) - đổi theo trang người dùng điều hướng tới (nút Trước/Sau, xem
+  // activePdfPage - state cục bộ tại component, không phải Redux, vì đây là
+  // điều hướng UI thuần tuý). null nếu nguồn không phải PDF hoặc chưa có file.
   previewImageDataUrl: string | null;
   targetFormat: DocumentFormat;
   convertedDataUrl: string | null;

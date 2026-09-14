@@ -1,4 +1,4 @@
-import type { DocumentConverterState } from '@/util/interface/Interface';
+import type { DocumentConverterState, DocumentPreviewSheet } from '@/util/interface/Interface';
 import type { DocumentFormat } from '@/util/interface/Type';
 import { getDefaultTargetFormat } from '@/util/documentConverter';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
@@ -10,6 +10,7 @@ const initialState: DocumentConverterState = {
   originalDataUrl: null,
   originalFormat: null,
   previewHtml: null,
+  previewXlsxSheets: null,
   previewImageDataUrl: null,
   targetFormat: 'pdf',
   convertedDataUrl: null,
@@ -26,8 +27,13 @@ type OriginalFilePayload = {
   format: DocumentFormat;
 };
 
+// Luôn truyền ĐỦ CẢ 3 field (không chỉ field liên quan tới định dạng hiện
+// tại) - action này thay thế TOÀN BỘ trạng thái preview mỗi lần gọi, kể cả
+// khi chỉ đổi trang PDF đang xem (2 field còn lại vẫn phải truyền null tường
+// minh) - tránh sót lại preview của định dạng/file trước đó.
 type PreviewPayload = {
   html: string | null;
+  xlsxSheets: DocumentPreviewSheet[] | null;
   imageDataUrl: string | null;
 };
 
@@ -50,6 +56,7 @@ export const documentConverterSlice = createSlice({
       // File mới -> preview/kết quả cũ (nếu có) không còn khớp, xoá để tránh
       // hiểu nhầm đang xem preview/kết quả của file vừa tải lên.
       state.previewHtml = null;
+      state.previewXlsxSheets = null;
       state.previewImageDataUrl = null;
       state.convertedDataUrl = null;
       state.convertedSize = null;
@@ -61,6 +68,7 @@ export const documentConverterSlice = createSlice({
     },
     setPreview: (state, action: PayloadAction<PreviewPayload>) => {
       state.previewHtml = action.payload.html;
+      state.previewXlsxSheets = action.payload.xlsxSheets;
       state.previewImageDataUrl = action.payload.imageDataUrl;
     },
     setTargetFormat: (state, action: PayloadAction<DocumentFormat>) => {

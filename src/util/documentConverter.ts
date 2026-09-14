@@ -2,7 +2,7 @@
 // viện docx) trùng tên với DOM Document toàn cục (dùng ở parseXmlString bên
 // dưới) - không đổi tên sẽ khiến TypeScript hiểu nhầm mọi chỗ dùng "Document"
 // trong file này là kiểu Word document, kể cả khi đang nói tới XML Document.
-import { Document as DocxDocument, HeadingLevel, ImageRun, Packer, Paragraph, Table, TableCell, TableRow } from 'docx';
+import { Document as DocxDocument, HeadingLevel, ImageRun, PageBreak, Packer, Paragraph, Table, TableCell, TableRow } from 'docx';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import JSZip from 'jszip';
@@ -278,12 +278,13 @@ export type XlsxEmbeddedImage = {
   anchorRow: number;
 };
 
-export const readXlsxEmbeddedImages = async (
-  arrayBuffer: ArrayBuffer,
-  sheetName: string
-): Promise<XlsxEmbeddedImage[]> => {
+// Tách riêng phần THÂN từ readXlsxEmbeddedImages để dùng chung 1 JSZip đã mở
+// sẵn khi đọc NHIỀU sheet (parseXlsxSource) - tránh giải nén lại cùng 1 file
+// nhiều lần. try/catch bọc riêng từng sheet, không phải toàn bộ file: 1 sheet
+// có cấu trúc drawing khác thường (hiếm gặp) không nên làm mất ảnh của các
+// sheet khác vẫn đọc bình thường.
+const readXlsxEmbeddedImagesFromZip = async (zip: JSZip, sheetName: string): Promise<XlsxEmbeddedImage[]> => {
   try {
-    const zip = await JSZip.loadAsync(arrayBuffer);
     const worksheetPath = await findWorksheetPath(zip, sheetName);
     if (!worksheetPath) return [];
     const drawingPath = await findDrawingPathForWorksheet(zip, worksheetPath);
@@ -309,8 +310,20 @@ export const readXlsxEmbeddedImages = async (
     }
     return images;
   } catch {
-    // 1 file .xlsx hợp lệ nhưng có cấu trúc drawing khác thường (hiếm gặp)
-    // không nên làm hỏng toàn bộ việc đọc file - coi như "không có ảnh".
+    return [];
+  }
+};
+
+export const readXlsxEmbeddedImages = async (
+  arrayBuffer: ArrayBuffer,
+  sheetName: string
+): Promise<XlsxEmbeddedImage[]> => {
+  try {
+    const zip = await JSZip.loadAsync(arrayBuffer);
+    return await readXlsxEmbeddedImagesFromZip(zip, sheetName);
+  } catch {
+    // File .xlsx không giải nén được (hiếm, file hỏng) - không nên làm hỏng
+    // toàn bộ việc đọc file, coi như "không có ảnh".
     return [];
   }
 };
@@ -445,17 +458,30 @@ export type DocxSourceData = {
   html: string;
 };
 
-export type XlsxSourceData = {
-  kind: 'xlsx';
-  html: string;
+// 1 sheet Excel đã đọc xong - workbook Excel thật có thể có NHIỀU sheet (mỗi
+// sheet là 1 "tab" riêng ở cuối màn hình Excel), trước đây app chỉ đọc đúng
+// SheetNames[0] (sheet đầu tiên) nên các sheet còn lại bị bỏ qua hoàn toàn dù
+// người dùng vẫn thấy đủ trong Excel gốc (bug đã gặp và sửa 2026-09-14).
+export type XlsxSheetData = {
+  name: string;
   // Đã là chữ ĐÃ ĐỊNH DẠNG (`.w` của từng ô, xem sheetToFormattedAoa) - luôn
   // là string, không phải giá trị thô (.v) của ô.
   aoa: string[][];
   // originalRowIndexes[i] = chỉ số dòng THẬT trong sheet gốc của aoa[i] (sau
   // khi đã lọc dòng trống) - dùng để chèn lại ảnh đính kèm đúng chỗ.
   originalRowIndexes: number[];
-  sheetName: string;
   images: XlsxEmbeddedImage[];
+  // HTML xem trước CỦA RIÊNG sheet này (đã xen ảnh đúng vị trí, xem
+  // buildXlsxSheetBodyHtml) - dùng làm nội dung 1 tab trong khung xem trước
+  // (mỗi sheet Excel = 1 tab riêng, giống hệt cách Excel thật chia tab ở
+  // cuối màn hình, thay vì gộp chung mọi sheet vào 1 khối cuộn dài - xem
+  // DocumentConverter.tsx).
+  html: string;
+};
+
+export type XlsxSourceData = {
+  kind: 'xlsx';
+  sheets: XlsxSheetData[];
 };
 
 export type PdfSourceData = {
@@ -474,7 +500,14 @@ export type ParsedSource = DocxSourceData | XlsxSourceData | PdfSourceData;
 
 export const parseDocxSource = async (arrayBuffer: ArrayBuffer): Promise<DocxSourceData> => {
   const htmlResult = await mammoth.convertToHtml({ arrayBuffer });
-  return { kind: 'docx', html: htmlResult.value };
+  // Giới hạn kích thước ảnh nhúng NGAY LÚC ĐỌC file (giống hệt cách
+  // parseXlsxSource làm với sheet.html) - dùng chung 1 bản HTML đã "gọn
+  // gàng" cho cả preview lẫn buildDocxPdfBlob, thay vì mỗi nơi tự xử lý
+  // riêng. Mammoth không giữ lại kích thước hiển thị GỐC trong Word (chỉ
+  // nhúng nguyên byte ảnh, có thể vài nghìn pixel với ảnh chụp điện thoại) -
+  // xem constrainEmbeddedImagesInHtml.
+  const html = await constrainEmbeddedImagesInHtml(htmlResult.value);
+  return { kind: 'docx', html };
 };
 
 // sheet_to_json({header:1}) trả về giá trị THÔ của ô (.v) - vd 1 ô ngày tháng
@@ -513,17 +546,43 @@ const sheetToFormattedAoa = (
   return { aoa, originalRowIndexes };
 };
 
+// Chỉ mở JSZip 1 LẦN cho toàn bộ file rồi dùng chung cho mọi sheet (thay vì
+// gọi readXlsxEmbeddedImages - vốn tự giải nén lại từ đầu - cho từng sheet) -
+// tránh giải nén lặp lại cùng 1 file nhiều lần khi workbook có nhiều sheet.
+// Giải nén lỗi (file .xlsx hợp lệ với SheetJS nhưng không phải file zip đọc
+// được, cực hiếm) không nên chặn việc đọc dữ liệu ô - coi như không sheet nào
+// có ảnh thay vì báo lỗi toàn bộ.
 export const parseXlsxSource = async (arrayBuffer: ArrayBuffer): Promise<XlsxSourceData> => {
   const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-  const sheetName = workbook.SheetNames[0];
-  if (!sheetName) {
+  if (workbook.SheetNames.length === 0) {
     throw new Error('This spreadsheet has no sheets to read.');
   }
-  const sheet = workbook.Sheets[sheetName];
-  const html = XLSX.utils.sheet_to_html(sheet);
-  const { aoa, originalRowIndexes } = sheetToFormattedAoa(sheet);
-  const images = await readXlsxEmbeddedImages(arrayBuffer, sheetName);
-  return { kind: 'xlsx', html, aoa, originalRowIndexes, sheetName, images };
+
+  let zip: JSZip | null = null;
+  try {
+    zip = await JSZip.loadAsync(arrayBuffer);
+  } catch {
+    zip = null;
+  }
+
+  const sheets: XlsxSheetData[] = [];
+  for (const sheetName of workbook.SheetNames) {
+    const sheet = workbook.Sheets[sheetName];
+    const { aoa, originalRowIndexes } = sheetToFormattedAoa(sheet);
+    const images = zip ? await readXlsxEmbeddedImagesFromZip(zip, sheetName) : [];
+    // Dựng preview từ CHÍNH logic dùng để convert (buildXlsxSheetBodyHtml,
+    // xen ảnh đúng vị trí qua interleaveRowsWithImages) thay vì
+    // XLSX.utils.sheet_to_html() - sheet_to_html KHÔNG biết gì về ảnh nhúng
+    // (SheetJS free vốn không đọc được ảnh), nên trước đây preview luôn thiếu
+    // ảnh dù bản convert thật sự đã có (bug đã gặp và sửa 2026-09-14). Không
+    // gộp tiêu đề tên sheet vào HTML này nữa - mỗi sheet giờ là 1 TAB riêng ở
+    // trang (xem DocumentConverter.tsx), bản thân cái tab đã hiện tên sheet
+    // rồi nên không cần lặp lại tiêu đề bên trong nội dung.
+    const html = await buildXlsxSheetBodyHtml({ aoa, originalRowIndexes, images });
+    sheets.push({ name: sheetName, aoa, originalRowIndexes, images, html });
+  }
+
+  return { kind: 'xlsx', sheets };
 };
 
 const PDF_THUMBNAIL_SCALE = 1;
@@ -679,6 +738,38 @@ const computeEmbeddedImageSize = async (dataUrl: string): Promise<{ width: numbe
   return computeScaledDimensions(img.naturalWidth, img.naturalHeight, MAX_EMBEDDED_IMAGE_DIMENSION_PX);
 };
 
+// Gán rõ width/height (px) cho MỌI <img> trong 1 đoạn HTML, theo đúng kích
+// thước đã tính ở computeEmbeddedImageSize - KHÔNG dựa vào CSS (vd
+// "max-width:100%") để giới hạn kích thước ảnh khi render bằng html2canvas,
+// vì % chỉ tính đúng khi phần tử cha có chiều rộng XÁC ĐỊNH. Với Excel->PDF,
+// container "tự co theo nội dung" (display:inline-block, không có chiều rộng
+// cố định - xem renderHtmlToPdfBlob/PDF_RENDER_WIDTH_PX) khiến trình duyệt
+// không tính được % đó theo cách mong đợi: ảnh (có thể vài nghìn pixel với
+// ảnh chụp điện thoại) tự kéo cả container rộng ra bằng đúng kích thước GỐC
+// của nó, làm sai lệch tỉ lệ toàn trang khi ép vừa khổ giấy - chữ bị phóng to
+// bất thường, ảnh bị cắt tràn qua nhiều trang (bug đã gặp và sửa 2026-09-14).
+// width/height là THUỘC TÍNH HTML (không phải CSS) nên luôn được hiểu đúng dù
+// container có chiều rộng xác định hay không.
+const constrainEmbeddedImagesInHtml = async (html: string): Promise<string> => {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  await Promise.all(
+    Array.from(doc.querySelectorAll('img')).map(async (img) => {
+      const src = img.getAttribute('src');
+      if (!src?.startsWith('data:')) return;
+      try {
+        const { width, height } = await computeEmbeddedImageSize(src);
+        img.setAttribute('width', String(width));
+        img.setAttribute('height', String(height));
+        img.removeAttribute('style');
+      } catch {
+        // Ảnh lỗi/không đọc được kích thước (hiếm gặp) - bỏ qua, giữ nguyên
+        // ảnh gốc thay vì làm hỏng toàn bộ nội dung còn lại.
+      }
+    })
+  );
+  return doc.body.innerHTML;
+};
+
 // Khổ A4 ở 96dpi (210mm) - html2canvas cần 1 chiều rộng cố định để layout
 // HTML nhất quán, không phụ thuộc kích thước cửa sổ trình duyệt hiện tại. Chỉ
 // dùng cho Word (xem renderHtmlToPdfBlob) - Excel không có khái niệm "khổ
@@ -708,19 +799,16 @@ type RenderHtmlToPdfOptions = {
   fixedWidthPx?: number;
 };
 
-// Dựng 1 đoạn HTML bất kỳ thành PDF bằng cách "chụp ảnh" (html2canvas) rồi
-// cắt thành nhiều trang A4 (jsPDF) - giữ được font/màu/khoảng cách trực quan
-// giống bản gốc (kể cả tiếng Việt có dấu, vì đây là chữ trình duyệt tự vẽ
-// bằng font hệ thống, không phải font vector giới hạn WinAnsi của jsPDF),
-// đổi lại chữ trong PDF kết quả là ẢNH nên không chọn/copy được. Dùng chung
-// cho cả Word->PDF lẫn Excel->PDF (trước đây Excel->PDF dựng bằng
-// jspdf-autotable, dùng font vector mặc định của jsPDF vốn không có các ký tự
-// tiếng Việt ghép dấu thanh/chữ "đ" -> chữ bị mất/lệch, xem
-// CONVERSION_QUALITY_LABEL và bug đã sửa 2026-09-13).
-const renderHtmlToPdfBlob = async (
+// "Chụp ảnh" 1 đoạn HTML bằng html2canvas - giữ được font/màu/khoảng cách
+// trực quan giống bản gốc (kể cả tiếng Việt có dấu, vì đây là chữ trình duyệt
+// tự vẽ bằng font hệ thống, không phải font vector giới hạn WinAnsi của
+// jsPDF). Tách riêng khỏi bước cắt trang PDF (addCanvasAsPdfPages) để 1 file
+// PDF nhiều "phần" (vd nhiều sheet Excel) có thể ghép nhiều canvas vào CÙNG 1
+// jsPDF, mỗi phần bắt đầu 1 trang mới - xem buildXlsxPdfBlob.
+const captureHtmlToCanvas = async (
   html: string,
   options: RenderHtmlToPdfOptions = {}
-): Promise<Blob> => {
+): Promise<HTMLCanvasElement> => {
   const container = document.createElement('div');
   container.style.position = 'fixed';
   container.style.top = '0';
@@ -739,37 +827,56 @@ const renderHtmlToPdfBlob = async (
 
   try {
     await waitForImagesToSettle(container);
-    const canvas = await html2canvas(container, { scale: 2, backgroundColor: '#FFFFFF', useCORS: true });
-
-    // Khổ dọc/ngang tự chọn theo TỈ LỆ THẬT của nội dung đã chụp - 1 bảng
-    // Excel nhiều cột sẽ tự ra canvas rộng hơn cao, lúc đó dùng khổ ngang cho
-    // đỡ bị thu nhỏ quá mức khi ép vừa khổ dọc.
-    const orientation = canvas.width > canvas.height ? 'landscape' : 'portrait';
-    const pdf = new jsPDF({ orientation, unit: 'mm', format: 'a4' });
-    const pageWidthMm = pdf.internal.pageSize.getWidth();
-    const pageHeightMm = pdf.internal.pageSize.getHeight();
-    const imgWidthMm = pageWidthMm;
-    const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
-    const imgData = canvas.toDataURL('image/png');
-
-    let heightLeft = imgHeightMm;
-    let position = 0;
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidthMm, imgHeightMm);
-    heightLeft -= pageHeightMm;
-
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeightMm;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidthMm, imgHeightMm);
-      heightLeft -= pageHeightMm;
-    }
-
-    return pdf.output('blob');
+    return await html2canvas(container, { scale: 2, backgroundColor: '#FFFFFF', useCORS: true });
   } finally {
     document.body.removeChild(container);
   }
 };
 
+// Cắt 1 canvas (có thể rất cao) thành nhiều trang A4 nối tiếp, vẽ vào `pdf`
+// đã có sẵn - trang ĐẦU TIÊN của canvas này vẽ luôn vào trang HIỆN TẠI của
+// pdf (không tự gọi addPage() trước), để nơi gọi tự quyết định có cần bắt đầu
+// 1 trang mới trước khi vẽ phần này hay không (vd nhiều sheet Excel nối
+// tiếp - xem buildXlsxPdfBlob).
+const addCanvasAsPdfPages = (pdf: jsPDF, canvas: HTMLCanvasElement): void => {
+  const pageWidthMm = pdf.internal.pageSize.getWidth();
+  const pageHeightMm = pdf.internal.pageSize.getHeight();
+  const imgWidthMm = pageWidthMm;
+  const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
+  const imgData = canvas.toDataURL('image/png');
+
+  let heightLeft = imgHeightMm;
+  let position = 0;
+  pdf.addImage(imgData, 'PNG', 0, position, imgWidthMm, imgHeightMm);
+  heightLeft -= pageHeightMm;
+
+  while (heightLeft > 0) {
+    position = heightLeft - imgHeightMm;
+    pdf.addPage();
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidthMm, imgHeightMm);
+    heightLeft -= pageHeightMm;
+  }
+};
+
+// Dựng 1 đoạn HTML bất kỳ thành PDF hoàn chỉnh (1 "phần" duy nhất) - dùng cho
+// Word->PDF. Trước đây Excel->PDF cũng dùng chung hàm này, nay Excel->PDF tự
+// ghép nhiều canvas (1 mỗi sheet) vào 1 jsPDF duy nhất - xem buildXlsxPdfBlob.
+const renderHtmlToPdfBlob = async (
+  html: string,
+  options: RenderHtmlToPdfOptions = {}
+): Promise<Blob> => {
+  const canvas = await captureHtmlToCanvas(html, options);
+  // Khổ dọc/ngang tự chọn theo TỈ LỆ THẬT của nội dung đã chụp - 1 bảng rộng
+  // nhiều cột sẽ tự ra canvas rộng hơn cao, lúc đó dùng khổ ngang cho đỡ bị
+  // thu nhỏ quá mức khi ép vừa khổ dọc.
+  const orientation = canvas.width > canvas.height ? 'landscape' : 'portrait';
+  const pdf = new jsPDF({ orientation, unit: 'mm', format: 'a4' });
+  addCanvasAsPdfPages(pdf, canvas);
+  return pdf.output('blob');
+};
+
+// html (parsed.html) đã được constrainEmbeddedImagesInHtml xử lý sẵn từ lúc
+// đọc file (xem parseDocxSource) - không cần gọi lại lần nữa ở đây.
 export const buildDocxPdfBlob = (html: string): Promise<Blob> =>
   renderHtmlToPdfBlob(html, { fixedWidthPx: PDF_RENDER_WIDTH_PX });
 
@@ -900,55 +1007,94 @@ const XLSX_TABLE_STYLE = `<style>
 // XLSX.utils.sheet_to_html()) để có thể xen ảnh đính kèm vào ĐÚNG vị trí qua
 // interleaveRowsWithImages() - đánh đổi nhỏ: bản xem trước (Preview, vẫn dùng
 // sheet_to_html) có thể còn giữ vài dòng trống mà PDF thật sự xuất ra thì
-// không, do dòng trống đã bị lọc khỏi aoa (xem sheetToFormattedAoa).
-export const buildXlsxPdfBlob = (
-  aoa: string[][],
-  originalRowIndexes: number[],
-  images: XlsxEmbeddedImage[]
-): Promise<Blob> => {
-  const rows = aoa.length > 0 ? padAoa(aoa) : [];
-  const blocks = interleaveRowsWithImages(rows, originalRowIndexes, images, Number.POSITIVE_INFINITY);
+// không, do dòng trống đã bị lọc khỏi aoa (xem sheetToFormattedAoa). Ảnh được
+// gán rõ width/height qua constrainEmbeddedImagesInHtml (không dựa CSS %) -
+// xem giải thích chi tiết ở đó.
+const buildXlsxSheetBodyHtml = async (
+  sheet: Pick<XlsxSheetData, 'aoa' | 'originalRowIndexes' | 'images'>
+): Promise<string> => {
+  const rows = sheet.aoa.length > 0 ? padAoa(sheet.aoa) : [];
+  const blocks = interleaveRowsWithImages(rows, sheet.originalRowIndexes, sheet.images, Number.POSITIVE_INFINITY);
   if (blocks.length === 0) blocks.push({ type: 'rows', rows: [['(empty)']] });
 
   const html = blocks
     .map((block) =>
       block.type === 'image'
-        ? `<div style="margin:12px 0"><img src="${block.image.dataUrl}" style="max-width:100%;max-height:400px"/></div>`
+        ? `<div style="margin:12px 0"><img src="${block.image.dataUrl}"/></div>`
         : renderAoaTableHtml(block.rows)
     )
     .join('');
-  return renderHtmlToPdfBlob(XLSX_TABLE_STYLE + html);
+  return constrainEmbeddedImagesInHtml(html);
 };
 
-export const buildXlsxDocxBlob = async (
-  aoa: string[][],
-  originalRowIndexes: number[],
-  images: XlsxEmbeddedImage[]
-): Promise<Blob> => {
-  const rows = aoa.length > 0 ? padAoa(aoa) : [];
-  const blocks = interleaveRowsWithImages(rows, originalRowIndexes, images, Number.POSITIVE_INFINITY);
-  if (blocks.length === 0) blocks.push({ type: 'rows', rows: [['(empty)']] });
+// Excel có thể có NHIỀU sheet (mỗi sheet là 1 "tab" riêng) - trước đây chỉ
+// đọc/convert đúng sheet đầu tiên, các sheet còn lại bị bỏ qua hoàn toàn dù
+// vẫn thấy đủ trong Excel gốc (bug đã gặp và sửa 2026-09-14). Giờ MỖI SHEET
+// tự chụp thành canvas riêng rồi ghép nối tiếp vào CÙNG 1 jsPDF, mỗi sheet
+// luôn bắt đầu 1 TRANG MỚI (kể cả khi sheet trước chưa lấp đầy trang) và tự
+// chọn khổ dọc/ngang theo đúng tỉ lệ riêng của sheet đó - không dồn chung mọi
+// sheet vào 1 khối ảnh chụp dài lê thê.
+export const buildXlsxPdfBlob = async (sheets: XlsxSheetData[]): Promise<Blob> => {
+  const canvases = await Promise.all(
+    sheets.map((sheet) => {
+      // sheet.html đã có sẵn (tính 1 lần lúc parseXlsxSource, dùng chung với
+      // khung xem trước) - chỉ cần thêm tiêu đề tên sheet cho riêng bản PDF
+      // (trang in cần tự có tiêu đề, khác preview đã có tab hiện tên sheet).
+      const heading = `<h2 style="margin:0 0 10px;font-family:Arial,Helvetica,sans-serif">${escapeHtml(sheet.name)}</h2>`;
+      return captureHtmlToCanvas(XLSX_TABLE_STYLE + heading + sheet.html);
+    })
+  );
 
-  const children: (Table | Paragraph)[] = [];
-  for (const block of blocks) {
-    if (block.type === 'image') {
-      const { width, height } = await computeEmbeddedImageSize(block.image.dataUrl);
-      children.push(
-        new Paragraph({
-          children: [new ImageRun({ data: block.image.bytes, type: block.image.docxType, transformation: { width, height } })],
-        })
-      );
+  let pdf: jsPDF | null = null;
+  canvases.forEach((canvas) => {
+    const orientation = canvas.width > canvas.height ? 'landscape' : 'portrait';
+    if (!pdf) {
+      pdf = new jsPDF({ orientation, unit: 'mm', format: 'a4' });
     } else {
-      children.push(
-        new Table({
-          rows: block.rows.map(
-            (row) =>
-              new TableRow({
-                children: row.map((cell) => new TableCell({ children: [new Paragraph(cell)] })),
-              })
-          ),
-        })
-      );
+      pdf.addPage('a4', orientation);
+    }
+    addCanvasAsPdfPages(pdf, canvas);
+  });
+  // Không có sheet nào (không nên xảy ra vì parseXlsxSource đã chặn workbook
+  // rỗng, nhưng vẫn phòng hờ) - trả về 1 trang trắng thay vì ném lỗi.
+  if (!pdf) pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+
+  return pdf.output('blob');
+};
+
+export const buildXlsxDocxBlob = async (sheets: XlsxSheetData[]): Promise<Blob> => {
+  const children: (Table | Paragraph)[] = [];
+
+  for (const [sheetIndex, sheet] of sheets.entries()) {
+    if (sheetIndex > 0) {
+      children.push(new Paragraph({ children: [new PageBreak()] }));
+    }
+    children.push(new Paragraph({ text: sheet.name, heading: HeadingLevel.HEADING_2 }));
+
+    const rows = sheet.aoa.length > 0 ? padAoa(sheet.aoa) : [];
+    const blocks = interleaveRowsWithImages(rows, sheet.originalRowIndexes, sheet.images, Number.POSITIVE_INFINITY);
+    if (blocks.length === 0) blocks.push({ type: 'rows', rows: [['(empty)']] });
+
+    for (const block of blocks) {
+      if (block.type === 'image') {
+        const { width, height } = await computeEmbeddedImageSize(block.image.dataUrl);
+        children.push(
+          new Paragraph({
+            children: [new ImageRun({ data: block.image.bytes, type: block.image.docxType, transformation: { width, height } })],
+          })
+        );
+      } else {
+        children.push(
+          new Table({
+            rows: block.rows.map(
+              (row) =>
+                new TableRow({
+                  children: row.map((cell) => new TableCell({ children: [new Paragraph(cell)] })),
+                })
+            ),
+          })
+        );
+      }
     }
   }
   const doc = new DocxDocument({ sections: [{ children }] });
@@ -959,48 +1105,63 @@ export const buildXlsxDocxBlob = async (
 // dồn vào 1 slide sẽ bị thu nhỏ tới mức không đọc được.
 const MAX_ROWS_PER_SLIDE = 15;
 
-export const buildXlsxPptxBlob = async (
-  aoa: string[][],
-  originalRowIndexes: number[],
-  images: XlsxEmbeddedImage[]
-): Promise<Blob> => {
-  const rows = aoa.length > 0 ? padAoa(aoa) : [];
-  const header = rows[0];
-  const dataRows = rows.slice(1);
-  // originalRowIndexes cũng bỏ bớt phần tử đầu (ứng với header) để khớp index
-  // với dataRows khi đưa vào interleaveRowsWithImages.
-  const dataRowIndexes = originalRowIndexes.slice(1);
-
-  const blocks = header
-    ? interleaveRowsWithImages(dataRows, dataRowIndexes, images, MAX_ROWS_PER_SLIDE)
-    : images.map((image) => ({ type: 'image' as const, image }));
-  // Luôn đảm bảo có ít nhất 1 khối bảng (dù rỗng) để hiện được dòng tiêu đề,
-  // kể cả khi sheet không có dòng dữ liệu nào ngoài ảnh.
-  if (header && !blocks.some((block) => block.type === 'rows')) {
-    blocks.unshift({ type: 'rows', rows: [] });
-  }
-  if (blocks.length === 0) blocks.push({ type: 'rows', rows: [['(empty)']] });
-
+export const buildXlsxPptxBlob = async (sheets: XlsxSheetData[]): Promise<Blob> => {
   const pptx = new pptxgen();
-  blocks.forEach((block) => {
-    const slide = pptx.addSlide();
-    if (block.type === 'image') {
-      slide.addImage({
-        data: block.image.dataUrl,
-        x: 0.5,
-        y: 0.5,
-        w: PPTX_SLIDE_WIDTH_IN - 1,
-        h: PPTX_SLIDE_HEIGHT_IN - 1,
-        sizing: { type: 'contain', w: PPTX_SLIDE_WIDTH_IN - 1, h: PPTX_SLIDE_HEIGHT_IN - 1 },
-      });
-      return;
+
+  for (const sheet of sheets) {
+    // 1 slide tiêu đề riêng cho mỗi sheet - đơn giản hơn hẳn việc chèn tên
+    // sheet chung vào slide bảng đầu tiên (phải né layout bảng/ảnh), và giúp
+    // nhận ra ngay ranh giới giữa các sheet khi lướt qua cả bộ slide.
+    const titleSlide = pptx.addSlide();
+    titleSlide.addText(sheet.name, {
+      x: 0.5,
+      y: PPTX_SLIDE_HEIGHT_IN / 2 - 0.5,
+      w: PPTX_SLIDE_WIDTH_IN - 1,
+      h: 1,
+      align: 'center',
+      fontSize: 32,
+      bold: true,
+      color: '1F2937',
+    });
+
+    const rows = sheet.aoa.length > 0 ? padAoa(sheet.aoa) : [];
+    const header = rows[0];
+    const dataRows = rows.slice(1);
+    // originalRowIndexes cũng bỏ bớt phần tử đầu (ứng với header) để khớp
+    // index với dataRows khi đưa vào interleaveRowsWithImages.
+    const dataRowIndexes = sheet.originalRowIndexes.slice(1);
+
+    const blocks = header
+      ? interleaveRowsWithImages(dataRows, dataRowIndexes, sheet.images, MAX_ROWS_PER_SLIDE)
+      : sheet.images.map((image) => ({ type: 'image' as const, image }));
+    // Luôn đảm bảo có ít nhất 1 khối bảng (dù rỗng) để hiện được dòng tiêu
+    // đề, kể cả khi sheet không có dòng dữ liệu nào ngoài ảnh.
+    if (header && !blocks.some((block) => block.type === 'rows')) {
+      blocks.unshift({ type: 'rows', rows: [] });
     }
-    const chunk = header ? [header, ...block.rows] : block.rows;
-    slide.addTable(
-      chunk.map((row) => row.map((cell) => ({ text: cell }))),
-      { x: 0.3, y: 0.3, w: '94%', fontSize: 10, border: { type: 'solid', color: 'CFCFCF', pt: 0.5 } }
-    );
-  });
+    if (blocks.length === 0) blocks.push({ type: 'rows', rows: [['(empty)']] });
+
+    blocks.forEach((block) => {
+      const slide = pptx.addSlide();
+      if (block.type === 'image') {
+        slide.addImage({
+          data: block.image.dataUrl,
+          x: 0.5,
+          y: 0.5,
+          w: PPTX_SLIDE_WIDTH_IN - 1,
+          h: PPTX_SLIDE_HEIGHT_IN - 1,
+          sizing: { type: 'contain', w: PPTX_SLIDE_WIDTH_IN - 1, h: PPTX_SLIDE_HEIGHT_IN - 1 },
+        });
+        return;
+      }
+      const chunk = header ? [header, ...block.rows] : block.rows;
+      slide.addTable(
+        chunk.map((row) => row.map((cell) => ({ text: cell }))),
+        { x: 0.3, y: 0.3, w: '94%', fontSize: 10, border: { type: 'solid', color: 'CFCFCF', pt: 0.5 } }
+      );
+    });
+  }
+
   const output = await pptx.write({ outputType: 'blob' });
   return output as Blob;
 };

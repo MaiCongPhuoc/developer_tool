@@ -77,6 +77,12 @@ const PREVIEW_IFRAME_STYLE = `<style>
 // script họ gõ) - xem thêm giải thích ở HtmlPreviewer.tsx.
 const PREVIEW_IFRAME_SANDBOX = '';
 
+// Alt text CỐ ĐỊNH, không đổi theo số trang - dùng làm "tên định danh" ổn
+// định cho khung ảnh xem trước PDF (test tự động và người dùng đọc màn hình
+// đều cần 1 chuỗi cố định để nhận diện đúng phần tử, không phụ thuộc trang
+// đang xem là trang mấy).
+const PDF_PREVIEW_IMAGE_ALT = 'PDF page preview';
+
 const DocumentConverter = () => {
   const dispatch = useAppDispatch();
   const {
@@ -85,6 +91,7 @@ const DocumentConverter = () => {
     originalDataUrl,
     originalFormat,
     previewHtml,
+    previewXlsxSheets,
     previewImageDataUrl,
     targetFormat,
     convertedDataUrl,
@@ -103,6 +110,24 @@ const DocumentConverter = () => {
   // Chỉ PDF cần hiển thị "trang 1 / N trang" - không thuộc business state cần
   // giữ lại (chỉ để hiển thị cạnh preview), nên để local thay vì Redux.
   const [sourcePageCount, setSourcePageCount] = useState<number | null>(null);
+  // Tab sheet Excel / trang PDF ĐANG XEM trong khung preview - thuần điều
+  // hướng UI (giống hoverInfo của ColorPicker), không phải dữ liệu cần giữ
+  // trong Redux; nội dung THẬT (previewXlsxSheets/previewImageDataUrl) mới ở
+  // Redux, còn "đang chọn xem cái nào" thì để local.
+  const [activeXlsxSheetIndex, setActiveXlsxSheetIndex] = useState(0);
+  const [activePdfPage, setActivePdfPage] = useState(1);
+  const [isLoadingPreviewPage, setIsLoadingPreviewPage] = useState(false);
+  // Theo dõi activePdfPage bằng ref để handlePdfPageChange tự kiểm tra lại
+  // SAU KHI render xong (bất đồng bộ) xem đây có còn là trang người dùng
+  // đang muốn xem không - tránh trường hợp bấm Next/Previous liên tục khiến
+  // 1 yêu cầu render CŨ hoàn thành sau và đè lên trang MỚI đang hiển thị.
+  const activePdfPageRef = useRef(activePdfPage);
+  useEffect(() => {
+    activePdfPageRef.current = activePdfPage;
+  }, [activePdfPage]);
+  // Cache ảnh từng trang PDF đã render - quay lại trang đã xem trước đó
+  // (vd Next rồi Previous) không cần gọi lại pdfjs vẽ canvas lần nữa.
+  const pdfPageImageCacheRef = useRef<Map<number, string>>(new Map());
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Dữ liệu ĐÃ PHÂN TÍCH của file nguồn (HTML/text của docx, AOA của xlsx,
@@ -150,6 +175,9 @@ const DocumentConverter = () => {
     cancel();
     destroyParsedSource();
     setSourcePageCount(null);
+    setActiveXlsxSheetIndex(0);
+    setActivePdfPage(1);
+    pdfPageImageCacheRef.current = new Map();
     setIsLoadingFile(true);
     try {
       const dataUrl = await readFileAsDataUrl(file);
@@ -168,16 +196,25 @@ const DocumentConverter = () => {
       if (validation.format === 'docx') {
         const parsed = await parseDocxSource(arrayBuffer);
         parsedSourceRef.current = parsed;
-        dispatch(setPreview({ html: parsed.html, imageDataUrl: null }));
+        dispatch(setPreview({ html: parsed.html, xlsxSheets: null, imageDataUrl: null }));
       } else if (validation.format === 'xlsx') {
         const parsed = await parseXlsxSource(arrayBuffer);
         parsedSourceRef.current = parsed;
-        dispatch(setPreview({ html: parsed.html, imageDataUrl: null }));
+        dispatch(
+          setPreview({
+            html: null,
+            xlsxSheets: parsed.sheets.map((sheet) => ({ name: sheet.name, html: sheet.html })),
+            imageDataUrl: null,
+          })
+        );
       } else {
         const parsed = await parsePdfSource(arrayBuffer);
         parsedSourceRef.current = parsed;
         setSourcePageCount(parsed.pageCount);
-        dispatch(setPreview({ html: null, imageDataUrl: parsed.thumbnailDataUrl }));
+        // Đã có sẵn ảnh trang 1 (thumbnailDataUrl) - lưu vào cache luôn để
+        // bấm "Previous" quay lại trang 1 không phải render lại từ đầu.
+        pdfPageImageCacheRef.current.set(1, parsed.thumbnailDataUrl);
+        dispatch(setPreview({ html: null, xlsxSheets: null, imageDataUrl: parsed.thumbnailDataUrl }));
       }
     } catch (err) {
       dispatch(
@@ -233,12 +270,9 @@ const DocumentConverter = () => {
           else if (requestedTarget === 'pptx') blob = await buildDocxPptxBlob(parsed.html);
           else throw new Error('Unsupported conversion.');
         } else if (parsed.kind === 'xlsx') {
-          if (requestedTarget === 'pdf')
-            blob = await buildXlsxPdfBlob(parsed.aoa, parsed.originalRowIndexes, parsed.images);
-          else if (requestedTarget === 'docx')
-            blob = await buildXlsxDocxBlob(parsed.aoa, parsed.originalRowIndexes, parsed.images);
-          else if (requestedTarget === 'pptx')
-            blob = await buildXlsxPptxBlob(parsed.aoa, parsed.originalRowIndexes, parsed.images);
+          if (requestedTarget === 'pdf') blob = await buildXlsxPdfBlob(parsed.sheets);
+          else if (requestedTarget === 'docx') blob = await buildXlsxDocxBlob(parsed.sheets);
+          else if (requestedTarget === 'pptx') blob = await buildXlsxPptxBlob(parsed.sheets);
           else throw new Error('Unsupported conversion.');
         } else {
           if (requestedTarget === 'docx') blob = await buildPdfDocxBlob(parsed.textByPage);
@@ -270,10 +304,56 @@ const DocumentConverter = () => {
     });
   };
 
+  // Điều hướng xem TỪNG TRANG PDF trong khung preview - tương tự cách Excel
+  // chia tab theo sheet, PDF chia theo trang (nhưng dùng nút Trước/Sau + "Trang
+  // X/N" thay vì 1 tab cho mỗi trang, vì PDF có thể có rất nhiều trang trong
+  // khi Excel thường chỉ vài sheet - 1 hàng tab cho hàng chục trang sẽ rối
+  // hơn là giúp ích).
+  const handlePdfPageChange = async (newPage: number) => {
+    const parsed = parsedSourceRef.current;
+    if (!parsed || parsed.kind !== 'pdf' || !sourcePageCount) return;
+    if (newPage < 1 || newPage > sourcePageCount || newPage === activePdfPage) return;
+
+    const sourceDataUrl = originalDataUrl;
+    activePdfPageRef.current = newPage;
+    setActivePdfPage(newPage);
+
+    const cachedImageDataUrl = pdfPageImageCacheRef.current.get(newPage);
+    if (cachedImageDataUrl) {
+      dispatch(setPreview({ html: null, xlsxSheets: null, imageDataUrl: cachedImageDataUrl }));
+      return;
+    }
+
+    setIsLoadingPreviewPage(true);
+    try {
+      const imageDataUrl = await parsed.getPageImage(newPage);
+      pdfPageImageCacheRef.current.set(newPage, imageDataUrl);
+      // File gốc đã bị đổi/xoá, hoặc người dùng đã bấm sang trang KHÁC trong
+      // lúc đang render trang này - bỏ qua kết quả để không đè nhầm lên
+      // trang đang thật sự hiển thị.
+      if (originalDataUrlRef.current !== sourceDataUrl || activePdfPageRef.current !== newPage) return;
+      dispatch(setPreview({ html: null, xlsxSheets: null, imageDataUrl }));
+    } catch (err) {
+      if (originalDataUrlRef.current !== sourceDataUrl || activePdfPageRef.current !== newPage) return;
+      dispatch(
+        setError(
+          err instanceof Error
+            ? `Could not render page ${newPage}: ${err.message}`
+            : `Could not render page ${newPage}.`
+        )
+      );
+    } finally {
+      if (activePdfPageRef.current === newPage) setIsLoadingPreviewPage(false);
+    }
+  };
+
   const handleClear = () => {
     cancel();
     destroyParsedSource();
     setSourcePageCount(null);
+    setActiveXlsxSheetIndex(0);
+    setActivePdfPage(1);
+    pdfPageImageCacheRef.current = new Map();
     setIsConverting(false);
     setIsLoadingFile(false);
     dispatch(clearDocumentConverter());
@@ -373,9 +453,10 @@ const DocumentConverter = () => {
         </div>
 
         {/* Xem trước nội dung file nguồn */}
-        {(previewHtml || previewImageDataUrl) && (
+        {(previewHtml || previewXlsxSheets || previewImageDataUrl) && (
           <div className="flex flex-col space-y-2">
             <label className={labelClass}>Preview:</label>
+
             {previewHtml && (
               <iframe
                 srcDoc={PREVIEW_IFRAME_STYLE + previewHtml}
@@ -384,12 +465,74 @@ const DocumentConverter = () => {
                 className="h-56 w-full rounded-lg border border-gray-200 bg-white dark:border-gray-700"
               />
             )}
+
+            {previewXlsxSheets && (
+              <>
+                {/* Mỗi sheet Excel là 1 tab riêng, giống hệt cách Excel thật
+                    chia tab ở cuối màn hình - cuộn ngang khi có nhiều sheet
+                    thay vì xuống dòng, gọn hơn khi workbook có hàng chục sheet. */}
+                <div className="flex gap-1 overflow-x-auto border-b border-gray-200 dark:border-gray-700">
+                  {previewXlsxSheets.map((sheet, index) => (
+                    <button
+                      key={`${sheet.name}-${index}`}
+                      type="button"
+                      onClick={() => setActiveXlsxSheetIndex(index)}
+                      title={sheet.name}
+                      className={`shrink-0 whitespace-nowrap border-b-2 px-3 py-1.5 text-sm font-medium transition ${
+                        index === activeXlsxSheetIndex
+                          ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+                          : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      }`}
+                    >
+                      {sheet.name}
+                    </button>
+                  ))}
+                </div>
+                <iframe
+                  srcDoc={PREVIEW_IFRAME_STYLE + (previewXlsxSheets[activeXlsxSheetIndex]?.html ?? '')}
+                  sandbox={PREVIEW_IFRAME_SANDBOX}
+                  title="Document preview"
+                  className="h-56 w-full rounded-lg border border-gray-200 bg-white dark:border-gray-700"
+                />
+              </>
+            )}
+
             {previewImageDataUrl && (
-              <img
-                src={previewImageDataUrl}
-                alt="First page preview"
-                className="max-h-56 rounded-lg border border-gray-200 object-contain dark:border-gray-700"
-              />
+              <>
+                {/* PDF chia theo TRANG thay vì tab (như Excel chia theo sheet)
+                    vì PDF có thể có rất nhiều trang - nút Trước/Sau mở rộng
+                    tốt hơn 1 hàng tab dài. */}
+                <div className="flex items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handlePdfPageChange(activePdfPage - 1)}
+                    disabled={activePdfPage <= 1 || isLoadingPreviewPage}
+                    className="px-2.5 py-1 text-xs font-medium bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-300 transition disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    Page {activePdfPage} of {sourcePageCount ?? 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handlePdfPageChange(activePdfPage + 1)}
+                    disabled={activePdfPage >= (sourcePageCount ?? 1) || isLoadingPreviewPage}
+                    className="px-2.5 py-1 text-xs font-medium bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-300 transition disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    Next
+                  </button>
+                </div>
+                {isLoadingPreviewPage ? (
+                  <LoadingIndicator label="Rendering page..." />
+                ) : (
+                  <img
+                    src={previewImageDataUrl}
+                    alt={PDF_PREVIEW_IMAGE_ALT}
+                    className="max-h-56 rounded-lg border border-gray-200 object-contain dark:border-gray-700"
+                  />
+                )}
+              </>
             )}
           </div>
         )}

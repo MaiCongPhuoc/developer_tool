@@ -3,6 +3,7 @@ import AppSidebar from './AppSidebar';
 import { Outlet } from 'react-router';
 import AppHeader from './AppHeader';
 import Adds from './Adds';
+import ContactWidget from './ContactWidget';
 
 export const AppLayout: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -39,6 +40,8 @@ export const AppLayout: React.FC = () => {
           <Adds label="Bottom ad" className="h-20 sm:h-24 w-full" />
         </div>
       </div>
+
+      <ContactWidget />
     </div>
   );
 };
