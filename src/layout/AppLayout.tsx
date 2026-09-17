@@ -4,11 +4,13 @@ import { Outlet } from 'react-router';
 import AppHeader from './AppHeader';
 import Adds from './Adds';
 import ContactWidget from './ContactWidget';
+import PageSeo from '@/seo/PageSeo';
 
 export const AppLayout: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
   return (
     <div className="min-h-screen xl:flex">
+      <PageSeo />
       <div>
         <AppSidebar />
         {/* <Backdrop /> */}

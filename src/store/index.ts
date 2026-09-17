@@ -20,41 +20,50 @@ import imageCompressorReducer from './slices/imageCompressorSlice';
 import imageFormatConverterReducer from './slices/imageFormatConverterSlice';
 import documentConverterReducer from './slices/documentConverterSlice';
 
-export const store = configureStore({
-  reducer: {
-    sidebar: sidebarReducer, // Gom các slices vào đây
-    jsonFormatter: jsonFormatterReducer,
-    xmlFormatter: xmlFormatterReducer,
-    sqlFormatter: sqlFormatterReducer,
-    jwt: jwtReducer,
-    dummyText: dummyTextReducer,
-    textCompare: textCompareReducer,
-    fileCompare: fileCompareReducer,
-    uuid: uuidReducer,
-    password: passwordReducer,
-    qrCode: qrCodeReducer,
-    timeConverter: timeConverterReducer,
-    regex: regexReducer,
-    unitConverter: unitConverterReducer,
-    colorPicker: colorPickerReducer,
-    markdown: markdownReducer,
-    htmlPreview: htmlPreviewReducer,
-    imageCompressor: imageCompressorReducer,
-    imageFormatConverter: imageFormatConverterReducer,
-    documentConverter: documentConverterReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      // updateJsonValue có thể mang giá trị kiểu BigInt (dùng cho số nguyên
-      // quá lớn để number giữ chính xác) - middleware mặc định của RTK coi
-      // BigInt là "không serialize được" nên báo warning nhầm. State thực sự
-      // lưu lại (formattedJson/inputJson) luôn là string đã stringify, nên
-      // bỏ qua kiểm tra riêng cho path này là an toàn.
-      serializableCheck: {
-        ignoredActionPaths: ['payload.value'],
-      },
-    }),
-});
+// Tách thành factory thay vì chỉ 1 store đơn - script tạo HTML tĩnh cho SEO
+// (scripts/prerender.mjs, qua src/entry-server.tsx) render lần lượt cả 19
+// trang trong CÙNG 1 tiến trình Node, nên mỗi trang cần 1 store MỚI hoàn
+// toàn độc lập thay vì dùng chung 1 instance sống xuyên suốt (tránh rủi ro
+// state của trang trước lọt sang HTML tĩnh của trang sau). App thật
+// (main.tsx) vẫn chỉ dùng đúng 1 instance singleton `store` như cũ.
+export const createAppStore = () =>
+  configureStore({
+    reducer: {
+      sidebar: sidebarReducer, // Gom các slices vào đây
+      jsonFormatter: jsonFormatterReducer,
+      xmlFormatter: xmlFormatterReducer,
+      sqlFormatter: sqlFormatterReducer,
+      jwt: jwtReducer,
+      dummyText: dummyTextReducer,
+      textCompare: textCompareReducer,
+      fileCompare: fileCompareReducer,
+      uuid: uuidReducer,
+      password: passwordReducer,
+      qrCode: qrCodeReducer,
+      timeConverter: timeConverterReducer,
+      regex: regexReducer,
+      unitConverter: unitConverterReducer,
+      colorPicker: colorPickerReducer,
+      markdown: markdownReducer,
+      htmlPreview: htmlPreviewReducer,
+      imageCompressor: imageCompressorReducer,
+      imageFormatConverter: imageFormatConverterReducer,
+      documentConverter: documentConverterReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        // updateJsonValue có thể mang giá trị kiểu BigInt (dùng cho số nguyên
+        // quá lớn để number giữ chính xác) - middleware mặc định của RTK coi
+        // BigInt là "không serialize được" nên báo warning nhầm. State thực sự
+        // lưu lại (formattedJson/inputJson) luôn là string đã stringify, nên
+        // bỏ qua kiểm tra riêng cho path này là an toàn.
+        serializableCheck: {
+          ignoredActionPaths: ['payload.value'],
+        },
+      }),
+  });
+
+export const store = createAppStore();
 
 // Type định nghĩa cho RootState và AppDispatch (Dùng chuẩn hóa cho TypeScript)
 export type RootState = ReturnType<typeof store.getState>;

@@ -5,7 +5,14 @@ import { useEffect, useState } from 'react';
 // Redux/Context nào cả, nên các phần cần biết theme hiện tại (Mermaid,
 // syntax highlighting) phải tự quan sát class này bằng MutationObserver
 // thay vì đọc từ store.
-const getIsDark = () => document.documentElement.classList.contains('dark');
+// typeof document check để an toàn khi hook này được render trong Node.js
+// (bước tạo HTML tĩnh cho SEO - xem scripts/prerender.mjs), nơi không tồn
+// tại `document` - nếu không có điều kiện này, gọi thẳng document sẽ crash
+// toàn bộ quá trình build tĩnh ngay khi render tới trang Markdown Previewer.
+const getIsDark = () =>
+  typeof document === 'undefined'
+    ? false
+    : document.documentElement.classList.contains('dark');
 
 export const useIsDarkMode = (): boolean => {
   const [isDark, setIsDark] = useState(getIsDark);

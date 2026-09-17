@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    // baseUrl bị đánh dấu deprecated kể từ TypeScript 6.x (sẽ ngừng hoạt
+    // động ở bản 7.0) nhưng vẫn cần thiết để "paths": {"@/*": ["src/*"]} bên
+    // dưới hoạt động ở bản hiện tại (~6.0.2) - cờ này chỉ tắt cảnh báo, chưa
+    // đổi hành vi gì. Lỗi này có sẵn từ trước (không phải do các thay đổi
+    // SEO gây ra) và chặn "tsc -b" chạy hoàn toàn nên phải sửa để build được.
+    "ignoreDeprecations": "6.0",
     "target": "es2023",
     "lib": ["ES2023", "DOM"],
     "module": "esnext",
