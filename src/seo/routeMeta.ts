@@ -145,6 +145,21 @@ export const routeMeta: Record<string, RouteMeta> = {
     'Document Format Converter',
     'Convert documents between Word, Excel, PDF, and PowerPoint formats directly in your browser — free, no upload to a server required.'
   ),
+  // Trang chính sách, không phải công cụ - dùng schema WebPage thay vì
+  // toolJsonLd's WebApplication (sai ý nghĩa cho 1 trang nội dung tĩnh), và
+  // không có offers/isAccessibleForFree vì đó là thuộc tính của ứng dụng.
+  '/privacy-policy': {
+    path: '/privacy-policy',
+    title: `Privacy Policy | ${SITE_NAME}`,
+    description:
+      'How Developer Tool handles your data: all tools run locally in your browser, no files are uploaded to a server, and how Google AdSense cookies are used.',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Privacy Policy',
+      url: `${SITE_URL}/privacy-policy`,
+    },
+  },
 };
 
 export const defaultMeta: RouteMeta = {

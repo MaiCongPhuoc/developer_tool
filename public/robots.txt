@@ -19,4 +19,7 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
+User-agent: Mediapartners-Google
+Allow: /
+
 Sitemap: https://YOUR_DOMAIN_HERE/sitemap.xml
