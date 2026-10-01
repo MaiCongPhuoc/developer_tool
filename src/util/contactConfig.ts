@@ -10,6 +10,6 @@
 // "Account" > "Security" trên dashboard EmailJS (nên thêm đúng domain của
 // trang này vào đó sau khi triển khai thật). Service ID/Template ID cũng chỉ
 // là định danh, không phải bí mật cần giấu.
-export const EMAILJS_SERVICE_ID = 'service_1494a8h';
-export const EMAILJS_TEMPLATE_ID = 'template_f182ap5';
-export const EMAILJS_PUBLIC_KEY = 'YLRfxFsQ2FUO9fG-1';
+export const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+export const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+export const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
