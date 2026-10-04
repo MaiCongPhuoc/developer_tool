@@ -22,4 +22,4 @@ Allow: /
 User-agent: Mediapartners-Google
 Allow: /
 
-Sitemap: https://developertool.com/sitemap.xml
+Sitemap: https://mydevelopertool.com/sitemap.xml
