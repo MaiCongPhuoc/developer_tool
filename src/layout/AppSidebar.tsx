@@ -4,6 +4,8 @@ import { Link, useLocation } from 'react-router';
 // Assume these icons are imported from an icon library
 import { ChevronDownIcon, HorizontaLDots } from '@/icons';
 import { useSidebar } from '@/hook/useSidebar';
+import { useAppDispatch } from '@/store/hooks';
+import { closeMobileSidebar } from '@/store/slices/sidebarSlice';
 import type { NavItem } from '@/util/interface/Type';
 
 const navItems: NavItem[] = [
@@ -111,8 +113,15 @@ const othersItems: NavItem[] = [
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const dispatch = useAppDispatch();
 
   const location = useLocation();
+
+  // Trên di động, menu phủ lên nội dung - chọn xong 1 mục (đổi route) thì tự
+  // đóng lại để người dùng thấy ngay trang vừa mở, không phải bấm nút X.
+  useEffect(() => {
+    dispatch(closeMobileSidebar());
+  }, [location.pathname, dispatch]);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: 'main' | 'others';
@@ -305,7 +314,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 dark:text-gray-100 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
+      className={`fixed top-16 lg:top-0 flex flex-col px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 dark:text-gray-100 h-[calc(100dvh-4rem)] lg:h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
         ${isExpanded || isMobileOpen ? 'w-[290px]' : isHovered ? 'w-[290px]' : 'w-[90px]'}
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0`}
@@ -340,7 +349,7 @@ const AppSidebar: React.FC = () => {
           )}
         </Link>
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>

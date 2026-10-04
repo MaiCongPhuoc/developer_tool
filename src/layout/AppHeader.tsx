@@ -4,13 +4,13 @@ import { Link } from 'react-router';
 // import { ThemeToggleButton } from '../components/common/ThemeToggleButton';
 // import NotificationDropdown from '../components/header/NotificationDropdown';
 // import UserDropdown from '../components/header/UserDropdown';
-import { useSidebar } from '@/hook/useSidebar';
+import { DESKTOP_BREAKPOINT, useSidebar } from '@/hook/useSidebar';
 
 const AppHeader: React.FC = () => {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
   const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
+    if (window.innerWidth >= DESKTOP_BREAKPOINT) {
       toggleSidebar();
     } else {
       toggleMobileSidebar();
@@ -84,7 +84,7 @@ const AppHeader: React.FC = () => {
 
           <Link to="/" className="lg:hidden flex justify-center items-center">
             <img
-              src="./images/logo/logo.svg"
+              src="/images/logo/logo.svg"
               alt="Logo"
               width={40}
               height={40}

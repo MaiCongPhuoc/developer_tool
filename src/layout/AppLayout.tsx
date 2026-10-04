@@ -8,13 +8,22 @@ import ContactWidget from './ContactWidget';
 import PageSeo from '@/seo/PageSeo';
 
 export const AppLayout: React.FC = () => {
-  const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  const { isExpanded, isHovered, isMobileOpen, closeMobileSidebar } =
+    useSidebar();
   return (
     <div className="min-h-screen xl:flex">
       <PageSeo />
       <div>
         <AppSidebar />
-        {/* <Backdrop /> */}
+        {/* Lớp nền mờ phía sau menu trên di động: chạm ra ngoài menu để đóng.
+            z-40 < z-50 của menu nên nằm dưới menu nhưng trên nội dung trang. */}
+        {isMobileOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-gray-900/50 lg:hidden"
+            onClick={closeMobileSidebar}
+            aria-hidden="true"
+          />
+        )}
       </div>
       <div
         className={`flex-1 transition-all duration-300 ease-in-out ${
@@ -22,7 +31,9 @@ export const AppLayout: React.FC = () => {
         } ${isMobileOpen ? 'ml-0' : ''}`}
       >
         <AppHeader />
-        <div className="flex flex-col gap-4 p-4 md:p-6">
+        {/* pb-24 trên di động: chừa chỗ cho nút chat nổi (fixed, góc dưới
+            phải) để khi cuộn tới cuối trang nó không che chân trang/quảng cáo. */}
+        <div className="flex flex-col gap-4 p-4 pb-24 md:p-6 md:pb-6">
           <GoogleAdUnit className="h-20 sm:h-24 w-full" />
 
           <div className="flex flex-col lg:flex-row gap-4">

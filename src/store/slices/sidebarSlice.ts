@@ -20,6 +20,9 @@ export const sidebarSlice = createSlice({
     toggleMobileSidebar: (state) => {
       state.isMobileOpen = !state.isMobileOpen;
     },
+    closeMobileSidebar: (state) => {
+      state.isMobileOpen = false;
+    },
     setIsHovered: (state, action: PayloadAction<boolean>) => {
       state.isHovered = action.payload;
     },
@@ -31,8 +34,13 @@ export const sidebarSlice = createSlice({
         state.openSubmenu === action.payload ? null : action.payload;
     },
     setIsMobile: (state, action: PayloadAction<boolean>) => {
+      // Chỉ đóng menu di động khi màn hình THỰC SỰ vượt từ "di động" lên
+      // "desktop". Trước đây mỗi sự kiện resize (trình duyệt điện thoại bắn
+      // liên tục khi thanh địa chỉ co/giãn lúc cuộn) đều đóng menu nếu chiều
+      // rộng >= 768px, khiến tablet/điện thoại xoay ngang không giữ được menu.
+      const wasMobile = state.isMobile;
       state.isMobile = action.payload;
-      if (!action.payload) {
+      if (wasMobile && !action.payload) {
         state.isMobileOpen = false;
       }
     },
@@ -42,6 +50,7 @@ export const sidebarSlice = createSlice({
 export const {
   toggleSidebar,
   toggleMobileSidebar,
+  closeMobileSidebar,
   setIsHovered,
   setActiveItem,
   toggleSubmenu,
