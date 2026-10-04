@@ -16,6 +16,7 @@ import {
   svgToObjectUrl,
   triggerDownload,
 } from '@/util/qrcode';
+import ToolGuide from '@/components/ToolGuide';
 
 const textareaClass =
   'w-full result-box-h-sm p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
@@ -178,6 +179,21 @@ const QrCode = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the QR Code Generator"
+        intro="Turn a link or any text into a QR code that people can scan with a phone camera. The code is created in your browser, so your text is never uploaded to a server."
+        steps={[
+          'Type or paste a URL or any text into the URL / Text box.',
+          'Click Generate. The QR code appears below.',
+          'Click Download PNG for an image you can print or share, or Download SVG for a sharp vector version that scales to any size.',
+          'Click Clear to remove the code and start again.',
+        ]}
+        tips={[
+          'Include the full address, starting with https://, so phones open it as a link.',
+          'The text can be up to 2,000 bytes. A message tells you if it is too long, and characters with accents take more than one byte each.',
+          'Always scan the finished code with your phone before printing it, to confirm it opens the right page.',
+        ]}
+      />
     </div>
   );
 };

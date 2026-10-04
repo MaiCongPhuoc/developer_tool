@@ -1,11 +1,6 @@
-import type { Element } from 'hast';
-import { useEffect, useRef, useState } from 'react';
-import ReactMarkdown, { type Components } from 'react-markdown';
-import rehypeHighlight from 'rehype-highlight';
-import remarkGfm from 'remark-gfm';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import MarkdownErrorBoundary from '@/components/MarkdownErrorBoundary';
-import MermaidDiagram from '@/components/MermaidDiagram';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   clearMarkdown,
@@ -14,58 +9,12 @@ import {
   setError,
   setMarkdown,
 } from '@/store/slices/markdownSlice';
+import ToolGuide from '@/components/ToolGuide';
 
-// Component custom (code trả về <MermaidDiagram>) chỉ THỰC SỰ được React
-// gọi/render ở một lượt sau, nên lúc <pre> nhận children, children.type vẫn
-// còn là hàm "code" ở dưới chứ CHƯA phải MermaidDiagram - không thể so sánh
-// child.type === MermaidDiagram ở đây được. Phải kiểm tra thẳng trên AST gốc
-// (node.children - hast, không đi qua React) xem code con có phải
-// "language-mermaid" hay không.
-const isMermaidPreNode = (node: Element | undefined): boolean => {
-  const codeNode = node?.children.find(
-    (child): child is Element =>
-      child.type === 'element' && child.tagName === 'code'
-  );
-  const classNames = codeNode?.properties?.className;
-  return (
-    Array.isArray(classNames) && classNames.includes('language-mermaid')
-  );
-};
+// Phần hiển thị Markdown nặng (react-markdown + highlight + mermaid) được nạp
+// khi trang này mở, không nằm trong bundle JS chính - xem MarkdownRenderer.tsx.
+const MarkdownRenderer = lazy(() => import('@/components/MarkdownRenderer'));
 
-// react-markdown v10 không còn truyền prop "inline" cho components.code như
-// bản cũ - phân biệt bằng className: chỉ code block dạng ```lang mới có
-// className "language-lang" (do remark gắn vào), code `inline` không có.
-const markdownComponents: Components = {
-  code({ className, children, ...rest }) {
-    const language = /language-(\w+)/.exec(className ?? '')?.[1];
-
-    if (language === 'mermaid') {
-      return <MermaidDiagram code={String(children).replace(/\n$/, '')} />;
-    }
-
-    // Các ngôn ngữ khác: giữ nguyên className/children - rehype-highlight đã
-    // gắn sẵn <span class="hljs-..."> tô màu cú pháp bên trong children rồi,
-    // không cần xử lý gì thêm ở đây.
-    return (
-      <code className={className} {...rest}>
-        {children}
-      </code>
-    );
-  },
-  // react-markdown luôn bọc code block trong <pre><code>...</code></pre> -
-  // với code JS/Python bình thường thì đúng ý (Tailwind Typography tô nền
-  // tối cho <pre> để trông giống ô code), nhưng với Mermaid thì children đã
-  // là 1 sơ đồ SVG/thông báo lỗi (từ MermaidDiagram), không phải văn bản, nên
-  // không được bọc trong <pre> nữa (<pre> ép white-space: pre khiến chữ
-  // thông báo lỗi bị tràn thay vì xuống dòng, và nền tối không hợp làm khung
-  // cho sơ đồ). Bỏ qua lớp bọc <pre> CHỈ khi con bên trong là MermaidDiagram.
-  pre({ node, children }) {
-    if (isMermaidPreNode(node)) {
-      return <>{children}</>;
-    }
-    return <pre>{children}</pre>;
-  },
-};
 
 const textareaClass =
   'w-full result-box-h p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
@@ -159,7 +108,10 @@ const MarkdownPreviewer = () => {
   // markdown lần 2 bằng renderToStaticMarkup - vừa tránh tốn công parse 2
   // lần, vừa đảm bảo HTML copy ra khớp 100% với những gì đang hiển thị.
   const handleCopyHtml = async () => {
-    const html = previewRef.current?.innerHTML;
+    // Chưa có khung .prose nghĩa là phần render Markdown (nạp lười) chưa tải
+    // xong - lúc đó innerHTML chỉ là chữ "Loading preview...", không copy.
+    if (!previewRef.current?.querySelector('.prose')) return;
+    const html = previewRef.current.innerHTML;
     if (!html) return;
     try {
       await navigator.clipboard.writeText(html);
@@ -249,23 +201,34 @@ const MarkdownPreviewer = () => {
                     </p>
                   }
                 >
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      rehypePlugins={[
-                        [rehypeHighlight, { ignoreMissing: true }],
-                      ]}
-                      components={markdownComponents}
-                    >
-                      {displayedMarkdown}
-                    </ReactMarkdown>
-                  </div>
+                  <Suspense
+                    fallback={<LoadingIndicator label="Loading preview..." />}
+                  >
+                    <MarkdownRenderer markdown={displayedMarkdown} />
+                  </Suspense>
                 </MarkdownErrorBoundary>
               )}
             </div>
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the Markdown Previewer"
+        intro="Write Markdown on one side and see the formatted result update on the other. It supports GitHub-style Markdown, syntax-highlighted code blocks and Mermaid diagrams. Everything runs in your browser, so your text is never uploaded to a server."
+        steps={[
+          'Type or paste your Markdown into the Markdown box. A short example is already there, so you can see how it works.',
+          'Stop typing for a moment and the Preview updates automatically. There is no button to press.',
+          'Use the usual Markdown syntax: # for headings, ** for bold, * for italics, - for lists, [text](url) for links, and three backticks to start and end a code block.',
+          'To draw a diagram, start a code block with three backticks followed by the word mermaid, and write your Mermaid diagram inside it.',
+          'Click Copy Markdown to copy what you wrote, Copy HTML to copy the generated HTML, or Clear to empty the Markdown box.',
+        ]}
+        tips={[
+          'Tables, task lists (- [ ] and - [x]) and strikethrough work, as they do on GitHub.',
+          'Add the language after the opening backticks, for example js or python, to get colored code.',
+          'Content is limited to 100,000 characters, and lines with extremely deep nesting are rejected to keep your browser from freezing. A message appears in both cases.',
+          'If a Mermaid diagram has a syntax error, a yellow message shows the problem so you can fix it.',
+        ]}
+      />
     </div>
   );
 };

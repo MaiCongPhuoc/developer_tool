@@ -14,6 +14,7 @@ import {
   setLength,
 } from '@/store/slices/passwordSlice';
 import type { PasswordStrength } from '@/util/interface/Type';
+import ToolGuide from '@/components/ToolGuide';
 
 const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500';
@@ -231,6 +232,21 @@ const PasswordGenerator = () => {
           )}
         </div>
       </div>
+      <ToolGuide
+        title="How to use the Password Generator"
+        intro="Create strong, random passwords that are hard to guess. They are generated in your browser with the secure Web Crypto API, so the password is never sent to or stored on a server."
+        steps={[
+          'Enter the password length, from 4 to 128 characters.',
+          'Choose the character types to include: Uppercase (A-Z), Lowercase (a-z), Numbers (0-9) and Symbols. Select at least one.',
+          'Click Generate. Your password appears together with a strength indicator that goes from Very Weak to Very Strong.',
+          'Click Copy to copy the password, then paste it straight into your password manager or the sign-up form. Click Clear to start over.',
+        ]}
+        tips={[
+          'Longer passwords with a mix of character types are stronger. For important accounts, aim for 16 characters or more.',
+          'Use a different password for every account, and store them in a password manager instead of reusing or memorising them.',
+          'Some websites do not accept certain symbols. If a site rejects your password, untick Symbols and generate a longer one instead.',
+        ]}
+      />
     </div>
   );
 };

@@ -1,4 +1,7 @@
-import QRCode from 'qrcode';
+// Thư viện qrcode chỉ được nạp khi thật sự tạo mã QR (import động), vì file này
+// còn được các trang khác import chỉ để dùng triggerDownload - nếu import tĩnh,
+// thư viện qrcode sẽ bị kéo vào bundle JS chính của mọi trang.
+const loadQrCode = async () => (await import('qrcode')).default;
 
 // Version 40 (kích thước tối đa của QR code) ở mức sửa lỗi M chỉ chứa được
 // tối đa 2331 byte dữ liệu dạng byte-mode (bảng tra của chuẩn QR). Đặt mốc
@@ -18,11 +21,11 @@ const QR_CODE_OPTIONS = {
 export const getUtf8ByteLength = (text: string): number =>
   new TextEncoder().encode(text).length;
 
-export const generateQrCodeDataUrl = (text: string): Promise<string> =>
-  QRCode.toDataURL(text, QR_CODE_OPTIONS);
+export const generateQrCodeDataUrl = async (text: string): Promise<string> =>
+  (await loadQrCode()).toDataURL(text, QR_CODE_OPTIONS);
 
-export const generateQrCodeSvg = (text: string): Promise<string> =>
-  QRCode.toString(text, { ...QR_CODE_OPTIONS, type: 'svg' });
+export const generateQrCodeSvg = async (text: string): Promise<string> =>
+  (await loadQrCode()).toString(text, { ...QR_CODE_OPTIONS, type: 'svg' });
 
 // Dùng chung cho cả tải PNG (href là data: URL) và SVG (href là blob: URL) -
 // tạo 1 thẻ <a download> tạm, bấm rồi gỡ ngay, không cần thêm UI ẩn trong JSX.

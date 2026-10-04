@@ -13,6 +13,7 @@ import {
   setHyphens,
   setUppercase,
 } from '@/store/slices/uuidSlice';
+import ToolGuide from '@/components/ToolGuide';
 
 const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500';
@@ -193,6 +194,21 @@ const Uuid = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the UUID / GUID Generator"
+        intro="Generate random version 4 UUIDs (also called GUIDs) for database keys, test data and identifiers. They are created in your browser with the secure Web Crypto API, and nothing is sent to a server."
+        steps={[
+          'Enter the quantity, which is how many UUIDs you want.',
+          'Choose the format: tick Uppercase for capital letters, keep Hyphens (-) ticked for the standard 8-4-4-4-12 layout (untick it to remove the dashes), and tick Braces ({}) to wrap each UUID in curly braces.',
+          'Click Generate. The UUIDs appear in a list.',
+          'Click Copy next to a single UUID, or Copy All to copy the whole list. Click Clear to start over.',
+        ]}
+        tips={[
+          'You can generate up to 1,000 UUIDs at a time.',
+          'Version 4 UUIDs are random, so the chance of getting the same value twice is extremely small.',
+          'Different systems expect different formats. For example, some Microsoft tools use uppercase UUIDs wrapped in braces, while most databases use lowercase with hyphens.',
+        ]}
+      />
     </div>
   );
 };

@@ -13,6 +13,7 @@ import {
 } from '@/store/slices/timeConverterSlice';
 import type { TimestampUnit } from '@/util/interface/Type';
 import { getSupportedTimezones } from '@/util/time';
+import ToolGuide from '@/components/ToolGuide';
 
 const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500';
@@ -226,6 +227,22 @@ const TimeConverter = () => {
           </div>
         )}
       </div>
+      <ToolGuide
+        title="How to use the Time / Timezone Converter"
+        intro="Convert a Unix timestamp into a readable date and time in any timezone, together with the matching UTC value in ISO 8601 format. The conversion happens in your browser."
+        steps={[
+          'Enter a Unix timestamp, or click Now to fill in the current time.',
+          'Choose the unit of your number: Seconds (10 digits, for example 1700000000) or Milliseconds (13 digits, for example 1700000000000).',
+          'Pick the Timezone you want to see the result in.',
+          'Click Convert. The date and time in that timezone appears, along with the UTC (ISO 8601) value.',
+          'Click Copy next to a result to copy it, or Clear to start over.',
+        ]}
+        tips={[
+          'If the converted date looks like the year 1970 or a date thousands of years away, you probably picked the wrong unit. Try switching between Seconds and Milliseconds.',
+          'A Unix timestamp counts the time since 1 January 1970 (UTC), so the same number is the same moment everywhere. Only the displayed local time changes with the timezone.',
+          'The timestamp must be a whole number within the range of dates that JavaScript supports, otherwise a message explains the problem.',
+        ]}
+      />
     </div>
   );
 };

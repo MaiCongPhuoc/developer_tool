@@ -8,6 +8,7 @@ import {
   setLeftText,
   setRightText,
 } from '@/store/slices/textCompareSlice';
+import ToolGuide from '@/components/ToolGuide';
 
 const textareaClass =
   'w-full result-box-h p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
@@ -125,6 +126,22 @@ const TextCompare = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use Text Compare"
+        intro="Text Compare shows the differences between two pieces of text side by side, line by line, so you can see exactly what was added, removed or changed. Everything runs in your browser, so your text is never uploaded to a server."
+        steps={[
+          'Paste the original text into the Original text box.',
+          'Paste the changed text into the Changed text box.',
+          'Click Compare. The Comparison result appears below with the original on the left and the changed text on the right, each with line numbers.',
+          'Read the highlights: red marks text that was removed, green marks text that was added, and within a modified line the exact words that differ are highlighted.',
+          'Use the summary above the result to see how many lines were modified, added and deleted. Click Clear to start a new comparison.',
+        ]}
+        tips={[
+          'You need text in at least one of the two boxes. If only one box is filled, the other side is treated as empty.',
+          'Very large inputs cannot be compared. The limit is 5,000 lines per side, and a message appears if you go over it.',
+          'To compare two files instead of pasted text, use the File Compare tool.',
+        ]}
+      />
     </div>
   );
 };

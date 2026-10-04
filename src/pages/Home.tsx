@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import JsonTreeView from '@/components/JsonTreeView';
 import LoadingIndicator from '@/components/LoadingIndicator';
+import ToolGuide from '@/components/ToolGuide';
 import { useDelayedAction } from '@/hook/useDelayedAction';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
@@ -130,6 +131,24 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      <ToolGuide
+        title="How to use the JSON Formatter"
+        intro="The JSON Formatter turns compact or messy JSON into a clean, indented tree that is easy to read, check and edit. Everything runs in your browser, so your data is never uploaded to a server."
+        steps={[
+          'Paste your JSON into the Input JSON box (it appears above the output on small screens).',
+          'Click Format JSON. The result appears in the Formatted Output panel as a collapsible tree.',
+          'Use the small arrow next to any object or array to collapse or expand it, which helps when working with large documents.',
+          'To change a value, click it in the output, type the new value and press Enter. Press Esc to cancel. The input and the output stay in sync.',
+          'Click Copy Output to copy the formatted JSON to your clipboard, or Clear to remove everything and start over.',
+        ]}
+        tips={[
+          'Trailing commas (for example {"a": 1,}) are removed automatically, and an invisible byte-order mark copied from some editors is ignored.',
+          'Very large integers keep their exact value instead of being rounded.',
+          'If the JSON is invalid, a red message explains the syntax error so you can fix the input and try again.',
+          'The formatted output uses 2-space indentation.',
+        ]}
+      />
     </div>
   );
 };

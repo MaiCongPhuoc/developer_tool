@@ -10,6 +10,7 @@ import {
   setError,
   setInputXml,
 } from '@/store/slices/xmlFormatterSlice';
+import ToolGuide from '@/components/ToolGuide';
 
 const XML = () => {
   const dispatch = useAppDispatch();
@@ -130,6 +131,22 @@ const XML = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the XML Formatter"
+        intro="The XML Formatter turns compact or messy XML into a clean, indented tree that is easy to read, check and edit. Everything runs in your browser, so your data is never uploaded to a server."
+        steps={[
+          'Paste your XML into the Input box (it appears above the output on small screens).',
+          'Click Format XML. The result appears in the Formatted Output panel as a collapsible tree.',
+          'Use the small arrow next to any element to collapse or expand it, which helps when working with large documents.',
+          'To change a text value or an attribute value, click it in the output, type the new value and press Enter. Press Esc to cancel.',
+          'Click Copy Output to copy the formatted XML to your clipboard, or Clear to remove everything and start over.',
+        ]}
+        tips={[
+          'Your XML must be well-formed: a single root element and every tag properly closed. If it is not, a red message explains what is wrong so you can fix it and try again.',
+          'The formatted output uses 2-space indentation, and elements with no content are written as self-closing tags such as <br />.',
+          'Text inside CDATA sections is not lost; it is written out as regular, escaped text.',
+        ]}
+      />
     </div>
   );
 };

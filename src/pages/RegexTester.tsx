@@ -15,6 +15,7 @@ import {
   test,
 } from '@/store/slices/regexSlice';
 import type { RegexMatchResult, RegexTokenType } from '@/util/interface/Type';
+import ToolGuide from '@/components/ToolGuide';
 
 const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 font-mono';
@@ -350,6 +351,24 @@ const RegexTester = () => {
           </div>
         )}
       </div>
+      <ToolGuide
+        title="How to use the Regex Tester"
+        intro="Test a regular expression against your own text and see every match highlighted instantly, together with the captured groups and a plain-language explanation of the pattern. It uses the JavaScript regular expression engine of your browser, and your text never leaves your device."
+        steps={[
+          'Type your regular expression into the Regular Expression Pattern box, without the surrounding slashes. For example: ^\\d{3}-\\d{4}$',
+          'Tick the flags you need: Global (g) finds every match, Ignore Case (i), Multiline (m), Dot All (s), Unicode (u) and Sticky (y).',
+          'Paste the text you want to search into the Test String box.',
+          'Click Test. A badge shows Match found with the number of matches, or No match.',
+          'Look at Highlighted Text to see where the matches are, at the Matches list for the position and captured groups of each one, and at Syntax Explanation to understand each part of your pattern.',
+          'Click Clear to reset everything.',
+        ]}
+        tips={[
+          'Without the Global (g) flag, only the first match is returned.',
+          'If the pattern is not valid, a red message from the regex engine explains the error.',
+          'To keep your browser responsive, the pattern can be up to 500 characters, the test string up to 20,000 characters, and at most 1,000 matches are listed.',
+          'Patterns with heavy nested repetition, such as (a+)+$, can be very slow on long text. If the page seems to hang, simplify the pattern.',
+        ]}
+      />
     </div>
   );
 };

@@ -25,6 +25,7 @@ import {
 import { readFileAsDataUrl } from '@/util/imagePixel';
 import type { ImageOutputFormat } from '@/util/interface/Type';
 import { triggerDownload } from '@/util/qrcode';
+import ToolGuide from '@/components/ToolGuide';
 
 const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 
@@ -587,6 +588,23 @@ const ImageFormatConverter = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the Image Format Converter"
+        intro="Convert an image between JPEG, WebP and PNG, and optionally turn a flat background transparent. Your image is processed inside your browser and is never uploaded to a server."
+        steps={[
+          'Add your image: drag and drop it onto the box, or click the box to browse. One image at a time, up to 20 MB.',
+          'Under Convert to, choose JPEG, WebP or PNG. Hover over an option to see a short note about its strengths.',
+          'Set the Quality with the slider for JPEG and WebP. PNG is lossless, so quality is ignored.',
+          'To remove a background, tick Make background transparent. This needs PNG or WebP, because JPEG cannot be transparent.',
+          'Choose the Background color to remove, or click Pick from corner to sample the color from the image. Use the Tolerance slider to decide how close a color must be to be removed.',
+          'Click Convert. Under Result you can compare the Original and the converted image, and then click Download to save it. Click Clear to start over.',
+        ]}
+        tips={[
+          'Use PNG when you need sharp edges and transparency, WebP for the smallest files on websites, and JPEG for photos that must work everywhere.',
+          'Background removal works best on flat, single-color backgrounds such as a white or green screen. It matches colors and does not detect objects.',
+          'If part of your subject disappears, lower the Tolerance. If bits of the background remain, raise it a little.',
+        ]}
+      />
     </div>
   );
 };

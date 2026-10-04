@@ -22,6 +22,7 @@ import {
 import { readFileAsDataUrl } from '@/util/imagePixel';
 import type { ImageOutputFormat } from '@/util/interface/Type';
 import { triggerDownload } from '@/util/qrcode';
+import ToolGuide from '@/components/ToolGuide';
 
 const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 
@@ -501,6 +502,23 @@ const ImageCompressor = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the Image Compressor"
+        intro="Make an image file smaller so it uploads, loads and shares faster. Your image is compressed inside your browser and is never uploaded to a server."
+        steps={[
+          'Add your image: drag and drop it onto the box, or click the box to browse. One image at a time, up to 20 MB.',
+          'Choose the Output format: JPEG for photos, WebP for the best compression, or PNG for lossless quality.',
+          'Set the Quality with the slider. A lower value gives a smaller file but less detail. Quality is ignored for PNG because PNG is lossless.',
+          'Optionally enter a Max width/height (px) to shrink large images. Use a whole number from 16 to 10000, or leave it empty to keep the original size.',
+          'Click Compress. Under Result you can compare the Original and Compressed images and see how much smaller the file became.',
+          'Click Download to save the compressed image, or Clear to start over.',
+        ]}
+        tips={[
+          'For photos, a quality of about 70 to 85 percent usually looks almost the same as the original at a much smaller size.',
+          'Reducing the max width or height often saves more space than lowering quality. A photo for a website rarely needs to be wider than 2000 pixels.',
+          'If the result is not smaller than the original, the tool says so. Try a lower quality or a smaller max dimension, or choose WebP.',
+        ]}
+      />
     </div>
   );
 };

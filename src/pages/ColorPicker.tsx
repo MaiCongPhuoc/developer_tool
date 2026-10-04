@@ -17,6 +17,7 @@ import {
 import { getAllColorFormats, rgbToHex } from '@/util/color';
 import type { ColorPickerTab } from '@/util/interface/Type';
 import { readFileAsDataUrl, validateImageFile } from '@/util/imagePixel';
+import ToolGuide from '@/components/ToolGuide';
 
 const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 font-mono';
@@ -520,6 +521,22 @@ const ColorPicker = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the Color Picker"
+        intro="Pick a color from a palette, type a HEX code, or click a color straight from your own image, then copy it as HEX, RGB or HSL. Everything runs in your browser, and images you open are never uploaded."
+        steps={[
+          'On the Palette tab, click the color box to open your browser\'s color chooser, type a HEX code (for example #3B82F6) and click Apply, or click one of the preset swatches.',
+          'To grab a color from a picture, open the Eyedropper tab and click Upload image to choose an image from your device.',
+          'Click anywhere on the image to pick the color of that exact pixel. Move your pointer over the image first to preview the color under it.',
+          'Look at Selected Color to see the result in HEX, RGB and HSL.',
+          'Click Copy next to the format you need, or Clear to start over.',
+        ]}
+        tips={[
+          'Use HEX or RGB for most web and design tools, and HSL when you want to adjust lightness or saturation by hand.',
+          'To convert between color formats without picking, use the Color category in the Unit and Currency Converter.',
+          'Only image files up to 8 MB can be uploaded on the Eyedropper tab. Anything else is rejected with a message.',
+        ]}
+      />
     </div>
   );
 };

@@ -10,6 +10,7 @@ import {
   setInputSql,
 } from '@/store/slices/sqlFormatterSlice';
 import { highlightSqlSegments } from '@/util/sql';
+import ToolGuide from '@/components/ToolGuide';
 
 const SQL = () => {
   const dispatch = useAppDispatch();
@@ -136,6 +137,22 @@ const SQL = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the SQL Formatter"
+        intro="The SQL Formatter rewrites a SQL statement so it is easy to read: keywords in capital letters, each main clause on its own line, and conditions and column lists indented. Everything runs in your browser, so your queries are never sent to a server."
+        steps={[
+          'Paste your SQL statement into the Input box (it appears above the output on small screens).',
+          'Click Format SQL.',
+          'Read the result in the Formatted Output panel. Clauses such as SELECT, FROM, WHERE and JOIN start on separate lines, and AND / OR conditions are indented.',
+          'Click Copy Output to copy the formatted SQL to your clipboard, or Clear to remove everything and start over.',
+        ]}
+        tips={[
+          'Table names, column names and aliases keep their original capitalisation; only SQL keywords are written in capital letters.',
+          'Subqueries and CASE expressions are indented one level deeper so their structure stays easy to follow.',
+          'The formatter handles common statements well, but very unusual or vendor-specific syntax may be laid out differently from what you expect, so review the result before you run it.',
+          'Formatting only changes the layout. The tool does not run your query or check it against a database.',
+        ]}
+      />
     </div>
   );
 };

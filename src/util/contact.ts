@@ -1,4 +1,3 @@
-import emailjs from '@emailjs/browser';
 import { EMAILJS_PUBLIC_KEY, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID } from '@/util/contactConfig';
 
 // Đủ dài cho 1 góp ý/yêu cầu chi tiết nhưng vẫn chặn được việc gửi 1 khối
@@ -27,6 +26,9 @@ export const sendContactMessage = async (message: string): Promise<void> => {
   }
 
   try {
+    // Chỉ nạp thư viện EmailJS lúc thực sự gửi tin (import động), không nằm
+    // trong bundle JS chính của mọi trang.
+    const { default: emailjs } = await import('@emailjs/browser');
     await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,

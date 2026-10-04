@@ -16,6 +16,7 @@ import {
   setTokenInput,
 } from '@/store/slices/jwtSlice';
 import type { JwtAlgorithm, JwtMode } from '@/util/interface/Type';
+import ToolGuide from '@/components/ToolGuide';
 
 const algorithms: JwtAlgorithm[] = ['HS256', 'HS384', 'HS512'];
 
@@ -379,6 +380,24 @@ const Encryption = () => {
           </div>
         )}
       </div>
+      <ToolGuide
+        title="How to use the JWT Encoder / Decoder"
+        intro="This tool creates (encodes) and reads (decodes) JSON Web Tokens signed with HMAC (HS256, HS384 or HS512). It runs entirely in your browser, so your tokens and secrets are not sent to any server."
+        steps={[
+          'To create a token, open the Encode tab and edit the Header and Payload JSON.',
+          'Pick an Algorithm (HS256, HS384 or HS512), type your Secret and click Generate JWT. Copy the result from the Encoded Token box.',
+          'To read a token, open the Decode tab and paste the token (it looks like header.payload.signature).',
+          'Optionally enter the secret to verify the signature, then click Decode JWT.',
+          'Read the decoded Header and Payload. A badge tells you whether the signature is valid, invalid or not verified, and if the payload has an exp claim it also shows when the token expires or expired.',
+          'Use Clear to reset the form and start over.',
+        ]}
+        tips={[
+          'The alg value in the header is always replaced by the algorithm selected in the dropdown, so the header and the signature always match.',
+          'Only HMAC algorithms (HS256, HS384, HS512) are supported. Tokens signed with other algorithms, such as RS256, cannot be verified here.',
+          'A JWT is encoded, not encrypted. Anyone who has the token can read its payload, so never put passwords or other secrets inside it.',
+          'Avoid pasting real production secrets into any online tool, even one that works in your browser.',
+        ]}
+      />
     </div>
   );
 };

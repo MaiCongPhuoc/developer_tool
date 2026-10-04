@@ -8,6 +8,7 @@ import {
   setError,
   setHtml,
 } from '@/store/slices/htmlPreviewSlice';
+import ToolGuide from '@/components/ToolGuide';
 
 const textareaClass =
   'w-full result-box-h p-3 font-mono text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500 resize-none';
@@ -155,6 +156,21 @@ const HtmlPreviewer = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the HTML Previewer"
+        intro="Write HTML, CSS and JavaScript and see the page render live next to your code. The preview runs in an isolated frame, and everything stays in your browser."
+        steps={[
+          'Type or paste your code into the HTML box. A small example is already there. Put CSS inside a style tag and JavaScript inside a script tag.',
+          'Stop typing for a moment and the Preview updates automatically. There is no button to press.',
+          'Interact with the preview just like a normal web page: click buttons, fill in forms and try your script.',
+          'Click Copy HTML to copy your code, or Clear to empty the HTML box.',
+        ]}
+        tips={[
+          'The preview is sandboxed. Scripts, alert and confirm dialogs, forms and popups work, but the page cannot read anything from this website.',
+          'Your code can be up to 200,000 characters long.',
+          'A single file is previewed at a time, so put your CSS and JavaScript in the same HTML.',
+        ]}
+      />
     </div>
   );
 };

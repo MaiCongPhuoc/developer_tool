@@ -32,6 +32,7 @@ import {
   TEMPERATURE_UNITS,
   UNIT_TABLES,
 } from '@/util/units';
+import ToolGuide from '@/components/ToolGuide';
 
 const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500';
@@ -444,6 +445,23 @@ const UnitConverter = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the Unit and Currency Converter"
+        intro="Convert values between units in eight categories: Length, Weight, Storage, Temperature, Font Size, Currency, Color and Number Base. Unit conversions run in your browser. Currency uses live exchange rates that are downloaded when you use that category."
+        steps={[
+          'Choose a category at the top, for example Length or Currency.',
+          'Enter the Value you want to convert.',
+          'Select the unit to convert From and the unit to convert To. Click the swap button between them to reverse the two units.',
+          'Click Convert. The converted value appears in the Result box.',
+          'Click Copy to copy the result, or Clear to start over.',
+        ]}
+        tips={[
+          'For Font Size, a Base font size (px) field lets you set what 1rem or 1em equals, which is usually 16px.',
+          'For Color, convert between HEX, RGB and HSL by typing the color in the format of the From unit, for example #FF5733.',
+          'Number Base converts between decimal, binary, octal and hexadecimal. Storage uses 1024 for each step, so 1 KB is 1,024 bytes.',
+          'Currency rates are fetched online, so this category needs an internet connection and the rates are for guidance only. Check with your bank or provider before making a payment.',
+        ]}
+      />
     </div>
   );
 };

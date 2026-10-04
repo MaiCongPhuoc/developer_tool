@@ -9,6 +9,7 @@ import {
   setCopied,
   setError,
 } from '@/store/slices/dummyTextSlice';
+import ToolGuide from '@/components/ToolGuide';
 
 const inputClass =
   'w-full p-2.5 text-sm border rounded-lg bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500';
@@ -139,6 +140,19 @@ const DummyText = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the Dummy Text Generator"
+        intro="Generate placeholder (lorem ipsum) text of an exact length for mockups, page layouts and tests. Everything runs in your browser."
+        steps={[
+          'Enter the number of characters you need. Spaces are included in the count.',
+          'Click Generate Text. The text appears in the output box.',
+          'Click Copy Output to copy the text to your clipboard, or Clear to reset the page.',
+        ]}
+        tips={[
+          'The length must be a whole number from 1 to 100000. Otherwise a red message explains the problem.',
+          'The generated text has exactly the number of characters you asked for, so it is handy for testing fields with a maximum length.',
+        ]}
+      />
     </div>
   );
 };

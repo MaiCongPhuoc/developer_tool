@@ -37,6 +37,7 @@ import {
 import { readFileAsDataUrl } from '@/util/imagePixel';
 import type { DocumentFormat } from '@/util/interface/Type';
 import { triggerDownload } from '@/util/qrcode';
+import ToolGuide from '@/components/ToolGuide';
 
 const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 
@@ -276,7 +277,7 @@ const DocumentConverter = () => {
           else throw new Error('Unsupported conversion.');
         } else {
           if (requestedTarget === 'docx') blob = await buildPdfDocxBlob(parsed.textByPage);
-          else if (requestedTarget === 'xlsx') blob = buildPdfXlsxBlob(parsed.textByPage);
+          else if (requestedTarget === 'xlsx') blob = await buildPdfXlsxBlob(parsed.textByPage);
           else if (requestedTarget === 'pptx')
             blob = await buildPdfPptxBlob(parsed.getPageImage, parsed.pageCount);
           else throw new Error('Unsupported conversion.');
@@ -627,6 +628,23 @@ const DocumentConverter = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use the Document Format Converter"
+        intro="Convert documents between Word, Excel, PDF and PowerPoint formats. The files are read and converted inside your browser, so your documents are never uploaded to a server."
+        steps={[
+          'Add your file: drag and drop it onto the box, or click the box to browse. Accepted sources are Word (.docx), Excel (.xlsx, .xls or .csv) and PDF files, up to 15 MB.',
+          'Check the Preview. Excel files show one tab per sheet, and PDF files can be browsed page by page.',
+          'Under Convert to, choose the format you want. The note below the buttons tells you how faithful that conversion is.',
+          'Click Convert and wait for it to finish. Large files can take a little while.',
+          'Click Download to save the converted file, or Clear to start over.',
+        ]}
+        tips={[
+          'Quality depends on the pair of formats. Excel to PDF, Word or PowerPoint, and Word to PDF keep tables and core formatting. Word to Excel or PowerPoint, and PDF to Word or Excel, keep mostly the text.',
+          'PDF to PowerPoint turns every page into a slide image, so it looks exactly like the PDF but the text cannot be edited. It is limited to 30 pages.',
+          'PowerPoint (.ppt or .pptx) can be created here but cannot be used as the source file yet, and the old Word .doc format is not supported. Open it in Word and save it as .docx first.',
+          'Complex layouts, fonts or macros may not carry over perfectly, so always check the converted file.',
+        ]}
+      />
     </div>
   );
 };

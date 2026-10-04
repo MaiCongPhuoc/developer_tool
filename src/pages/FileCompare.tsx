@@ -17,6 +17,7 @@ import {
   TEXT_FILE_ACCEPT,
   validateCompareFile,
 } from '@/util/file';
+import ToolGuide from '@/components/ToolGuide';
 
 const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300';
 
@@ -319,6 +320,22 @@ const FileCompare = () => {
           </div>
         </div>
       </div>
+      <ToolGuide
+        title="How to use File Compare"
+        intro="File Compare shows the differences between two text-based files side by side, line by line. The files are read in your browser and are never uploaded to a server."
+        steps={[
+          'Add the original file on the left: drag and drop it onto the box, or click the box to browse for it.',
+          'Add the changed file on the right in the same way. Click a box again to replace its file.',
+          'Click Compare. The Comparison result appears below with the original on the left and the changed file on the right, each with line numbers.',
+          'Read the highlights: red marks lines that were removed, green marks lines that were added, and within a modified line the exact words that differ are highlighted.',
+          'Check the summary to see how many lines were modified, added and deleted. If the files match, the tool tells you they are identical. Click Clear to start over.',
+        ]}
+        tips={[
+          'Only text-based files work, such as .txt, .csv, .json, .xml, .yaml, .md, .log, source code and configuration files. Images, PDF or Office documents, archives and other binary files are rejected with a message.',
+          'Each file can be up to 10 MB, and you can drop only one file at a time into each box.',
+          'To compare text you have copied rather than files, use the Text Compare tool.',
+        ]}
+      />
     </div>
   );
 };
