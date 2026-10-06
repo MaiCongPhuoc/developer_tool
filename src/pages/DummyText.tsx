@@ -152,6 +152,15 @@ const DummyText = () => {
           'The length must be a whole number from 1 to 100000. Otherwise a red message explains the problem.',
           'The generated text has exactly the number of characters you asked for, so it is handy for testing fields with a maximum length.',
         ]}
+        vi={{
+          title: 'Công cụ tạo văn bản mẫu (Lorem Ipsum)',
+          summary: 'Công cụ tạo văn bản mẫu Lorem Ipsum theo đúng số ký tự bạn cần, dùng cho thiết kế giao diện, mockup và kiểm thử các ô nhập có giới hạn độ dài. Hỗ trợ từ 1 đến 100000 ký tự.',
+          steps: [
+            'Nhập số ký tự cần tạo (tính cả dấu cách).',
+            'Bấm Generate Text.',
+            'Bấm Copy Output để sao chép văn bản.',
+          ],
+        }}
       />
     </div>
   );

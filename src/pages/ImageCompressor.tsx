@@ -518,6 +518,15 @@ const ImageCompressor = () => {
           'Reducing the max width or height often saves more space than lowering quality. A photo for a website rarely needs to be wider than 2000 pixels.',
           'If the result is not smaller than the original, the tool says so. Try a lower quality or a smaller max dimension, or choose WebP.',
         ]}
+        vi={{
+          title: 'Công cụ nén ảnh online',
+          summary: 'Công cụ nén ảnh giúp giảm dung lượng ảnh JPG, PNG, WebP bằng cách chọn chất lượng và kích thước tối đa. Ảnh được xử lý ngay trên trình duyệt, không tải lên máy chủ, mỗi ảnh tối đa 20 MB.',
+          steps: [
+            'Kéo thả hoặc bấm chọn ảnh, rồi chọn định dạng đầu ra (JPEG, WebP hoặc PNG).',
+            'Chỉnh thanh Quality và nhập Max width/height (px) nếu muốn thu nhỏ ảnh.',
+            'Bấm Compress, so sánh ảnh gốc với ảnh đã nén rồi bấm Download.',
+          ],
+        }}
       />
     </div>
   );

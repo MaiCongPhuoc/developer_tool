@@ -193,6 +193,15 @@ const QrCode = () => {
           'The text can be up to 2,000 bytes. A message tells you if it is too long, and characters with accents take more than one byte each.',
           'Always scan the finished code with your phone before printing it, to confirm it opens the right page.',
         ]}
+        vi={{
+          title: 'Công cụ tạo mã QR online',
+          summary: 'Tạo mã QR (QR code) miễn phí từ đường link hoặc đoạn văn bản bất kỳ, sau đó tải về dạng PNG hoặc SVG. Mã QR được tạo ngay trên trình duyệt, không cần đăng ký.',
+          steps: [
+            'Nhập đường link (nên bắt đầu bằng https://) hoặc văn bản.',
+            'Bấm Generate.',
+            'Bấm Download PNG hoặc Download SVG để tải mã QR về.',
+          ],
+        }}
       />
     </div>
   );

@@ -148,6 +148,15 @@ const Home = () => {
           'If the JSON is invalid, a red message explains the syntax error so you can fix the input and try again.',
           'The formatted output uses 2-space indentation.',
         ]}
+        vi={{
+          title: 'Công cụ định dạng JSON online',
+          summary: 'Công cụ định dạng JSON (JSON formatter) giúp bạn làm đẹp, kiểm tra cú pháp và chỉnh sửa JSON ngay trên trình duyệt. Miễn phí, không cần đăng ký, và dữ liệu của bạn không bị tải lên máy chủ. Nếu JSON sai cú pháp, công cụ sẽ báo lỗi để bạn sửa lại.',
+          steps: [
+            'Dán chuỗi JSON vào ô Input JSON.',
+            'Bấm Format JSON để xem kết quả dạng cây, có thể thu gọn hoặc mở rộng từng nhánh.',
+            'Bấm vào một giá trị để sửa, nhấn Enter để lưu, rồi bấm Copy Output để sao chép kết quả.',
+          ],
+        }}
       />
     </div>
   );

@@ -170,6 +170,15 @@ const HtmlPreviewer = () => {
           'Your code can be up to 200,000 characters long.',
           'A single file is previewed at a time, so put your CSS and JavaScript in the same HTML.',
         ]}
+        vi={{
+          title: 'Công cụ xem trước HTML online',
+          summary: 'Trình soạn thảo HTML, CSS và JavaScript online có xem trước trực tiếp trong khung cách ly an toàn (sandbox). Phù hợp để thử nhanh một đoạn mã mà không cần tạo file.',
+          steps: [
+            'Nhập mã vào ô HTML (CSS đặt trong thẻ style, JavaScript đặt trong thẻ script).',
+            'Dừng gõ một lúc, phần Preview sẽ tự cập nhật.',
+            'Bấm Copy HTML để sao chép mã.',
+          ],
+        }}
       />
     </div>
   );

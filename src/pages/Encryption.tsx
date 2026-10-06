@@ -397,6 +397,15 @@ const Encryption = () => {
           'A JWT is encoded, not encrypted. Anyone who has the token can read its payload, so never put passwords or other secrets inside it.',
           'Avoid pasting real production secrets into any online tool, even one that works in your browser.',
         ]}
+        vi={{
+          title: 'Công cụ giải mã và tạo JWT online',
+          summary: 'Công cụ giải mã JWT (decode JWT online) cho phép bạn xem header, payload, kiểm tra chữ ký HS256, HS384, HS512 và thời hạn của token, đồng thời tạo JWT mới. Token và secret chỉ được xử lý trên trình duyệt của bạn.',
+          steps: [
+            'Ở tab Decode, dán token, nhập secret nếu muốn kiểm tra chữ ký rồi bấm Decode JWT.',
+            'Ở tab Encode, sửa Header và Payload, chọn thuật toán, nhập Secret rồi bấm Generate JWT.',
+            'Lưu ý: JWT chỉ được mã hóa dạng encode chứ không phải mã hóa bảo mật, nên đừng đặt mật khẩu trong payload.',
+          ],
+        }}
       />
     </div>
   );

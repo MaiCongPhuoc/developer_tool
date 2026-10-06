@@ -644,6 +644,15 @@ const DocumentConverter = () => {
           'PowerPoint (.ppt or .pptx) can be created here but cannot be used as the source file yet, and the old Word .doc format is not supported. Open it in Word and save it as .docx first.',
           'Complex layouts, fonts or macros may not carry over perfectly, so always check the converted file.',
         ]}
+        vi={{
+          title: 'Công cụ chuyển đổi PDF, Word, Excel, PowerPoint',
+          summary: 'Chuyển đổi tài liệu giữa Word, Excel, PDF và PowerPoint ngay trên trình duyệt, ví dụ PDF sang Word, Word sang PDF, Excel sang PDF. File không bị tải lên máy chủ, tối đa 15 MB. Chất lượng tùy theo cặp định dạng: một số chuyển đổi chỉ giữ lại phần văn bản.',
+          steps: [
+            'Kéo thả hoặc bấm chọn file nguồn (.docx, .xlsx, .xls, .csv hoặc .pdf).',
+            'Chọn định dạng đích ở mục Convert to rồi bấm Convert.',
+            'Bấm Download để tải file đã chuyển đổi.',
+          ],
+        }}
       />
     </div>
   );

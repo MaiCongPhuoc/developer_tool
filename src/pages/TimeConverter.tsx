@@ -242,6 +242,15 @@ const TimeConverter = () => {
           'A Unix timestamp counts the time since 1 January 1970 (UTC), so the same number is the same moment everywhere. Only the displayed local time changes with the timezone.',
           'The timestamp must be a whole number within the range of dates that JavaScript supports, otherwise a message explains the problem.',
         ]}
+        vi={{
+          title: 'Công cụ chuyển đổi timestamp và múi giờ',
+          summary: 'Công cụ đổi Unix timestamp (epoch time) sang ngày giờ dễ đọc theo múi giờ bạn chọn, kèm giá trị UTC chuẩn ISO 8601. Hỗ trợ cả timestamp tính bằng giây và mili giây.',
+          steps: [
+            'Nhập timestamp, hoặc bấm Now để lấy thời gian hiện tại.',
+            'Chọn đơn vị Seconds hoặc Milliseconds và chọn múi giờ.',
+            'Bấm Convert, rồi bấm Copy để sao chép kết quả.',
+          ],
+        }}
       />
     </div>
   );

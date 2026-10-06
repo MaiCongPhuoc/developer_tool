@@ -368,6 +368,15 @@ const RegexTester = () => {
           'To keep your browser responsive, the pattern can be up to 500 characters, the test string up to 20,000 characters, and at most 1,000 matches are listed.',
           'Patterns with heavy nested repetition, such as (a+)+$, can be very slow on long text. If the page seems to hang, simplify the pattern.',
         ]}
+        vi={{
+          title: 'Công cụ kiểm tra regex (biểu thức chính quy) online',
+          summary: 'Công cụ kiểm tra regex online giúp bạn thử biểu thức chính quy với văn bản của mình, tô sáng các kết quả khớp, xem các nhóm bắt (capture group) và đọc giải thích cú pháp. Công cụ dùng bộ máy regex JavaScript của trình duyệt.',
+          steps: [
+            'Nhập biểu thức vào ô Regular Expression Pattern và chọn các cờ cần dùng (g, i, m, s, u, y).',
+            'Dán văn bản cần kiểm tra vào ô Test String.',
+            'Bấm Test để xem kết quả khớp, danh sách Matches và phần Syntax Explanation.',
+          ],
+        }}
       />
     </div>
   );

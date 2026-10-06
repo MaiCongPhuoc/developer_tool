@@ -7,6 +7,14 @@ type ToolGuideProps = {
   steps: string[];
   // Mẹo/lưu ý thêm (không bắt buộc).
   tips?: string[];
+  // Bản hướng dẫn nhanh bằng tiếng Việt (không bắt buộc) - để người dùng Việt
+  // Nam tìm thấy công cụ bằng từ khóa tiếng Việt. Là nội dung thật, hiển thị
+  // cho người dùng (không ẩn), đặt thuộc tính lang="vi" cho đúng ngôn ngữ.
+  vi?: {
+    title: string;
+    summary: string;
+    steps: string[];
+  };
 };
 
 // Khung "Hướng dẫn sử dụng" dùng chung cho mọi trang công cụ. Đặt ở CUỐI nội
@@ -16,7 +24,7 @@ type ToolGuideProps = {
 //
 // Chữ này nằm trong HTML được prerender lúc build (scripts/prerender.mjs), nên
 // crawler không chạy JavaScript cũng đọc được nội dung hướng dẫn.
-const ToolGuide = ({ title, intro, steps, tips }: ToolGuideProps) => {
+const ToolGuide = ({ title, intro, steps, tips, vi }: ToolGuideProps) => {
   return (
     <section className="space-y-4 rounded-xl border border-gray-200 p-4 shadow-sm dark:border-gray-800 dark:bg-gray-800/60 sm:p-6">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -48,6 +56,25 @@ const ToolGuide = ({ title, intro, steps, tips }: ToolGuideProps) => {
               <li key={tip}>{tip}</li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {vi && (
+        <div
+          lang="vi"
+          className="space-y-3 border-t border-gray-200 pt-4 dark:border-gray-700"
+        >
+          <h3 className="text-base font-semibold text-gray-800 dark:text-white">
+            {vi.title}
+          </h3>
+          <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+            {vi.summary}
+          </p>
+          <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-gray-600 marker:font-medium marker:text-gray-500 dark:text-gray-300 dark:marker:text-gray-400">
+            {vi.steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
         </div>
       )}
     </section>

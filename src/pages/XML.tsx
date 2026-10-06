@@ -146,6 +146,15 @@ const XML = () => {
           'The formatted output uses 2-space indentation, and elements with no content are written as self-closing tags such as <br />.',
           'Text inside CDATA sections is not lost; it is written out as regular, escaped text.',
         ]}
+        vi={{
+          title: 'Công cụ định dạng XML online',
+          summary: 'Công cụ định dạng XML (format XML online) giúp làm đẹp các đoạn XML lộn xộn thành dạng thụt lề dễ đọc, đồng thời kiểm tra XML có hợp lệ (đúng cấu trúc) hay không. Mọi thao tác chạy ngay trên trình duyệt của bạn.',
+          steps: [
+            'Dán XML vào ô nhập.',
+            'Bấm Format XML để xem kết quả dạng cây có thể thu gọn.',
+            'Bấm vào nội dung hoặc giá trị thuộc tính để sửa, rồi bấm Copy Output để sao chép.',
+          ],
+        }}
       />
     </div>
   );

@@ -536,6 +536,15 @@ const ColorPicker = () => {
           'To convert between color formats without picking, use the Color category in the Unit and Currency Converter.',
           'Only image files up to 8 MB can be uploaded on the Eyedropper tab. Anything else is rejected with a message.',
         ]}
+        vi={{
+          title: 'Công cụ chọn màu và lấy mã màu từ ảnh',
+          summary: 'Chọn màu từ bảng màu, nhập mã HEX hoặc dùng công cụ Eyedropper để lấy mã màu từ hình ảnh của bạn, rồi sao chép dưới dạng HEX, RGB hoặc HSL. Ảnh được xử lý trên trình duyệt, tối đa 8 MB.',
+          steps: [
+            'Ở tab Palette, chọn màu, nhập mã HEX hoặc bấm vào một màu có sẵn.',
+            'Hoặc mở tab Eyedropper, tải ảnh lên rồi bấm vào điểm ảnh bạn muốn lấy màu.',
+            'Xem mã màu trong mục Selected Color và bấm Copy.',
+          ],
+        }}
       />
     </div>
   );

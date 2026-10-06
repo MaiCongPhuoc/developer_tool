@@ -152,6 +152,15 @@ const SQL = () => {
           'The formatter handles common statements well, but very unusual or vendor-specific syntax may be laid out differently from what you expect, so review the result before you run it.',
           'Formatting only changes the layout. The tool does not run your query or check it against a database.',
         ]}
+        vi={{
+          title: 'Công cụ định dạng SQL online',
+          summary: 'Công cụ format SQL online giúp làm đẹp câu lệnh SQL: viết hoa từ khóa, đưa mỗi mệnh đề như SELECT, FROM, WHERE xuống dòng riêng và thụt lề các điều kiện. Câu truy vấn của bạn không bị gửi lên máy chủ.',
+          steps: [
+            'Dán câu lệnh SQL vào ô nhập.',
+            'Bấm Format SQL.',
+            'Kiểm tra kết quả rồi bấm Copy Output để sao chép.',
+          ],
+        }}
       />
     </div>
   );

@@ -335,6 +335,15 @@ const FileCompare = () => {
           'Each file can be up to 10 MB, and you can drop only one file at a time into each box.',
           'To compare text you have copied rather than files, use the Text Compare tool.',
         ]}
+        vi={{
+          title: 'Công cụ so sánh file online',
+          summary: 'So sánh hai file văn bản online để tìm điểm khác biệt. Hỗ trợ các file như .txt, .json, .csv, .xml, mã nguồn và file cấu hình, mỗi file tối đa 10 MB. File được đọc ngay trên trình duyệt, không tải lên máy chủ.',
+          steps: [
+            'Kéo thả hoặc bấm chọn file gốc ở bên trái và file đã sửa ở bên phải.',
+            'Bấm Compare.',
+            'Xem điểm khác nhau theo từng dòng. Nếu hai file giống nhau, công cụ sẽ thông báo.',
+          ],
+        }}
       />
     </div>
   );

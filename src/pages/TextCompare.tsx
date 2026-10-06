@@ -141,6 +141,15 @@ const TextCompare = () => {
           'Very large inputs cannot be compared. The limit is 5,000 lines per side, and a message appears if you go over it.',
           'To compare two files instead of pasted text, use the File Compare tool.',
         ]}
+        vi={{
+          title: 'Công cụ so sánh văn bản online',
+          summary: 'Công cụ so sánh văn bản (text compare, diff checker) giúp tìm điểm khác nhau giữa hai đoạn văn bản theo từng dòng, đánh dấu phần được thêm, bị xóa và bị sửa. Văn bản được xử lý ngay trên trình duyệt của bạn.',
+          steps: [
+            'Dán văn bản gốc vào ô Original text và văn bản đã sửa vào ô Changed text.',
+            'Bấm Compare.',
+            'Xem kết quả: màu đỏ là phần bị xóa, màu xanh lá là phần được thêm, các từ khác nhau trong cùng một dòng được tô sáng.',
+          ],
+        }}
       />
     </div>
   );
