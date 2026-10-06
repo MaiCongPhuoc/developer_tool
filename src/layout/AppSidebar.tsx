@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
   },
   {
     icon: '',
-    name: 'Encryption',
+    name: 'JWT Encryption',
     path: '/encryption',
   },
   {
