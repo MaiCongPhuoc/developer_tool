@@ -2,7 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Favicon: Google Search KHÔNG hỗ trợ SVG và yêu cầu ảnh VUÔNG (1:1), nên
+         ngoài bản SVG (cho trình duyệt) còn có favicon.ico và PNG vuông 192x192
+         (bội của 48px) cho Google. Logo gốc 564x442 không vuông nên các file này
+         được đệm nền trong suốt cho vuông. Giữ nguyên tên/đường dẫn file (Google
+         yêu cầu URL favicon ổn định). -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="icon" type="image/svg+xml" href="/images/logo/logo.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Developer Tool – Free Online Developer Utilities</title>
     <meta
