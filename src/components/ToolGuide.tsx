@@ -1,3 +1,6 @@
+import { useLocation } from 'react-router';
+import { getRelatedSearches } from '@/seo/toolKeywords';
+
 type ToolGuideProps = {
   // Tiêu đề phần hướng dẫn, vd "How to use the JSON Formatter".
   title: string;
@@ -25,6 +28,11 @@ type ToolGuideProps = {
 // Chữ này nằm trong HTML được prerender lúc build (scripts/prerender.mjs), nên
 // crawler không chạy JavaScript cũng đọc được nội dung hướng dẫn.
 const ToolGuide = ({ title, intro, steps, tips, vi }: ToolGuideProps) => {
+  // Các cụm tìm kiếm liên quan lấy theo đường dẫn trang từ seo/toolKeywords.ts
+  // (sửa danh sách ở đó, không sửa ở đây).
+  const { pathname } = useLocation();
+  const related = getRelatedSearches(pathname);
+
   return (
     <section className="space-y-4 rounded-xl border border-gray-200 p-4 shadow-sm dark:border-gray-800 dark:bg-gray-800/60 sm:p-6">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -75,6 +83,26 @@ const ToolGuide = ({ title, intro, steps, tips, vi }: ToolGuideProps) => {
               <li key={step}>{step}</li>
             ))}
           </ol>
+        </div>
+      )}
+      {(related.en.length > 0 || related.vi.length > 0) && (
+        <div className="space-y-1.5 border-t border-gray-200 pt-4 text-xs leading-relaxed text-gray-500 dark:border-gray-700 dark:text-gray-400">
+          {related.en.length > 0 && (
+            <p>
+              <span className="font-semibold text-gray-600 dark:text-gray-300">
+                Related searches:
+              </span>{' '}
+              {related.en.join(' · ')}
+            </p>
+          )}
+          {related.vi.length > 0 && (
+            <p lang="vi">
+              <span className="font-semibold text-gray-600 dark:text-gray-300">
+                Tìm kiếm liên quan:
+              </span>{' '}
+              {related.vi.join(' · ')}
+            </p>
+          )}
         </div>
       )}
     </section>
