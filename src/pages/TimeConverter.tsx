@@ -242,6 +242,32 @@ const TimeConverter = () => {
           'A Unix timestamp counts the time since 1 January 1970 (UTC), so the same number is the same moment everywhere. Only the displayed local time changes with the timezone.',
           'The timestamp must be a whole number within the range of dates that JavaScript supports, otherwise a message explains the problem.',
         ]}
+        faq={[
+          {
+            question: 'How do I know if my number is in seconds or milliseconds?',
+            answer: 'A timestamp in seconds usually has 10 digits (for example 1700000000) and one in milliseconds has 13 digits (1700000000000). Choose the matching unit before you convert.',
+          },
+          {
+            question: 'Why does my date show 1970 or a far-away year?',
+            answer: 'The unit is probably wrong. A value in milliseconds read as seconds gives a date thousands of years away, and a value in seconds read as milliseconds gives a date in January 1970.',
+          },
+          {
+            question: 'What is a Unix timestamp?',
+            answer: 'It is the number of seconds since 1 January 1970 at 00:00:00 UTC. The same number is the same moment everywhere, and only the displayed local time changes with the time zone.',
+          },
+          {
+            question: 'Does it handle daylight saving time?',
+            answer: 'Yes. The conversion uses the time zone data built into your browser, which includes daylight saving rules.',
+          },
+          {
+            question: 'Where does the list of time zones come from?',
+            answer: 'From your browser. UTC is added at the top, and your own time zone is detected automatically.',
+          },
+          {
+            question: 'What is the UTC (ISO 8601) value?',
+            answer: 'It is the same moment written in the standard international format, for example 2023-11-14T22:13:20.000Z.',
+          },
+        ]}
         vi={{
           title: 'Công cụ chuyển đổi timestamp và múi giờ',
           summary: 'Công cụ đổi Unix timestamp (epoch time) sang ngày giờ dễ đọc theo múi giờ bạn chọn, kèm giá trị UTC chuẩn ISO 8601. Hỗ trợ cả timestamp tính bằng giây và mili giây.',

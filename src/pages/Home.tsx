@@ -148,6 +148,32 @@ const Home = () => {
           'If the JSON is invalid, a red message explains the syntax error so you can fix the input and try again.',
           'The formatted output uses 2-space indentation.',
         ]}
+        faq={[
+          {
+            question: 'Is my JSON sent to a server?',
+            answer: 'No. The JSON is parsed and formatted in your browser, so nothing you paste is uploaded or stored on a server.',
+          },
+          {
+            question: 'Why does it show "JSON syntax error"?',
+            answer: 'JSON has strict rules: keys and text must use double quotes, single quotes are not allowed, keys cannot be unquoted, and comments are not part of JSON. The message shows what the parser found. Fix the input and click Format JSON again.',
+          },
+          {
+            question: 'Does it fix trailing commas?',
+            answer: 'Yes. A comma before a closing } or ] is removed automatically before parsing, and an invisible byte-order mark at the start of the text (often added by Notepad) is ignored.',
+          },
+          {
+            question: 'Can I change a value in the formatted result?',
+            answer: 'Yes. Click a value, type the new one and press Enter (Esc cancels). This works for single values such as text, numbers, true, false and null, and the Input box is updated to match. To change the structure, edit the Input and format again.',
+          },
+          {
+            question: 'Does it change very large numbers?',
+            answer: 'No. Whole numbers that are larger than JavaScript can normally store exactly keep all their digits instead of being rounded.',
+          },
+          {
+            question: 'Is there a minify option?',
+            answer: 'Not at the moment. The output is always formatted with 2-space indentation.',
+          },
+        ]}
         vi={{
           title: 'Công cụ định dạng JSON online',
           summary: 'Công cụ định dạng JSON (JSON formatter) giúp bạn làm đẹp, kiểm tra cú pháp và chỉnh sửa JSON ngay trên trình duyệt. Miễn phí, không cần đăng ký, và dữ liệu của bạn không bị tải lên máy chủ. Nếu JSON sai cú pháp, công cụ sẽ báo lỗi để bạn sửa lại.',

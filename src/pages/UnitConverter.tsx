@@ -461,6 +461,32 @@ const UnitConverter = () => {
           'Number Base converts between decimal, binary, octal and hexadecimal. Storage uses 1024 for each step, so 1 KB is 1,024 bytes.',
           'Currency rates are fetched online, so this category needs an internet connection and the rates are for guidance only. Check with your bank or provider before making a payment.',
         ]}
+        faq={[
+          {
+            question: 'Which kinds of conversion are available?',
+            answer: 'Length, Weight, Storage, Temperature, Font Size (px, rem, em and percent), Currency, Color (HEX, RGB, HSL) and Number Base (decimal, binary, octal, hexadecimal).',
+          },
+          {
+            question: 'Does it need an internet connection?',
+            answer: 'Only the Currency category does. Exchange rates are fetched from the free open.er-api.com service, which updates about once a day, and the time of the last update is shown. Every other conversion is calculated in your browser.',
+          },
+          {
+            question: 'How accurate are the currency rates?',
+            answer: 'They are reference rates and can differ from what a bank or card provider uses, so check with your provider before making a payment.',
+          },
+          {
+            question: 'How are results rounded?',
+            answer: 'Numeric results are rounded to at most 6 decimal places, and unnecessary trailing zeros are removed.',
+          },
+          {
+            question: 'How is px converted to rem?',
+            answer: 'The pixel value is divided by the base font size, which you can change in the Base font size field. 16 px is the common default.',
+          },
+          {
+            question: 'Is 1 KB equal to 1,000 or 1,024 bytes?',
+            answer: 'The Storage category uses 1,024 for each step, so 1 KB is 1,024 bytes and 1 MB is 1,024 KB.',
+          },
+        ]}
         vi={{
           title: 'Công cụ chuyển đổi đơn vị và tiền tệ',
           summary: 'Chuyển đổi đơn vị online gồm 8 nhóm: độ dài, khối lượng, dung lượng lưu trữ, nhiệt độ, cỡ chữ (px sang rem), mã màu (HEX sang RGB), hệ cơ số (nhị phân sang thập phân) và tiền tệ theo tỷ giá cập nhật (ví dụ USD sang VND). Riêng tỷ giá cần có kết nối mạng.',

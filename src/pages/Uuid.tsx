@@ -208,6 +208,28 @@ const Uuid = () => {
           'Version 4 UUIDs are random, so the chance of getting the same value twice is extremely small.',
           'Different systems expect different formats. For example, some Microsoft tools use uppercase UUIDs wrapped in braces, while most databases use lowercase with hyphens.',
         ]}
+        faq={[
+          {
+            question: 'Which UUID version does it create?',
+            answer: 'Version 4 (random) UUIDs, generated with the browser built-in crypto.randomUUID() function.',
+          },
+          {
+            question: 'Can two generated UUIDs be the same?',
+            answer: 'In practice no. A version 4 UUID has 122 random bits, so the chance of two matching values is extremely small.',
+          },
+          {
+            question: 'How many UUIDs can I generate at once?',
+            answer: 'Up to 1,000. You can show them in uppercase, without hyphens, or wrapped in curly braces.',
+          },
+          {
+            question: 'What is the difference between a UUID and a GUID?',
+            answer: 'They are the same 128-bit identifier. GUID is the name used by Microsoft. Only the way it is written differs, for example uppercase letters or curly braces.',
+          },
+          {
+            question: 'Can I use a UUID as a password or secret?',
+            answer: 'No. A UUID is an identifier, not a secret. Use the Password Generator for passwords.',
+          },
+        ]}
         vi={{
           title: 'Công cụ tạo UUID / GUID online',
           summary: 'Công cụ tạo UUID (GUID) phiên bản 4 ngẫu nhiên. Bạn có thể tạo một hoặc tối đa 1000 UUID cùng lúc, với tùy chọn viết hoa, bỏ dấu gạch ngang hoặc thêm dấu ngoặc nhọn.',

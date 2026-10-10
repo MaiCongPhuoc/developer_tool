@@ -170,6 +170,28 @@ const HtmlPreviewer = () => {
           'Your code can be up to 200,000 characters long.',
           'A single file is previewed at a time, so put your CSS and JavaScript in the same HTML.',
         ]}
+        faq={[
+          {
+            question: 'Is my code uploaded?',
+            answer: 'No. It runs in your browser inside a sandboxed frame and is never sent to a server.',
+          },
+          {
+            question: 'Can my code read data from this website?',
+            answer: 'No. The preview frame is isolated from this page. Your scripts, alert and confirm dialogs, forms and popups work, but the code cannot read this site\'s cookies or stored data.',
+          },
+          {
+            question: 'Where do I put CSS and JavaScript?',
+            answer: 'In the same HTML, CSS inside a style tag and JavaScript inside a script tag. The previewer shows one document at a time.',
+          },
+          {
+            question: 'Is my code saved?',
+            answer: 'No. Nothing is saved on a server, and reloading the page brings back the example. Copy your code before you leave the page.',
+          },
+          {
+            question: 'How long can the code be?',
+            answer: 'Up to 200,000 characters.',
+          },
+        ]}
         vi={{
           title: 'Công cụ xem trước HTML online',
           summary: 'Trình soạn thảo HTML, CSS và JavaScript online có xem trước trực tiếp trong khung cách ly an toàn (sandbox). Phù hợp để thử nhanh một đoạn mã mà không cần tạo file.',

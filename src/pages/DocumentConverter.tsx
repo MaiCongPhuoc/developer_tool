@@ -644,6 +644,36 @@ const DocumentConverter = () => {
           'PowerPoint (.ppt or .pptx) can be created here but cannot be used as the source file yet, and the old Word .doc format is not supported. Open it in Word and save it as .docx first.',
           'Complex layouts, fonts or macros may not carry over perfectly, so always check the converted file.',
         ]}
+        faq={[
+          {
+            question: 'Are my documents uploaded?',
+            answer: 'No. The files are read and converted in your browser and are never sent to a server. Source files can be up to 15 MB.',
+          },
+          {
+            question: 'Which files can I use as the source?',
+            answer: 'Word (.docx), Excel (.xlsx, .xls and .csv) and PDF. PowerPoint can be created here but cannot be used as a source, and the old Word .doc format is not supported.',
+          },
+          {
+            question: 'How good is each conversion?',
+            answer: 'Excel to PDF, Word or PowerPoint, and Word to PDF keep tables and core formatting. Word to Excel or PowerPoint, and PDF to Word or Excel, keep mostly the text. A note under the format buttons shows the quality for your choice.',
+          },
+          {
+            question: 'Why does PDF to Word keep only text?',
+            answer: 'A PDF stores where each piece of text is placed, not a document structure, so the tool extracts the text page by page. Tables and layout are not rebuilt.',
+          },
+          {
+            question: 'Does it work with scanned PDFs?',
+            answer: 'Only if the PDF contains real text. A scanned page that is only an image has no text to extract, and there is no OCR, so such a page comes out empty.',
+          },
+          {
+            question: 'Why is PDF to PowerPoint made of images?',
+            answer: 'Each PDF page becomes a slide image, so it looks exactly like the PDF but the text cannot be edited. This is limited to 30 pages.',
+          },
+          {
+            question: 'Will the converted file look exactly the same?',
+            answer: 'Complex layouts, fonts or macros may not carry over perfectly, so always check the converted file.',
+          },
+        ]}
         vi={{
           title: 'Công cụ chuyển đổi PDF, Word, Excel, PowerPoint',
           summary: 'Chuyển đổi tài liệu giữa Word, Excel, PDF và PowerPoint ngay trên trình duyệt, ví dụ PDF sang Word, Word sang PDF, Excel sang PDF. File không bị tải lên máy chủ, tối đa 15 MB. Chất lượng tùy theo cặp định dạng: một số chuyển đổi chỉ giữ lại phần văn bản.',

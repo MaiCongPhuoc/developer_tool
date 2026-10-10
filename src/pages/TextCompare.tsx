@@ -141,6 +141,28 @@ const TextCompare = () => {
           'Very large inputs cannot be compared. The limit is 5,000 lines per side, and a message appears if you go over it.',
           'To compare two files instead of pasted text, use the File Compare tool.',
         ]}
+        faq={[
+          {
+            question: 'Is my text uploaded?',
+            answer: 'No. The comparison runs in your browser and the text is never sent to a server.',
+          },
+          {
+            question: 'What do the colours mean?',
+            answer: 'Red marks text that was removed from the original, and green marks text that was added in the changed version. Inside a modified line, the exact words that differ are highlighted, and the summary above the result counts the modified, added and deleted lines.',
+          },
+          {
+            question: 'Can I ignore spaces or capital letters?',
+            answer: 'There is no such option. The tool compares the text exactly, so a different number of spaces or a different capital letter counts as a difference.',
+          },
+          {
+            question: 'How large can the texts be?',
+            answer: 'Up to 5,000 lines on each side, with a combined limit to keep your browser responsive. A message appears if you go over it.',
+          },
+          {
+            question: 'Can I compare files instead of pasted text?',
+            answer: 'Yes. Use the File Compare tool to drop two text-based files.',
+          },
+        ]}
         vi={{
           title: 'Công cụ so sánh văn bản online',
           summary: 'Công cụ so sánh văn bản (text compare, diff checker) giúp tìm điểm khác nhau giữa hai đoạn văn bản theo từng dòng, đánh dấu phần được thêm, bị xóa và bị sửa. Văn bản được xử lý ngay trên trình duyệt của bạn.',

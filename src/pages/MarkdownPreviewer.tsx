@@ -228,6 +228,32 @@ const MarkdownPreviewer = () => {
           'Content is limited to 100,000 characters, and lines with extremely deep nesting are rejected to keep your browser from freezing. A message appears in both cases.',
           'If a Mermaid diagram has a syntax error, a yellow message shows the problem so you can fix it.',
         ]}
+        faq={[
+          {
+            question: 'Is my text uploaded?',
+            answer: 'No. The Markdown is rendered in your browser and never sent to a server.',
+          },
+          {
+            question: 'Which Markdown features are supported?',
+            answer: 'GitHub-style Markdown: headings, lists, links, tables, task lists, strikethrough and fenced code blocks with syntax highlighting. A code block marked as mermaid is drawn as a diagram.',
+          },
+          {
+            question: 'Why does the preview wait a moment?',
+            answer: 'The preview refreshes after you pause typing, so it does not flicker on every keystroke.',
+          },
+          {
+            question: 'Does it run HTML written inside Markdown?',
+            answer: 'No. HTML tags and scripts that you type are shown as plain text and are not executed, which keeps the preview safe.',
+          },
+          {
+            question: 'What does Copy HTML copy?',
+            answer: 'The HTML that makes up the rendered preview, so you can paste it into another page.',
+          },
+          {
+            question: 'Are there limits?',
+            answer: 'The text can be up to 100,000 characters, and lines with extremely deep nesting are rejected so that your browser does not freeze. A message appears in both cases.',
+          },
+        ]}
         vi={{
           title: 'Công cụ xem trước Markdown online',
           summary: 'Trình soạn thảo Markdown online có xem trước trực tiếp, hỗ trợ bảng, danh sách việc cần làm, tô màu code và vẽ sơ đồ Mermaid. Văn bản của bạn không bị tải lên máy chủ.',

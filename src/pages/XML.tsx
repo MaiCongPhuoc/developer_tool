@@ -146,6 +146,32 @@ const XML = () => {
           'The formatted output uses 2-space indentation, and elements with no content are written as self-closing tags such as <br />.',
           'Text inside CDATA sections is not lost; it is written out as regular, escaped text.',
         ]}
+        faq={[
+          {
+            question: 'Is my XML sent to a server?',
+            answer: 'No. The XML is parsed and formatted in your browser, so nothing you paste is uploaded.',
+          },
+          {
+            question: 'Does it validate my XML?',
+            answer: 'It checks that the XML is well-formed using the browser XML parser: one root element, correctly matched tags and valid escaping. It does not validate against an XSD or DTD schema.',
+          },
+          {
+            question: 'Why do I get an error message?',
+            answer: 'The message comes from the browser XML parser. The usual causes are a tag that is not closed or does not match (XML is case-sensitive), an unescaped & or < in text, more than one root element, or text before the root element.',
+          },
+          {
+            question: 'Does it keep comments and the XML declaration?',
+            answer: 'No. XML comments and processing instructions are not kept, whitespace around text is trimmed, and the formatted output always starts with a standard <?xml version="1.0" encoding="UTF-8"?> line. Keep a copy of the original if you need those.',
+          },
+          {
+            question: 'How are elements without content written?',
+            answer: 'As self-closing tags, for example <br /> instead of <br></br>.',
+          },
+          {
+            question: 'Can I edit values in the result?',
+            answer: 'Yes. Click a text value or an attribute value in the tree, type the new value and press Enter. Press Esc to cancel.',
+          },
+        ]}
         vi={{
           title: 'Công cụ định dạng XML online',
           summary: 'Công cụ định dạng XML (format XML online) giúp làm đẹp các đoạn XML lộn xộn thành dạng thụt lề dễ đọc, đồng thời kiểm tra XML có hợp lệ (đúng cấu trúc) hay không. Mọi thao tác chạy ngay trên trình duyệt của bạn.',

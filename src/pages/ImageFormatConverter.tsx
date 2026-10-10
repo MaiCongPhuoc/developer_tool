@@ -604,6 +604,32 @@ const ImageFormatConverter = () => {
           'Background removal works best on flat, single-color backgrounds such as a white or green screen. It matches colors and does not detect objects.',
           'If part of your subject disappears, lower the Tolerance. If bits of the background remain, raise it a little.',
         ]}
+        faq={[
+          {
+            question: 'Is my image uploaded?',
+            answer: 'No. The conversion happens in your browser and nothing is sent to a server. Images can be up to 20 MB.',
+          },
+          {
+            question: 'What happens to transparency when I convert to JPEG?',
+            answer: 'JPEG cannot be transparent, so transparent areas become white. Choose PNG or WebP to keep transparency.',
+          },
+          {
+            question: 'How does "Make background transparent" work?',
+            answer: 'It removes pixels that are close to the colour you choose, so it works best on a flat, single-colour background. It does not detect objects with AI, and it needs PNG or WebP as the output.',
+          },
+          {
+            question: 'What does Tolerance do?',
+            answer: 'It sets how close a colour must be to the background colour to be removed. Lower it if part of your subject disappears, and raise it a little if bits of the background remain.',
+          },
+          {
+            question: 'Why is quality ignored for PNG?',
+            answer: 'PNG is lossless, so there is no quality setting for it. The quality slider applies to JPEG and WebP.',
+          },
+          {
+            question: 'Which format should I use?',
+            answer: 'PNG for sharp edges and transparency, WebP for the smallest files on websites, and JPEG for photos that must work everywhere.',
+          },
+        ]}
         vi={{
           title: 'Công cụ chuyển đổi định dạng ảnh',
           summary: 'Chuyển đổi ảnh giữa JPG, PNG và WebP (ví dụ PNG sang JPG), kèm tùy chọn làm nền ảnh trong suốt theo màu nền. Công cụ không nhận diện chủ thể bằng AI nên phù hợp nhất với nền đơn sắc. Ảnh được xử lý trên trình duyệt, tối đa 20 MB.',

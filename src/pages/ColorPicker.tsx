@@ -536,6 +536,28 @@ const ColorPicker = () => {
           'To convert between color formats without picking, use the Color category in the Unit and Currency Converter.',
           'Only image files up to 8 MB can be uploaded on the Eyedropper tab. Anything else is rejected with a message.',
         ]}
+        faq={[
+          {
+            question: 'Is my image uploaded?',
+            answer: 'No. The image is drawn in your browser and the colour of a pixel is read locally. Images can be up to 8 MB.',
+          },
+          {
+            question: 'Which formats can I copy?',
+            answer: 'HEX, RGB and HSL. Each one has its own Copy button under Selected Color.',
+          },
+          {
+            question: 'How does the eyedropper find the colour?',
+            answer: 'When you click the image, the tool reads the colour of that exact pixel of the original image, even if the picture is shown smaller on your screen. Moving the pointer over the image first shows the colour under it.',
+          },
+          {
+            question: 'Can I enter a colour myself?',
+            answer: 'Yes. Type a HEX code (for example #3B82F6) and click Apply, use the colour box, or click one of the preset swatches.',
+          },
+          {
+            question: 'How do I convert a colour without picking it?',
+            answer: 'Use the Color category of the Unit and Currency Converter to convert between HEX, RGB and HSL.',
+          },
+        ]}
         vi={{
           title: 'Công cụ chọn màu và lấy mã màu từ ảnh',
           summary: 'Chọn màu từ bảng màu, nhập mã HEX hoặc dùng công cụ Eyedropper để lấy mã màu từ hình ảnh của bạn, rồi sao chép dưới dạng HEX, RGB hoặc HSL. Ảnh được xử lý trên trình duyệt, tối đa 8 MB.',

@@ -518,6 +518,32 @@ const ImageCompressor = () => {
           'Reducing the max width or height often saves more space than lowering quality. A photo for a website rarely needs to be wider than 2000 pixels.',
           'If the result is not smaller than the original, the tool says so. Try a lower quality or a smaller max dimension, or choose WebP.',
         ]}
+        faq={[
+          {
+            question: 'Is my image uploaded?',
+            answer: 'No. The image is compressed in your browser and never sent to a server. Images can be up to 20 MB.',
+          },
+          {
+            question: 'Which format should I choose?',
+            answer: 'JPEG is best for photos, WebP gives very good compression and supports transparency, and PNG is lossless but gives larger files.',
+          },
+          {
+            question: 'Why is the quality slider disabled for PNG?',
+            answer: 'PNG is lossless, so quality does not apply. To make a PNG smaller, lower the maximum width or height, or choose WebP.',
+          },
+          {
+            question: 'Why is the result not smaller than the original?',
+            answer: 'This can happen with images that are already well compressed. Try a lower quality, a smaller maximum width or height, or the WebP format.',
+          },
+          {
+            question: 'What happens to transparent areas?',
+            answer: 'Transparent areas become white when you save as JPEG, because JPEG has no transparency. PNG and WebP keep it.',
+          },
+          {
+            question: 'Is the camera information in the photo kept?',
+            answer: 'Normally not. The image is redrawn and encoded again in your browser, so extra data such as EXIF camera details is not carried over.',
+          },
+        ]}
         vi={{
           title: 'Công cụ nén ảnh online',
           summary: 'Công cụ nén ảnh giúp giảm dung lượng ảnh JPG, PNG, WebP bằng cách chọn chất lượng và kích thước tối đa. Ảnh được xử lý ngay trên trình duyệt, không tải lên máy chủ, mỗi ảnh tối đa 20 MB.',

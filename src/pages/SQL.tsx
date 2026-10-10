@@ -152,6 +152,28 @@ const SQL = () => {
           'The formatter handles common statements well, but very unusual or vendor-specific syntax may be laid out differently from what you expect, so review the result before you run it.',
           'Formatting only changes the layout. The tool does not run your query or check it against a database.',
         ]}
+        faq={[
+          {
+            question: 'Is my query sent anywhere or executed?',
+            answer: 'No. The tool only rewrites the text of your statement in your browser. It never runs the query and never sends it to a server.',
+          },
+          {
+            question: 'Does formatting change what my query does?',
+            answer: 'No. Only the layout and the capitalisation of SQL keywords change. Table names, column names and aliases keep their original capitalisation.',
+          },
+          {
+            question: 'Which SQL dialect does it use?',
+            answer: 'It lays statements out in a common MySQL-like style, which suits standard SELECT, INSERT, UPDATE and DELETE statements. Very unusual or vendor-specific syntax may be laid out differently from what you expect, so review the result.',
+          },
+          {
+            question: 'Can I format several statements at once?',
+            answer: 'Yes. Statements separated by a semicolon are placed on separate lines.',
+          },
+          {
+            question: 'How are subqueries and CASE expressions shown?',
+            answer: 'Subqueries and CASE expressions are indented one level deeper, and AND / OR conditions and long column lists are indented so the structure is easy to follow.',
+          },
+        ]}
         vi={{
           title: 'Công cụ định dạng SQL online',
           summary: 'Công cụ format SQL online giúp làm đẹp câu lệnh SQL: viết hoa từ khóa, đưa mỗi mệnh đề như SELECT, FROM, WHERE xuống dòng riêng và thụt lề các điều kiện. Câu truy vấn của bạn không bị gửi lên máy chủ.',

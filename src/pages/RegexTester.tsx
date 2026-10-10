@@ -368,6 +368,32 @@ const RegexTester = () => {
           'To keep your browser responsive, the pattern can be up to 500 characters, the test string up to 20,000 characters, and at most 1,000 matches are listed.',
           'Patterns with heavy nested repetition, such as (a+)+$, can be very slow on long text. If the page seems to hang, simplify the pattern.',
         ]}
+        faq={[
+          {
+            question: 'Which regular expression syntax does it use?',
+            answer: 'The JavaScript RegExp engine of your browser. Patterns written for PCRE, Python or Java can behave differently, and features such as atomic groups or possessive quantifiers are not available.',
+          },
+          {
+            question: 'What do the flags mean?',
+            answer: 'g finds all matches, i ignores case, m makes ^ and $ match at each line, s lets the dot match line breaks, u turns on Unicode mode, and y matches only at the exact position where the search starts.',
+          },
+          {
+            question: 'Why do I get only one match?',
+            answer: 'Without the Global (g) flag, only the first match is returned. Tick Global to find all matches.',
+          },
+          {
+            question: 'Are there limits?',
+            answer: 'The pattern can be up to 500 characters, the test text up to 20,000 characters, and at most 1,000 matches are listed. This keeps your browser responsive.',
+          },
+          {
+            question: 'Why does the page become slow with some patterns?',
+            answer: 'Patterns with nested repetition such as (a+)+$ can take extremely long on long text, which is called catastrophic backtracking. Simplify the pattern if the page seems to hang.',
+          },
+          {
+            question: 'Is my text sent to a server?',
+            answer: 'No. The test runs entirely in your browser.',
+          },
+        ]}
         vi={{
           title: 'Công cụ kiểm tra regex (biểu thức chính quy) online',
           summary: 'Công cụ kiểm tra regex online giúp bạn thử biểu thức chính quy với văn bản của mình, tô sáng các kết quả khớp, xem các nhóm bắt (capture group) và đọc giải thích cú pháp. Công cụ dùng bộ máy regex JavaScript của trình duyệt.',

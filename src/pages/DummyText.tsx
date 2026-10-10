@@ -152,6 +152,24 @@ const DummyText = () => {
           'The length must be a whole number from 1 to 100000. Otherwise a red message explains the problem.',
           'The generated text has exactly the number of characters you asked for, so it is handy for testing fields with a maximum length.',
         ]}
+        faq={[
+          {
+            question: 'Is the text random?',
+            answer: 'No. It always uses the classic Lorem Ipsum words in the same order, repeated as many times as needed. The same length always gives the same text.',
+          },
+          {
+            question: 'Is the length exact?',
+            answer: 'Yes. The number you enter is the number of characters, spaces included. The text is cut at exactly that length, so the last word may be cut in the middle.',
+          },
+          {
+            question: 'What is the minimum and maximum length?',
+            answer: 'From 1 to 100000 characters. A message appears if the number is not a whole number or is outside that range.',
+          },
+          {
+            question: 'What is Lorem Ipsum for?',
+            answer: 'It is meaningless placeholder text used in designs and mockups so that a layout can be judged without real content. It also helps to test fields with a maximum length.',
+          },
+        ]}
         vi={{
           title: 'Công cụ tạo văn bản mẫu (Lorem Ipsum)',
           summary: 'Công cụ tạo văn bản mẫu Lorem Ipsum theo đúng số ký tự bạn cần, dùng cho thiết kế giao diện, mockup và kiểm thử các ô nhập có giới hạn độ dài. Hỗ trợ từ 1 đến 100000 ký tự.',

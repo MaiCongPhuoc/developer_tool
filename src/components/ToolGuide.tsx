@@ -10,6 +10,10 @@ type ToolGuideProps = {
   steps: string[];
   // Mẹo/lưu ý thêm (không bắt buộc).
   tips?: string[];
+  // Câu hỏi thường gặp (không bắt buộc). Hiển thị công khai (không thu gọn) để
+  // cả người đọc lẫn công cụ tìm kiếm đều thấy. Chỉ ghi câu trả lời ĐÚNG với
+  // cách công cụ thật sự hoạt động.
+  faq?: { question: string; answer: string }[];
   // Bản hướng dẫn nhanh bằng tiếng Việt (không bắt buộc) - để người dùng Việt
   // Nam tìm thấy công cụ bằng từ khóa tiếng Việt. Là nội dung thật, hiển thị
   // cho người dùng (không ẩn), đặt thuộc tính lang="vi" cho đúng ngôn ngữ.
@@ -27,7 +31,14 @@ type ToolGuideProps = {
 //
 // Chữ này nằm trong HTML được prerender lúc build (scripts/prerender.mjs), nên
 // crawler không chạy JavaScript cũng đọc được nội dung hướng dẫn.
-const ToolGuide = ({ title, intro, steps, tips, vi }: ToolGuideProps) => {
+const ToolGuide = ({
+  title,
+  intro,
+  steps,
+  tips,
+  faq,
+  vi,
+}: ToolGuideProps) => {
   // Các cụm tìm kiếm liên quan lấy theo đường dẫn trang từ seo/toolKeywords.ts
   // (sửa danh sách ở đó, không sửa ở đây).
   const { pathname } = useLocation();
@@ -64,6 +75,26 @@ const ToolGuide = ({ title, intro, steps, tips, vi }: ToolGuideProps) => {
               <li key={tip}>{tip}</li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {faq && faq.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+            Frequently asked questions
+          </h3>
+          <dl className="space-y-4">
+            {faq.map((item) => (
+              <div key={item.question} className="space-y-1">
+                <dt className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                  {item.question}
+                </dt>
+                <dd className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                  {item.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       )}
 

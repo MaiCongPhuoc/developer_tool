@@ -246,6 +246,32 @@ const PasswordGenerator = () => {
           'Use a different password for every account, and store them in a password manager instead of reusing or memorising them.',
           'Some websites do not accept certain symbols. If a site rejects your password, untick Symbols and generate a longer one instead.',
         ]}
+        faq={[
+          {
+            question: 'Is the password stored or sent anywhere?',
+            answer: 'No. It is generated in your browser with the secure crypto.getRandomValues() function and is not sent to or stored on a server.',
+          },
+          {
+            question: 'How is the strength meter calculated?',
+            answer: 'It is an estimate based on the length and on the size of the character set you chose (entropy in bits). Below 28 bits is Very Weak, below 36 Weak, below 60 Fair, below 128 Strong, and 128 or more Very Strong. The estimate is only meaningful for randomly generated passwords.',
+          },
+          {
+            question: 'Will every selected character type appear?',
+            answer: 'Yes, as long as the length is at least the number of types you selected. At least one character from each selected type is included, and the order is then shuffled.',
+          },
+          {
+            question: 'How long can the password be?',
+            answer: 'From 4 to 128 characters. For important accounts, 16 or more characters is a good choice.',
+          },
+          {
+            question: 'Which symbols can it use?',
+            answer: 'The symbols are !@#$%^&*()_+-=[]{}|;:,.<>?',
+          },
+          {
+            question: 'A website rejects my password. What can I do?',
+            answer: 'Some sites do not allow certain symbols. Untick Symbols and generate a longer password instead.',
+          },
+        ]}
         vi={{
           title: 'Công cụ tạo mật khẩu ngẫu nhiên',
           summary: 'Công cụ tạo mật khẩu mạnh, ngẫu nhiên với độ dài từ 4 đến 128 ký tự và các loại ký tự tùy chọn (chữ hoa, chữ thường, số, ký hiệu), kèm thanh đánh giá độ mạnh. Mật khẩu được tạo ngay trên trình duyệt của bạn.',

@@ -397,6 +397,40 @@ const Encryption = () => {
           'A JWT is encoded, not encrypted. Anyone who has the token can read its payload, so never put passwords or other secrets inside it.',
           'Avoid pasting real production secrets into any online tool, even one that works in your browser.',
         ]}
+        faq={[
+          {
+            question: 'Is it safe to paste my JWT into this tool?',
+            answer: 'Decoding, signing and verifying all happen in your browser with the built-in Web Crypto API, and the token and secret are not sent to a server. You can confirm this by opening your browser developer tools on the Network tab while you decode a token. Even so, it is good practice to use test tokens and test secrets instead of production ones on any website.',
+          },
+          {
+            question: 'Do I need the secret to decode a JWT?',
+            answer: 'No. The header and payload of a JWT are only Base64URL-encoded, not encrypted, so they can be read without any secret. The secret is needed only to verify the signature, and to sign a new token on the Encode tab.',
+          },
+          {
+            question: 'What are the three parts of a JWT?',
+            answer: 'A JWT is made of a header, a payload and a signature, joined by two dots (header.payload.signature). The header says which algorithm was used, the payload carries the claims such as the subject or the expiry time, and the signature lets the receiver check that the first two parts were not changed.',
+          },
+          {
+            question: 'Why does it show "Signature invalid"?',
+            answer: 'The most common reasons are a wrong secret, a token that was modified after it was signed, or an algorithm that this tool cannot verify. Only HS256, HS384 and HS512 are supported here, so a token signed with RS256 or ES256 is reported as invalid. The secret is used exactly as you type it, as plain text, so a secret that is stored Base64-encoded will not match unless you enter the decoded value.',
+          },
+          {
+            question: 'Can I read a token signed with RS256 or ES256?',
+            answer: 'Yes, you can read its header and payload, because decoding does not depend on the algorithm. What this tool cannot do is check the signature of those tokens, since it only supports the HMAC algorithms (HS256, HS384, HS512).',
+          },
+          {
+            question: 'How do I know if a token has expired?',
+            answer: 'If the payload has an exp claim (a Unix timestamp in seconds), the tool shows the date and whether the token has expired, by comparing it with the clock on your device. A token without an exp claim shows no expiry information. The tool reads only exp; it does not check other time claims such as nbf.',
+          },
+          {
+            question: 'What is the difference between HS256, HS384 and HS512?',
+            answer: 'All three use HMAC with the same shared secret and differ only in the hash size: SHA-256, SHA-384 and SHA-512. HS256 is the most widely used. Because the same secret both signs and verifies, anyone who has the secret can create valid tokens, so keep it private.',
+          },
+          {
+            question: 'Why do I get an error that the JWT must have 3 parts?',
+            answer: 'The input must be exactly header.payload.signature with two dots. Paste only the token itself, without a prefix such as Bearer, and without extra characters that were copied by accident.',
+          },
+        ]}
         vi={{
           title: 'Công cụ giải mã và tạo JWT online',
           summary: 'Công cụ giải mã JWT (decode JWT online) cho phép bạn xem header, payload, kiểm tra chữ ký HS256, HS384, HS512 và thời hạn của token, đồng thời tạo JWT mới. Token và secret chỉ được xử lý trên trình duyệt của bạn.',

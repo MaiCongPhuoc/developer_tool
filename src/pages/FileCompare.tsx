@@ -335,6 +335,32 @@ const FileCompare = () => {
           'Each file can be up to 10 MB, and you can drop only one file at a time into each box.',
           'To compare text you have copied rather than files, use the Text Compare tool.',
         ]}
+        faq={[
+          {
+            question: 'Are my files uploaded?',
+            answer: 'No. The files are read in your browser and never sent to a server.',
+          },
+          {
+            question: 'Which files can I compare?',
+            answer: 'Text-based files such as .txt, .csv, .json, .xml, .yaml, .md, .log, source code and configuration files. Images, PDF or Office documents, archives and executable files are rejected with a message.',
+          },
+          {
+            question: 'How large can a file be?',
+            answer: 'Up to 10 MB per file, and one file at a time in each box.',
+          },
+          {
+            question: 'Why does it say my file looks like a binary file?',
+            answer: 'The content is checked after the file is read. Text that contains NUL bytes or many characters that cannot be decoded is treated as binary, which also catches an image that was renamed to .txt.',
+          },
+          {
+            question: 'Which text encoding is used?',
+            answer: 'The browser reads the file as text, normally UTF-8. A file saved in another encoding may show unexpected characters, so save it as UTF-8 first.',
+          },
+          {
+            question: 'What do the colours mean?',
+            answer: 'Red marks lines removed from the original and green marks lines added in the changed file. Inside a modified line, the words that differ are highlighted. If the files match, the tool says they are identical.',
+          },
+        ]}
         vi={{
           title: 'Công cụ so sánh file online',
           summary: 'So sánh hai file văn bản online để tìm điểm khác biệt. Hỗ trợ các file như .txt, .json, .csv, .xml, mã nguồn và file cấu hình, mỗi file tối đa 10 MB. File được đọc ngay trên trình duyệt, không tải lên máy chủ.',

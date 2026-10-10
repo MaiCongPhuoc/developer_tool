@@ -193,6 +193,28 @@ const QrCode = () => {
           'The text can be up to 2,000 bytes. A message tells you if it is too long, and characters with accents take more than one byte each.',
           'Always scan the finished code with your phone before printing it, to confirm it opens the right page.',
         ]}
+        faq={[
+          {
+            question: 'Is my link or text sent to a server?',
+            answer: 'No. The QR code is created in your browser and nothing is uploaded.',
+          },
+          {
+            question: 'Should I download PNG or SVG?',
+            answer: 'PNG is a 280-pixel image that is fine for screens. SVG is a vector file that stays sharp at any size, so it is the better choice for printing.',
+          },
+          {
+            question: 'How much text can a QR code hold?',
+            answer: 'Up to 2,000 bytes. Characters with accents use more than one byte each, so the limit is lower for such text.',
+          },
+          {
+            question: 'Does the QR code expire or track scans?',
+            answer: 'No. The code contains your text itself, so it works for as long as the link inside it works. This tool does not track scans.',
+          },
+          {
+            question: 'How well does it survive damage?',
+            answer: 'It uses the medium error-correction level, which can recover from roughly 15 percent of the code being damaged or hidden.',
+          },
+        ]}
         vi={{
           title: 'Công cụ tạo mã QR online',
           summary: 'Tạo mã QR (QR code) miễn phí từ đường link hoặc đoạn văn bản bất kỳ, sau đó tải về dạng PNG hoặc SVG. Mã QR được tạo ngay trên trình duyệt, không cần đăng ký.',
