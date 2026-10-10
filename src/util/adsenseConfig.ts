@@ -19,7 +19,7 @@
 //
 // Nhớ điền thêm dòng "google.com, pub-..., DIRECT, f08c47fec0942fa0" (cùng
 // dãy số sau "ca-pub-" ở trên, bỏ tiền tố "ca-") vào public/ads.txt.
-export const ADSENSE_CLIENT_ID = '';
+export const ADSENSE_CLIENT_ID = 'ca-pub-5609859335617137';
 export const ADSENSE_TOP_AD_SLOT_ID = '';
 export const ADSENSE_SIDE_AD_SLOT_ID = '';
 export const ADSENSE_BOTTOM_AD_SLOT_ID = '';
