@@ -21,6 +21,11 @@ import ImageCompressor from './pages/ImageCompressor';
 import ImageFormatConverter from './pages/ImageFormatConverter';
 import DocumentConverter from './pages/DocumentConverter';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Terms from './pages/Terms';
+import Guides from './pages/Guides';
+import GuideArticle from './pages/GuideArticle';
 import NotFound from './pages/NotFound';
 
 // Tách riêng bảng route (không kèm BrowserRouter) để script tạo HTML tĩnh
@@ -67,6 +72,11 @@ export const AppRoutes: React.FC = () => {
           element={<DocumentConverter />}
         />
         <Route index path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route index path="/about" element={<About />} />
+        <Route index path="/contact" element={<Contact />} />
+        <Route index path="/terms" element={<Terms />} />
+        <Route index path="/guides" element={<Guides />} />
+        <Route path="/guides/:slug" element={<GuideArticle />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

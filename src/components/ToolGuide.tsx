@@ -1,5 +1,7 @@
-import { useLocation } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { getRelatedSearches } from '@/seo/toolKeywords';
+import { toolInsights } from '@/content/toolInsights';
+import { getGuide } from '@/content/guides';
 
 type ToolGuideProps = {
   // Tiêu đề phần hướng dẫn, vd "How to use the JSON Formatter".
@@ -43,6 +45,12 @@ const ToolGuide = ({
   // (sửa danh sách ở đó, không sửa ở đây).
   const { pathname } = useLocation();
   const related = getRelatedSearches(pathname);
+  // Phần nội dung chuyên sâu của trang (khái niệm, khi nào dùng, ví dụ, lỗi hay
+  // gặp, bài viết liên quan) lấy theo đường dẫn từ content/toolInsights.ts.
+  const insight = toolInsights[pathname];
+  const relatedGuides = (insight?.relatedGuides ?? [])
+    .map((slug) => getGuide(slug))
+    .filter((g): g is NonNullable<typeof g> => Boolean(g));
 
   return (
     <section className="space-y-4 rounded-xl border border-gray-200 p-4 shadow-sm dark:border-gray-800 dark:bg-gray-800/60 sm:p-6">
@@ -75,6 +83,90 @@ const ToolGuide = ({
               <li key={tip}>{tip}</li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {insight && (
+        <div className="space-y-4 border-t border-gray-200 pt-4 dark:border-gray-700">
+          <h3 className="text-base font-semibold text-gray-800 dark:text-white">
+            Good to know
+          </h3>
+          {insight.background.map((paragraph) => (
+            <p
+              key={paragraph}
+              className="text-sm leading-relaxed text-gray-600 dark:text-gray-300"
+            >
+              {paragraph}
+            </p>
+          ))}
+
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+              When to use it
+            </h4>
+            <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-600 marker:text-gray-400 dark:text-gray-300">
+              {insight.useCases.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+
+          {insight.example && (
+            <div className="space-y-2">
+              <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                Example: {insight.example.title}
+              </h4>
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="space-y-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    Input
+                  </p>
+                  <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-lg bg-gray-100 p-3 text-xs leading-relaxed text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+                    {insight.example.input}
+                  </pre>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    Result
+                  </p>
+                  <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-lg bg-gray-100 p-3 text-xs leading-relaxed text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+                    {insight.example.output}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+              Common mistakes
+            </h4>
+            <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-600 marker:text-gray-400 dark:text-gray-300">
+              {insight.mistakes.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+
+          {relatedGuides.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                Read more
+              </h4>
+              <ul className="list-disc space-y-1 pl-5 text-sm text-gray-600 marker:text-gray-400 dark:text-gray-300">
+                {relatedGuides.map((guide) => (
+                  <li key={guide.slug}>
+                    <Link
+                      to={`/guides/${guide.slug}`}
+                      className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
+                    >
+                      {guide.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
 

@@ -78,6 +78,11 @@ const navItems: NavItem[] = [
       { name: 'HTML Previewer', path: '/html-converter', pro: false },
     ],
   },
+  {
+    icon: '',
+    name: 'Guides',
+    path: '/guides',
+  },
 ];
 
 const othersItems: NavItem[] = [

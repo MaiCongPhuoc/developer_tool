@@ -56,6 +56,13 @@ export const isAdSlotShown = (position: AdPosition): boolean =>
 // cấm quảng cáo trên màn hình không có nội dung, trang "dead end" như trang
 // lỗi, trang cảm ơn... nên ngoài danh sách này, mọi route KHÔNG có trong
 // routeMeta (tức trang 404) cũng tự được coi là không có quảng cáo - xem
-// AppLayout.tsx. Trang Privacy Policy là trang pháp lý, không phải trang công
-// cụ nên cũng bỏ quảng cáo cho an toàn.
-export const AD_FREE_PATHS: ReadonlySet<string> = new Set(['/privacy-policy']);
+// AppLayout.tsx. Trang Privacy Policy, Terms, About, Contact và trang danh sách
+// Guides là trang thông tin/pháp lý, không phải trang công cụ hay bài viết nên
+// cũng bỏ quảng cáo cho an toàn (bài /guides/<slug> vẫn được phép có quảng cáo).
+export const AD_FREE_PATHS: ReadonlySet<string> = new Set([
+  '/privacy-policy',
+  '/terms',
+  '/about',
+  '/contact',
+  '/guides',
+]);

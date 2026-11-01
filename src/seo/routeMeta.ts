@@ -6,6 +6,8 @@
 //    qua render React) để chèn thẳng vào <head> tĩnh của từng file HTML -
 //    đây mới là phần mà các crawler AI (không chạy JS) thực sự nhìn thấy.
 import { getAllKeywords } from './toolKeywords';
+// Dữ liệu thuần (không import React) nên prerender đọc được an toàn.
+import { GUIDES_PUBLISHED, guides } from '../content/guides';
 
 export interface RouteMeta {
   path: string;
@@ -57,6 +59,63 @@ function entry(path: string, name: string, description: string): RouteMeta {
     jsonLd: toolJsonLd(name, description, path, getAllKeywords(path)),
   };
 }
+
+// Trang thông tin (About, Contact, Terms, danh sách Guides): schema theo loại
+// trang tương ứng của schema.org, không phải WebApplication của công cụ.
+function pageEntry(
+  path: string,
+  name: string,
+  description: string,
+  schemaType: 'AboutPage' | 'ContactPage' | 'WebPage' | 'CollectionPage'
+): RouteMeta {
+  return {
+    path,
+    title: `${name} | ${SITE_NAME}`,
+    description,
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': schemaType,
+      name,
+      url: `${SITE_URL}${path}`,
+      description,
+      inLanguage: 'en',
+      isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: SITE_URL },
+    },
+  };
+}
+
+// Mỗi bài viết trong /guides: schema Article.
+const guideEntries: Record<string, RouteMeta> = Object.fromEntries(
+  guides.map((guide) => {
+    const path = `/guides/${guide.slug}`;
+    const meta: RouteMeta = {
+      path,
+      title: `${guide.title} | ${SITE_NAME}`,
+      description: guide.description,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: guide.title,
+        description: guide.description,
+        url: `${SITE_URL}${path}`,
+        mainEntityOfPage: `${SITE_URL}${path}`,
+        datePublished: GUIDES_PUBLISHED,
+        dateModified: GUIDES_PUBLISHED,
+        inLanguage: 'en',
+        author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+        publisher: {
+          '@type': 'Organization',
+          name: SITE_NAME,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${SITE_URL}/images/logo/logo.png`,
+          },
+        },
+      },
+    };
+    return [path, meta];
+  })
+);
 
 export const routeMeta: Record<string, RouteMeta> = {
   '/': entry(
@@ -169,6 +228,31 @@ export const routeMeta: Record<string, RouteMeta> = {
       url: `${SITE_URL}/privacy-policy`,
     },
   },
+  '/terms': pageEntry(
+    '/terms',
+    'Terms of Use',
+    'The terms for using Developer Tool: free browser-based tools provided as is, how your data is handled, acceptable use, advertising and limits of liability.',
+    'WebPage'
+  ),
+  '/about': pageEntry(
+    '/about',
+    'About Developer Tool',
+    'Who builds Developer Tool and why: free browser-based utilities for developers that run on your device, with guides that explain the ideas behind each tool.',
+    'AboutPage'
+  ),
+  '/contact': pageEntry(
+    '/contact',
+    'Contact',
+    'How to contact Developer Tool: send feedback, report a bug, suggest a tool or ask for a correction to a guide.',
+    'ContactPage'
+  ),
+  '/guides': pageEntry(
+    '/guides',
+    'Guides',
+    'In-depth developer guides: JSON vs XML, fixing JSON errors, regex cheat sheet, JWT, UUID versions, Unix timestamps, CSS units, SQL formatting, passwords, images and QR codes.',
+    'CollectionPage'
+  ),
+  ...guideEntries,
 };
 
 export const defaultMeta: RouteMeta = {

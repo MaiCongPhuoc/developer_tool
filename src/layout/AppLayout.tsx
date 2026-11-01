@@ -77,10 +77,28 @@ export const AppLayout: React.FC = () => {
             enabled={isAdPage}
           />
 
-          <footer className="border-t border-gray-200 pt-4 text-center text-xs text-gray-400 dark:border-gray-800 dark:text-gray-500">
-            <Link to="/privacy-policy" className="hover:underline">
-              Privacy Policy
-            </Link>
+          <footer className="space-y-2 border-t border-gray-200 pt-4 text-center text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
+            <nav
+              aria-label="Footer"
+              className="flex flex-wrap justify-center gap-x-4 gap-y-1"
+            >
+              <Link to="/guides" className="hover:underline">
+                Guides
+              </Link>
+              <Link to="/about" className="hover:underline">
+                About
+              </Link>
+              <Link to="/contact" className="hover:underline">
+                Contact
+              </Link>
+              <Link to="/privacy-policy" className="hover:underline">
+                Privacy Policy
+              </Link>
+              <Link to="/terms" className="hover:underline">
+                Terms of Use
+              </Link>
+            </nav>
+            <p>&copy; 2026 Developer Tool</p>
           </footer>
         </div>
       </div>
