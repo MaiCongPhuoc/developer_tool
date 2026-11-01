@@ -487,15 +487,6 @@ const UnitConverter = () => {
             answer: 'The Storage category uses 1,024 for each step, so 1 KB is 1,024 bytes and 1 MB is 1,024 KB.',
           },
         ]}
-        vi={{
-          title: 'Công cụ chuyển đổi đơn vị và tiền tệ',
-          summary: 'Chuyển đổi đơn vị online gồm 8 nhóm: độ dài, khối lượng, dung lượng lưu trữ, nhiệt độ, cỡ chữ (px sang rem), mã màu (HEX sang RGB), hệ cơ số (nhị phân sang thập phân) và tiền tệ theo tỷ giá cập nhật (ví dụ USD sang VND). Riêng tỷ giá cần có kết nối mạng.',
-          steps: [
-            'Chọn nhóm đơn vị ở phía trên rồi nhập giá trị cần đổi.',
-            'Chọn đơn vị From và To (có nút đảo chiều) rồi bấm Convert.',
-            'Bấm Copy để sao chép kết quả. Tỷ giá chỉ mang tính tham khảo.',
-          ],
-        }}
       />
     </div>
   );

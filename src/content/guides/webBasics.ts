@@ -109,14 +109,6 @@ Positive integer       ^[1-9]\\d*$`,
         ],
       },
     ],
-    vi: {
-      title: 'Bảng tra cứu biểu thức chính quy (regex) kèm ví dụ',
-      summary: [
-        'Regex được ghép từ vài thành phần: lớp ký tự (\\d, \\w, \\s, [abc]), neo (^, $, \\b), lượng từ (*, +, ?, {n,m}), nhóm (capturing, không bắt, có tên), lookahead và lookbehind, cùng các cờ g, i, m, s, u, y.',
-        'Lượng từ mặc định là tham lam; thêm ? để thành lười (lazy). Ví dụ <.+?> chỉ khớp thẻ mở đầu thay vì cả chuỗi.',
-        'Tránh lượng từ lồng nhau như (a+)+$ vì có thể gây backtracking thảm họa làm treo trang; dùng lớp ký tự cụ thể, neo mẫu và kiểm thử trên dữ liệu thực tế. Khi viết regex trong chuỗi, nhớ nhân đôi dấu gạch chéo ngược.',
-      ],
-    },
   },
   {
     slug: 'unix-timestamp-explained',
@@ -191,14 +183,6 @@ Positive integer       ^[1-9]\\d*$`,
         ],
       },
     ],
-    vi: {
-      title: 'Unix timestamp và múi giờ: hướng dẫn cho lập trình viên',
-      summary: [
-        'Unix timestamp là số giây kể từ 00:00:00 UTC ngày 01/01/1970; ví dụ 1700000000 là 22:13:20 UTC ngày 14/11/2023, tương ứng 05:13:20 ngày 15/11/2023 theo giờ Việt Nam (UTC+7). Số giây có 10 chữ số, mili giây có 13 chữ số; nhầm hai đơn vị này là lỗi phổ biến nhất.',
-        'Nên lưu và truyền thời gian theo UTC, chỉ đổi sang múi giờ địa phương khi hiển thị; dùng tên múi giờ như Asia/Ho_Chi_Minh thay vì độ lệch cố định, và dùng định dạng ISO 8601 có phần lệch giờ hoặc chữ Z khi trao đổi dạng văn bản.',
-        'Lỗi Year 2038 xảy ra với số nguyên 32 bit có dấu (tối đa 2.147.483.647, tức 03:14:07 UTC ngày 19/01/2038); hệ thống 64 bit hiện đại không bị ảnh hưởng.',
-      ],
-    },
   },
   {
     slug: 'css-units-px-rem-em',
@@ -265,14 +249,6 @@ Positive integer       ^[1-9]\\d*$`,
         ],
       },
     ],
-    vi: {
-      title: 'Đơn vị CSS: px, rem và em, khi nào dùng loại nào',
-      summary: [
-        'px là đơn vị tham chiếu cố định, không đổi khi người dùng tăng cỡ chữ mặc định; rem tính theo cỡ chữ của phần tử gốc html (mặc định 16px, nên 1rem = 16px); em tính theo cỡ chữ của chính phần tử, và có thể bị cộng dồn khi lồng nhau.',
-        'Công thức đổi: rem = px chia cho cỡ chữ gốc, ví dụ 24px = 1,5rem. Dùng rem cho cỡ chữ và khoảng cách cần co giãn theo chữ, em cho thành phần co giãn theo chữ của chính nó, px cho đường viền mảnh và bóng đổ.',
-        'Không đặt html { font-size: 10px } vì ghi đè lựa chọn của người dùng; line-height nên dùng số không đơn vị như 1.5 để co giãn theo cỡ chữ.',
-      ],
-    },
   },
   {
     slug: 'markdown-cheat-sheet',
@@ -404,13 +380,5 @@ flowchart LR
         ],
       },
     ],
-    vi: {
-      title: 'Bảng tra cứu Markdown: cú pháp, bảng, danh sách việc và sơ đồ',
-      summary: [
-        'Markdown là cách viết văn bản định dạng bằng ký hiệu đơn giản: # cho tiêu đề, ** cho chữ đậm, * hoặc _ cho chữ nghiêng, - hoặc số cho danh sách, [chữ](đường dẫn) cho liên kết và ba dấu huyền cho khối mã.',
-        'Phần mở rộng kiểu GitHub gồm bảng dùng dấu |, danh sách việc cần làm - [ ] và gạch ngang chữ ~~như thế này~~; nhiều trình xem còn vẽ sơ đồ Mermaid từ khối mã có ngôn ngữ mermaid.',
-        'Cú pháp có nhiều biến thể nên hãy xem trước nội dung đúng trên công cụ sẽ dùng để đăng; muốn hiển thị ký tự đặc biệt nguyên văn, thêm dấu gạch chéo ngược phía trước.',
-      ],
-    },
   },
 ];

@@ -124,20 +124,6 @@ const GuideArticle = () => {
             runs in your browser, free and with no sign-up.
           </p>
         </div>
-
-        <div
-          lang="vi"
-          className="space-y-3 border-t border-gray-200 pt-4 dark:border-gray-700"
-        >
-          <h2 className="text-base font-semibold text-gray-800 dark:text-white">
-            {guide.vi.title}
-          </h2>
-          <ul className={`list-disc ${listClass}`}>
-            {guide.vi.summary.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-        </div>
       </div>
 
       <section className="space-y-2">

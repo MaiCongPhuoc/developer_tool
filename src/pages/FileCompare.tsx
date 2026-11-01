@@ -361,15 +361,6 @@ const FileCompare = () => {
             answer: 'Red marks lines removed from the original and green marks lines added in the changed file. Inside a modified line, the words that differ are highlighted. If the files match, the tool says they are identical.',
           },
         ]}
-        vi={{
-          title: 'Công cụ so sánh file online',
-          summary: 'So sánh hai file văn bản online để tìm điểm khác biệt. Hỗ trợ các file như .txt, .json, .csv, .xml, mã nguồn và file cấu hình, mỗi file tối đa 10 MB. File được đọc ngay trên trình duyệt, không tải lên máy chủ.',
-          steps: [
-            'Kéo thả hoặc bấm chọn file gốc ở bên trái và file đã sửa ở bên phải.',
-            'Bấm Compare.',
-            'Xem điểm khác nhau theo từng dòng. Nếu hai file giống nhau, công cụ sẽ thông báo.',
-          ],
-        }}
       />
     </div>
   );

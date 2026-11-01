@@ -23,8 +23,6 @@ export interface Guide {
   tool: { path: string; label: string };
   intro: string;
   sections: GuideSection[];
-  // Tóm tắt tiếng Việt (nội dung thật, hiển thị công khai).
-  vi: { title: string; summary: string[] };
 }
 
 export const GUIDES_PUBLISHED = '2026-11-01';

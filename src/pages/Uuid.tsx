@@ -230,15 +230,6 @@ const Uuid = () => {
             answer: 'No. A UUID is an identifier, not a secret. Use the Password Generator for passwords.',
           },
         ]}
-        vi={{
-          title: 'Công cụ tạo UUID / GUID online',
-          summary: 'Công cụ tạo UUID (GUID) phiên bản 4 ngẫu nhiên. Bạn có thể tạo một hoặc tối đa 1000 UUID cùng lúc, với tùy chọn viết hoa, bỏ dấu gạch ngang hoặc thêm dấu ngoặc nhọn.',
-          steps: [
-            'Nhập số lượng UUID cần tạo.',
-            'Chọn định dạng (Uppercase, Hyphens, Braces) rồi bấm Generate.',
-            'Bấm Copy để sao chép từng UUID hoặc Copy All để sao chép tất cả.',
-          ],
-        }}
       />
     </div>
   );

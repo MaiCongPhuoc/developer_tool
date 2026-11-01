@@ -215,15 +215,6 @@ const QrCode = () => {
             answer: 'It uses the medium error-correction level, which can recover from roughly 15 percent of the code being damaged or hidden.',
           },
         ]}
-        vi={{
-          title: 'Công cụ tạo mã QR online',
-          summary: 'Tạo mã QR (QR code) miễn phí từ đường link hoặc đoạn văn bản bất kỳ, sau đó tải về dạng PNG hoặc SVG. Mã QR được tạo ngay trên trình duyệt, không cần đăng ký.',
-          steps: [
-            'Nhập đường link (nên bắt đầu bằng https://) hoặc văn bản.',
-            'Bấm Generate.',
-            'Bấm Download PNG hoặc Download SVG để tải mã QR về.',
-          ],
-        }}
       />
     </div>
   );

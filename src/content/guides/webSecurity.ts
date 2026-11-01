@@ -83,14 +83,6 @@ Signature: HMAC-SHA256(
         ],
       },
     ],
-    vi: {
-      title: 'JWT là gì: cấu trúc, claim, chữ ký và các lỗi thường gặp',
-      summary: [
-        'JWT gồm ba phần header.payload.signature; header và payload chỉ được mã hóa Base64URL nên ai cũng đọc được, chữ ký (ví dụ HS256 dùng HMAC-SHA256 với một khóa bí mật) chỉ giúp phát hiện dữ liệu bị sửa.',
-        'Các claim chuẩn gồm iss, sub, aud, exp, nbf, iat, jti; thời gian tính bằng giây theo Unix timestamp. Giải mã không có nghĩa là hợp lệ: máy chủ phải xác minh chữ ký, thuật toán và kiểm tra exp, aud, iss.',
-        'Tránh lưu thông tin nhạy cảm trong payload, tránh tin thuật toán ghi trong token, dùng khóa HS256 ngẫu nhiên đủ dài (từ 32 byte) và đặt thời hạn ngắn kèm refresh token.',
-      ],
-    },
   },
   {
     slug: 'uuid-versions-explained',
@@ -161,14 +153,6 @@ Signature: HMAC-SHA256(
         ],
       },
     ],
-    vi: {
-      title: 'Các phiên bản UUID: v1, v4, v7 và nên dùng loại nào',
-      summary: [
-        'UUID là giá trị 128 bit viết dạng 8-4-4-4-12; GUID chỉ là tên gọi của Microsoft. Phiên bản 4 dùng 122 bit ngẫu nhiên, phiên bản 7 gồm dấu thời gian Unix (mili giây) cộng bit ngẫu nhiên nên có thể sắp xếp theo thời gian, phiên bản 1 có thể lộ thời điểm và máy tạo.',
-        'Xác suất trùng của UUID v4 cực thấp: cần khoảng 2,7 × 10^18 giá trị mới có 50% khả năng trùng một cặp; lỗi thực tế thường đến từ bộ sinh số ngẫu nhiên kém.',
-        'Làm khóa chính trong cơ sở dữ liệu lớn nên ưu tiên UUID v7 và lưu ở kiểu gọn (uuid hoặc BINARY(16)); UUID chỉ là định danh, không dùng làm mật khẩu hay khóa bí mật.',
-      ],
-    },
   },
   {
     slug: 'strong-password-guide',
@@ -247,13 +231,5 @@ Signature: HMAC-SHA256(
         ],
       },
     ],
-    vi: {
-      title: 'Thế nào là mật khẩu mạnh: độ dài, tính ngẫu nhiên và entropy',
-      summary: [
-        'Độ mạnh của mật khẩu đến từ độ dài và tính ngẫu nhiên: entropy của mật khẩu ngẫu nhiên bằng độ dài nhân log2 của số ký tự có thể dùng; 16 ký tự ngẫu nhiên từ bàn phím đầy đủ cho khoảng 105 bit, còn 8 chữ thường chỉ khoảng 38 bit.',
-        'Độ dài quan trọng hơn quy tắc phức tạp; mẫu dự đoán được như P@ssw0rd1! rất yếu. Cụm từ gồm 5–6 từ ngẫu nhiên là lựa chọn tốt cho mật khẩu bạn phải nhớ, như mật khẩu của trình quản lý mật khẩu.',
-        'Hãy dùng mật khẩu khác nhau cho từng tài khoản bằng trình quản lý mật khẩu, bật xác thực hai lớp hoặc passkey, và chỉ đổi mật khẩu khi có dấu hiệu bị lộ; NIST khuyến nghị ưu tiên độ dài và không ép đổi định kỳ.',
-      ],
-    },
   },
 ];

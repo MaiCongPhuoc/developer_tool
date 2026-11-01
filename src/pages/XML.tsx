@@ -172,15 +172,6 @@ const XML = () => {
             answer: 'Yes. Click a text value or an attribute value in the tree, type the new value and press Enter. Press Esc to cancel.',
           },
         ]}
-        vi={{
-          title: 'Công cụ định dạng XML online',
-          summary: 'Công cụ định dạng XML (format XML online) giúp làm đẹp các đoạn XML lộn xộn thành dạng thụt lề dễ đọc, đồng thời kiểm tra XML có hợp lệ (đúng cấu trúc) hay không. Mọi thao tác chạy ngay trên trình duyệt của bạn.',
-          steps: [
-            'Dán XML vào ô nhập.',
-            'Bấm Format XML để xem kết quả dạng cây có thể thu gọn.',
-            'Bấm vào nội dung hoặc giá trị thuộc tính để sửa, rồi bấm Copy Output để sao chép.',
-          ],
-        }}
       />
     </div>
   );

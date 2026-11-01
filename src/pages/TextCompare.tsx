@@ -163,15 +163,6 @@ const TextCompare = () => {
             answer: 'Yes. Use the File Compare tool to drop two text-based files.',
           },
         ]}
-        vi={{
-          title: 'Công cụ so sánh văn bản online',
-          summary: 'Công cụ so sánh văn bản (text compare, diff checker) giúp tìm điểm khác nhau giữa hai đoạn văn bản theo từng dòng, đánh dấu phần được thêm, bị xóa và bị sửa. Văn bản được xử lý ngay trên trình duyệt của bạn.',
-          steps: [
-            'Dán văn bản gốc vào ô Original text và văn bản đã sửa vào ô Changed text.',
-            'Bấm Compare.',
-            'Xem kết quả: màu đỏ là phần bị xóa, màu xanh lá là phần được thêm, các từ khác nhau trong cùng một dòng được tô sáng.',
-          ],
-        }}
       />
     </div>
   );

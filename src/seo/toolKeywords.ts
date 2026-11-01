@@ -14,9 +14,14 @@
 //                        cuối phần hướng dẫn (lấy RELATED_SEARCHES_COUNT cụm đầu
 //                        của enLong và viLong - nên xếp cụm quan trọng nhất lên đầu).
 //
+// Từ khóa bằng các ngôn ngữ KHÁC (es, pt, fr, de, it, id, ru, tr, ja, ko, zh)
+// nằm ở toolKeywordsIntl.ts, chỉ dùng cho JSON-LD (không hiển thị ra trang).
+//
 // LƯU Ý: chỉ ghi những cụm trang THẬT SỰ làm được. Google không dùng thẻ meta
 // "keywords"; từ khóa chỉ có tác dụng khi khớp với nội dung thật của trang, và
 // nhồi nhét cụm không liên quan có thể bị coi là spam.
+
+import { getIntlKeywords } from './toolKeywordsIntl';
 
 export interface ToolKeywordSet {
   enShort: string[];
@@ -650,12 +655,22 @@ export const toolKeywords: Record<string, ToolKeywordSet> = {
   },
 };
 
-// Toàn bộ từ khóa của 1 trang theo thứ tự: Anh ngắn, Anh dài, Việt ngắn, Việt dài
-// (không trùng lặp) - dùng cho JSON-LD trong routeMeta.ts.
+// Toàn bộ từ khóa của 1 trang theo thứ tự: Anh ngắn, Anh dài, Việt ngắn, Việt
+// dài, rồi các ngôn ngữ khác (toolKeywordsIntl.ts) - không trùng lặp. Dùng cho
+// JSON-LD trong routeMeta.ts. Từ khóa ngôn ngữ khác CHỈ nằm ở dữ liệu ẩn này,
+// không hiển thị ra trang.
 export const getAllKeywords = (path: string): string[] => {
   const k = toolKeywords[path];
   if (!k) return [];
-  return [...new Set([...k.enShort, ...k.enLong, ...k.viShort, ...k.viLong])];
+  return [
+    ...new Set([
+      ...k.enShort,
+      ...k.enLong,
+      ...k.viShort,
+      ...k.viLong,
+      ...getIntlKeywords(path),
+    ]),
+  ];
 };
 
 // Các cụm DÀI hiển thị công khai ở mục "Related searches" của trang.

@@ -394,15 +394,6 @@ const RegexTester = () => {
             answer: 'No. The test runs entirely in your browser.',
           },
         ]}
-        vi={{
-          title: 'Công cụ kiểm tra regex (biểu thức chính quy) online',
-          summary: 'Công cụ kiểm tra regex online giúp bạn thử biểu thức chính quy với văn bản của mình, tô sáng các kết quả khớp, xem các nhóm bắt (capture group) và đọc giải thích cú pháp. Công cụ dùng bộ máy regex JavaScript của trình duyệt.',
-          steps: [
-            'Nhập biểu thức vào ô Regular Expression Pattern và chọn các cờ cần dùng (g, i, m, s, u, y).',
-            'Dán văn bản cần kiểm tra vào ô Test String.',
-            'Bấm Test để xem kết quả khớp, danh sách Matches và phần Syntax Explanation.',
-          ],
-        }}
       />
     </div>
   );

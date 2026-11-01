@@ -544,15 +544,6 @@ const ImageCompressor = () => {
             answer: 'Normally not. The image is redrawn and encoded again in your browser, so extra data such as EXIF camera details is not carried over.',
           },
         ]}
-        vi={{
-          title: 'Công cụ nén ảnh online',
-          summary: 'Công cụ nén ảnh giúp giảm dung lượng ảnh JPG, PNG, WebP bằng cách chọn chất lượng và kích thước tối đa. Ảnh được xử lý ngay trên trình duyệt, không tải lên máy chủ, mỗi ảnh tối đa 20 MB.',
-          steps: [
-            'Kéo thả hoặc bấm chọn ảnh, rồi chọn định dạng đầu ra (JPEG, WebP hoặc PNG).',
-            'Chỉnh thanh Quality và nhập Max width/height (px) nếu muốn thu nhỏ ảnh.',
-            'Bấm Compress, so sánh ảnh gốc với ảnh đã nén rồi bấm Download.',
-          ],
-        }}
       />
     </div>
   );

@@ -16,14 +16,6 @@ type ToolGuideProps = {
   // cả người đọc lẫn công cụ tìm kiếm đều thấy. Chỉ ghi câu trả lời ĐÚNG với
   // cách công cụ thật sự hoạt động.
   faq?: { question: string; answer: string }[];
-  // Bản hướng dẫn nhanh bằng tiếng Việt (không bắt buộc) - để người dùng Việt
-  // Nam tìm thấy công cụ bằng từ khóa tiếng Việt. Là nội dung thật, hiển thị
-  // cho người dùng (không ẩn), đặt thuộc tính lang="vi" cho đúng ngôn ngữ.
-  vi?: {
-    title: string;
-    summary: string;
-    steps: string[];
-  };
 };
 
 // Khung "Hướng dẫn sử dụng" dùng chung cho mọi trang công cụ. Đặt ở CUỐI nội
@@ -39,7 +31,6 @@ const ToolGuide = ({
   steps,
   tips,
   faq,
-  vi,
 }: ToolGuideProps) => {
   // Các cụm tìm kiếm liên quan lấy theo đường dẫn trang từ seo/toolKeywords.ts
   // (sửa danh sách ở đó, không sửa ở đây).
@@ -190,24 +181,6 @@ const ToolGuide = ({
         </div>
       )}
 
-      {vi && (
-        <div
-          lang="vi"
-          className="space-y-3 border-t border-gray-200 pt-4 dark:border-gray-700"
-        >
-          <h3 className="text-base font-semibold text-gray-800 dark:text-white">
-            {vi.title}
-          </h3>
-          <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
-            {vi.summary}
-          </p>
-          <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-gray-600 marker:font-medium marker:text-gray-500 dark:text-gray-300 dark:marker:text-gray-400">
-            {vi.steps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-        </div>
-      )}
       {(related.en.length > 0 || related.vi.length > 0) && (
         <div className="space-y-1.5 border-t border-gray-200 pt-4 text-xs leading-relaxed text-gray-500 dark:border-gray-700 dark:text-gray-400">
           {related.en.length > 0 && (

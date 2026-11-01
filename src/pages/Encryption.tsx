@@ -431,15 +431,6 @@ const Encryption = () => {
             answer: 'The input must be exactly header.payload.signature with two dots. Paste only the token itself, without a prefix such as Bearer, and without extra characters that were copied by accident.',
           },
         ]}
-        vi={{
-          title: 'Công cụ giải mã và tạo JWT online',
-          summary: 'Công cụ giải mã JWT (decode JWT online) cho phép bạn xem header, payload, kiểm tra chữ ký HS256, HS384, HS512 và thời hạn của token, đồng thời tạo JWT mới. Token và secret chỉ được xử lý trên trình duyệt của bạn.',
-          steps: [
-            'Ở tab Decode, dán token, nhập secret nếu muốn kiểm tra chữ ký rồi bấm Decode JWT.',
-            'Ở tab Encode, sửa Header và Payload, chọn thuật toán, nhập Secret rồi bấm Generate JWT.',
-            'Lưu ý: JWT chỉ được mã hóa dạng encode chứ không phải mã hóa bảo mật, nên đừng đặt mật khẩu trong payload.',
-          ],
-        }}
       />
     </div>
   );

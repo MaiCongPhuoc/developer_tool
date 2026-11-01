@@ -174,15 +174,6 @@ const SQL = () => {
             answer: 'Subqueries and CASE expressions are indented one level deeper, and AND / OR conditions and long column lists are indented so the structure is easy to follow.',
           },
         ]}
-        vi={{
-          title: 'Công cụ định dạng SQL online',
-          summary: 'Công cụ format SQL online giúp làm đẹp câu lệnh SQL: viết hoa từ khóa, đưa mỗi mệnh đề như SELECT, FROM, WHERE xuống dòng riêng và thụt lề các điều kiện. Câu truy vấn của bạn không bị gửi lên máy chủ.',
-          steps: [
-            'Dán câu lệnh SQL vào ô nhập.',
-            'Bấm Format SQL.',
-            'Kiểm tra kết quả rồi bấm Copy Output để sao chép.',
-          ],
-        }}
       />
     </div>
   );

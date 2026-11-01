@@ -254,15 +254,6 @@ const MarkdownPreviewer = () => {
             answer: 'The text can be up to 100,000 characters, and lines with extremely deep nesting are rejected so that your browser does not freeze. A message appears in both cases.',
           },
         ]}
-        vi={{
-          title: 'Công cụ xem trước Markdown online',
-          summary: 'Trình soạn thảo Markdown online có xem trước trực tiếp, hỗ trợ bảng, danh sách việc cần làm, tô màu code và vẽ sơ đồ Mermaid. Văn bản của bạn không bị tải lên máy chủ.',
-          steps: [
-            'Nhập hoặc dán Markdown vào ô bên trái.',
-            'Dừng gõ một lúc, phần Preview sẽ tự cập nhật.',
-            'Bấm Copy Markdown hoặc Copy HTML để sao chép.',
-          ],
-        }}
       />
     </div>
   );

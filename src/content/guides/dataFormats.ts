@@ -88,14 +88,6 @@ export const dataFormatGuides: Guide[] = [
         ],
       },
     ],
-    vi: {
-      title: 'JSON và XML: khác nhau thế nào, nên dùng cái nào',
-      summary: [
-        'JSON gọn, dễ đọc và ánh xạ trực tiếp sang đối tượng, mảng, số, chuỗi của hầu hết ngôn ngữ lập trình nên phù hợp nhất cho API web và cấu hình đơn giản.',
-        'XML mạnh ở tài liệu có văn bản kèm định dạng, hỗ trợ namespace, schema (XSD), XSLT, XPath và có chú thích, nên phù hợp các chuẩn và hệ thống cũ như SOAP, RSS, SVG.',
-        'Khi chuyển đổi giữa hai định dạng cần quyết định cách xử lý thuộc tính, phần tử lặp (mảng) và kiểu dữ liệu, vì XML không có kiểu và không có mảng riêng.',
-      ],
-    },
   },
   {
     slug: 'fix-common-json-errors',
@@ -181,14 +173,6 @@ export const dataFormatGuides: Guide[] = [
         ],
       },
     ],
-    vi: {
-      title: 'Cách sửa các lỗi cú pháp JSON thường gặp',
-      summary: [
-        'Hầu hết lỗi JSON đến từ vài nguyên nhân lặp lại: dấu phẩy thừa ở cuối, dùng nháy đơn hoặc khóa không có nháy kép, có chú thích, và các giá trị JavaScript như undefined, NaN, Infinity.',
-        'Số không được có số 0 đứng đầu hoặc dạng hex; số nguyên lớn hơn 9007199254740991 có thể bị làm tròn nên hãy truyền dưới dạng chuỗi nếu cần chính xác tuyệt đối.',
-        'Trong chuỗi phải escape xuống dòng, tab, dấu gạch chéo ngược và nháy kép; văn bản sao chép có thể chứa nháy cong hoặc khoảng trắng không ngắt. Hãy dùng trình định dạng để thấy dòng lỗi và sửa từng lỗi một.',
-      ],
-    },
   },
   {
     slug: 'readable-sql-formatting',
@@ -278,14 +262,6 @@ END AS grade`,
         ],
       },
     ],
-    vi: {
-      title: 'Cách định dạng SQL để cả nhóm dễ đọc',
-      summary: [
-        'Định dạng không làm truy vấn chạy nhanh hơn nhưng giúp thấy rõ lỗi: viết hoa từ khóa, mỗi mệnh đề và mỗi cột một dòng, thụt lề điều kiện và truy vấn con, dùng JOIN ... ON và bí danh rõ ràng.',
-        'Nên tránh SELECT * trong mã thật, dùng CTE (WITH) cho truy vấn lồng nhau nhiều tầng và trình bày CASE theo từng dòng WHEN.',
-        'Lưu ý: LEFT JOIN mà lọc bảng bên phải trong WHERE sẽ biến thành INNER JOIN; hãy chuyển điều kiện đó sang ON nếu muốn giữ dòng không khớp. Hãy thống nhất một quy ước và dùng công cụ định dạng tự động.',
-      ],
-    },
   },
   {
     slug: 'how-text-diff-works',
@@ -345,13 +321,5 @@ END AS grade`,
         ],
       },
     ],
-    vi: {
-      title: 'Cách một công cụ so sánh văn bản (diff) hoạt động',
-      summary: [
-        'Diff tìm chuỗi con chung dài nhất giữa hai văn bản; phần nằm ngoài chuỗi chung được báo là thêm hoặc xóa. Nhiều công cụ, kể cả Git mặc định, dùng biến thể của thuật toán Myers (1986).',
-        'Có thể so sánh theo dòng, theo từ hoặc theo ký tự: dòng phù hợp cho mã nguồn, từ phù hợp cho văn xuôi, ký tự phù hợp cho chuỗi ngắn như mã băm.',
-        'Nếu cả tệp bị đánh dấu thay đổi, hãy kiểm tra ký tự xuống dòng (CRLF/LF) và khoảng trắng. Với JSON hay XML, hãy định dạng và sắp xếp khóa trước khi so sánh để thay đổi thật sự lộ ra rõ ràng.',
-      ],
-    },
   },
 ];

@@ -268,15 +268,6 @@ const TimeConverter = () => {
             answer: 'It is the same moment written in the standard international format, for example 2023-11-14T22:13:20.000Z.',
           },
         ]}
-        vi={{
-          title: 'Công cụ chuyển đổi timestamp và múi giờ',
-          summary: 'Công cụ đổi Unix timestamp (epoch time) sang ngày giờ dễ đọc theo múi giờ bạn chọn, kèm giá trị UTC chuẩn ISO 8601. Hỗ trợ cả timestamp tính bằng giây và mili giây.',
-          steps: [
-            'Nhập timestamp, hoặc bấm Now để lấy thời gian hiện tại.',
-            'Chọn đơn vị Seconds hoặc Milliseconds và chọn múi giờ.',
-            'Bấm Convert, rồi bấm Copy để sao chép kết quả.',
-          ],
-        }}
       />
     </div>
   );

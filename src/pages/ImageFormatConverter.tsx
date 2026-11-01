@@ -630,15 +630,6 @@ const ImageFormatConverter = () => {
             answer: 'PNG for sharp edges and transparency, WebP for the smallest files on websites, and JPEG for photos that must work everywhere.',
           },
         ]}
-        vi={{
-          title: 'Công cụ chuyển đổi định dạng ảnh',
-          summary: 'Chuyển đổi ảnh giữa JPG, PNG và WebP (ví dụ PNG sang JPG), kèm tùy chọn làm nền ảnh trong suốt theo màu nền. Công cụ không nhận diện chủ thể bằng AI nên phù hợp nhất với nền đơn sắc. Ảnh được xử lý trên trình duyệt, tối đa 20 MB.',
-          steps: [
-            'Kéo thả hoặc bấm chọn ảnh, rồi chọn định dạng ở mục Convert to.',
-            'Muốn xóa nền, bật Make background transparent (cần PNG hoặc WebP) và chọn màu nền cần xóa.',
-            'Bấm Convert, kiểm tra kết quả rồi bấm Download.',
-          ],
-        }}
       />
     </div>
   );

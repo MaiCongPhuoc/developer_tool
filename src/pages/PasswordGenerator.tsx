@@ -272,15 +272,6 @@ const PasswordGenerator = () => {
             answer: 'Some sites do not allow certain symbols. Untick Symbols and generate a longer password instead.',
           },
         ]}
-        vi={{
-          title: 'Công cụ tạo mật khẩu ngẫu nhiên',
-          summary: 'Công cụ tạo mật khẩu mạnh, ngẫu nhiên với độ dài từ 4 đến 128 ký tự và các loại ký tự tùy chọn (chữ hoa, chữ thường, số, ký hiệu), kèm thanh đánh giá độ mạnh. Mật khẩu được tạo ngay trên trình duyệt của bạn.',
-          steps: [
-            'Nhập độ dài mật khẩu và chọn các loại ký tự.',
-            'Bấm Generate để tạo mật khẩu.',
-            'Bấm Copy rồi lưu mật khẩu vào trình quản lý mật khẩu của bạn.',
-          ],
-        }}
       />
     </div>
   );

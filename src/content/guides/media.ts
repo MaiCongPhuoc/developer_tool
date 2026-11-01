@@ -75,14 +75,6 @@ export const mediaGuides: Guide[] = [
         ],
       },
     ],
-    vi: {
-      title: 'Cách nén ảnh cho web mà không giảm chất lượng đáng kể',
-      summary: [
-        'Hãy thu nhỏ kích thước trước, chọn đúng định dạng rồi mới chỉnh chất lượng: JPG cho ảnh chụp, PNG hoặc WebP lossless cho logo và ảnh chụp màn hình có chữ, WebP thường cho tệp nhỏ hơn JPG/PNG ở cùng chất lượng.',
-        'Chất lượng 70–85 thường nhìn giống ảnh gốc nhưng nhẹ hơn nhiều; trên 90 tăng dung lượng mà gần như không khác biệt, dưới 60 bắt đầu thấy vỡ khối. Luôn kiểm tra kết quả ở mức phóng 100%.',
-        'Không nén lại cùng một tệp nhiều lần, không phóng to ảnh nhỏ; nén trong trình duyệt giúp ảnh không bị tải lên máy chủ và thường xóa luôn dữ liệu EXIF như vị trí GPS.',
-      ],
-    },
   },
   {
     slug: 'qr-code-best-practices',
@@ -167,14 +159,6 @@ export const mediaGuides: Guide[] = [
         ],
       },
     ],
-    vi: {
-      title: 'Cách tạo mã QR quét tốt: kích thước, độ tương phản, sửa lỗi và kiểm tra',
-      summary: [
-        'Mã QR lưu dữ liệu trong lưới các ô; mức sửa lỗi L, M, Q, H khôi phục lần lượt khoảng 7%, 15%, 25%, 30% phần bị che. Dùng M cho đa số trường hợp và Q hoặc H nếu chèn logo hay in trên bề mặt dễ xước.',
-        'Giữ nội dung ngắn (liên kết ngắn, https), dùng ô tối trên nền sáng, chừa vùng trống ít nhất 4 ô xung quanh và in không nhỏ hơn khoảng 2 × 2 cm; khoảng cách quét tối đa khoảng 10 lần chiều rộng mã.',
-        'Dùng SVG để in và PNG cho màn hình; luôn thử quét trên ít nhất hai điện thoại, ở kích thước và vật liệu thật, và kiểm tra địa chỉ liên kết trước khi mở một mã QR lạ.',
-      ],
-    },
   },
   {
     slug: 'color-formats-hex-rgb-hsl',
@@ -253,13 +237,5 @@ hsl(11 100% 60%)`,
         ],
       },
     ],
-    vi: {
-      title: 'Định dạng màu HEX, RGB và HSL: giải thích và cách quy đổi',
-      summary: [
-        'RGB mô tả lượng đỏ, xanh lục, xanh lam từ 0 đến 255; HEX là cùng ba giá trị viết dạng thập lục phân, mỗi kênh hai chữ số (ví dụ #FF5733 = rgb(255, 87, 51)); HSL mô tả màu theo sắc độ (0–360°), độ bão hòa và độ sáng, nên rất tiện để tạo biến thể sáng hơn hoặc nhạt hơn.',
-        'Ví dụ #FF5733 tương ứng hsl(11, 100%, 60%). Dùng HEX để sao chép màu cố định, RGB khi tính toán trong mã, HSL khi cần làm màu hover hoặc xây dựng bảng màu.',
-        'Văn bản cần độ tương phản đủ: WCAG AA yêu cầu tối thiểu 4,5:1 cho chữ thường và 3:1 cho chữ lớn. Đừng chỉ dùng màu để biểu thị lỗi hay trạng thái, hãy thêm biểu tượng hoặc nhãn.',
-      ],
-    },
   },
 ];
