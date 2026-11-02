@@ -12,6 +12,17 @@ export interface GuideSection {
   code?: { label?: string; text: string };
 }
 
+// Nguồn tham khảo (tài liệu gốc: RFC, W3C, NIST, MDN...) - hiện ở cuối bài.
+export interface GuideSource {
+  label: string;
+  url: string;
+}
+
+export interface GuideFaq {
+  question: string;
+  answer: string;
+}
+
 export interface Guide {
   // Đường dẫn: /guides/<slug>
   slug: string;
@@ -23,6 +34,11 @@ export interface Guide {
   tool: { path: string; label: string };
   intro: string;
   sections: GuideSection[];
+  faq?: GuideFaq[];
+  sources?: GuideSource[];
 }
 
+// Ngày đăng đầu tiên của mục Guides và ngày cập nhật gần nhất (dùng cho
+// JSON-LD Article và dòng "Published / Updated" ở đầu bài).
 export const GUIDES_PUBLISHED = '2026-11-01';
+export const GUIDES_UPDATED = '2026-11-02';

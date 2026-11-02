@@ -48,7 +48,7 @@ export const toolInsights: Record<string, ToolInsight> = {
       `Very large integers (above 9007199254740991) may be rounded by programs that use ordinary JavaScript numbers. If exact digits matter, keep such IDs as strings.`,
       `Do not treat a valid document as a correct one. Syntax checking confirms the structure is well formed, not that the values make sense for your application.`,
     ],
-    relatedGuides: ['fix-common-json-errors', 'json-vs-xml'],
+    relatedGuides: ['fix-common-json-errors', 'json-vs-xml', 'http-status-codes-guide'],
   },
   '/xml': {
     background: [
@@ -124,7 +124,7 @@ exp 1700003600 = 2023-11-14 23:13:20 UTC`,
       `Using a short or guessable secret for HS256. Use at least 32 random bytes.`,
       `Forgetting that exp is in seconds. A value in milliseconds looks like a date far in the future.`,
     ],
-    relatedGuides: ['jwt-explained', 'unix-timestamp-explained'],
+    relatedGuides: ['jwt-explained', 'unix-timestamp-explained', 'base64-encoding-explained', 'hashing-vs-encoding-vs-encryption'],
   },
   '/dummy-text': {
     background: [
@@ -146,7 +146,7 @@ exp 1700003600 = 2023-11-14 23:13:20 UTC`,
       `Testing only with Latin letters. Names and text with accents (for example Vietnamese), long words or right-to-left scripts can break layouts that look fine with lorem ipsum.`,
       `Using text that is much shorter than the real content, which hides overflow problems.`,
     ],
-    relatedGuides: [],
+    relatedGuides: ['utf-8-and-unicode-explained'],
   },
   '/text-compare': {
     background: [
@@ -171,7 +171,7 @@ Changed part: 0 -> 30`,
       `Comparing structured data with a different order of keys. Sort or format JSON before you compare it.`,
       `Reading only the added lines. A changed line appears as one removal and one addition, so read them together.`,
     ],
-    relatedGuides: ['how-text-diff-works'],
+    relatedGuides: ['how-text-diff-works', 'utf-8-and-unicode-explained'],
   },
   '/file-compare': {
     background: [
@@ -188,7 +188,7 @@ Changed part: 0 -> 30`,
       `Differences in file encoding (for example UTF-8 versus an older encoding) can make accented characters look changed.`,
       `Very large files can be slow in a browser. Compare only the relevant section when possible.`,
     ],
-    relatedGuides: ['how-text-diff-works'],
+    relatedGuides: ['how-text-diff-works', 'csv-format-pitfalls'],
   },
   '/uuid': {
     background: [
@@ -234,7 +234,7 @@ Changed part: 0 -> 30`,
       `Choosing a length that is too short. Prefer 16 characters or more whenever the site allows.`,
       `Forgetting a second factor. Turn on two-factor authentication for important accounts.`,
     ],
-    relatedGuides: ['strong-password-guide'],
+    relatedGuides: ['strong-password-guide', 'hashing-vs-encoding-vs-encryption'],
   },
   '/qr-code': {
     background: [
@@ -257,7 +257,7 @@ Changed part: 0 -> 30`,
       `Encoding a very long link. Shorten it first.`,
       `Not testing the code on more than one phone before printing many copies.`,
     ],
-    relatedGuides: ['qr-code-best-practices'],
+    relatedGuides: ['qr-code-best-practices', 'url-encoding-explained'],
   },
   '/time-converter': {
     background: [

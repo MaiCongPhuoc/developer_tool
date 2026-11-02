@@ -1,5 +1,10 @@
 import { Link, useParams } from 'react-router';
-import { GUIDES_PUBLISHED, getGuide, guides } from '@/content/guides';
+import {
+  GUIDES_PUBLISHED,
+  GUIDES_UPDATED,
+  getGuide,
+  guides,
+} from '@/content/guides';
 import NotFound from './NotFound';
 
 const paragraphClass =
@@ -46,7 +51,7 @@ const GuideArticle = () => {
       </h1>
       <p className="text-xs text-gray-500 dark:text-gray-400">
         {guide.readingMinutes} min read · Published{' '}
-        {formatDate(GUIDES_PUBLISHED)}
+        {formatDate(GUIDES_PUBLISHED)} · Updated {formatDate(GUIDES_UPDATED)}
       </p>
 
       <div className="space-y-6 rounded-xl border border-gray-200 p-4 shadow-sm dark:border-gray-800 dark:bg-gray-800/60 sm:p-6">
@@ -111,6 +116,46 @@ const GuideArticle = () => {
             )}
           </section>
         ))}
+
+        {guide.faq && guide.faq.length > 0 && (
+          <section className="space-y-3">
+            <h2 className="scroll-mt-24 text-lg font-semibold text-gray-800 dark:text-white">
+              Frequently asked questions
+            </h2>
+            <dl className="space-y-4">
+              {guide.faq.map((item) => (
+                <div key={item.question} className="space-y-1">
+                  <dt className="text-sm font-medium text-gray-800 dark:text-gray-100 sm:text-base">
+                    {item.question}
+                  </dt>
+                  <dd className={paragraphClass}>{item.answer}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
+        {guide.sources && guide.sources.length > 0 && (
+          <section className="space-y-2">
+            <h2 className="scroll-mt-24 text-lg font-semibold text-gray-800 dark:text-white">
+              Sources and further reading
+            </h2>
+            <ul className={`list-disc ${listClass}`}>
+              {guide.sources.map((source) => (
+                <li key={source.url}>
+                  <a
+                    href={source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
+                  >
+                    {source.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/40">
           <p className="text-sm text-gray-700 dark:text-gray-200">

@@ -7,7 +7,11 @@
 //    đây mới là phần mà các crawler AI (không chạy JS) thực sự nhìn thấy.
 import { getAllKeywords } from './toolKeywords';
 // Dữ liệu thuần (không import React) nên prerender đọc được an toàn.
-import { GUIDES_PUBLISHED, guides } from '../content/guides';
+import {
+  GUIDES_PUBLISHED,
+  GUIDES_UPDATED,
+  guides,
+} from '../content/guides';
 
 export interface RouteMeta {
   path: string;
@@ -100,7 +104,7 @@ const guideEntries: Record<string, RouteMeta> = Object.fromEntries(
         url: `${SITE_URL}${path}`,
         mainEntityOfPage: `${SITE_URL}${path}`,
         datePublished: GUIDES_PUBLISHED,
-        dateModified: GUIDES_PUBLISHED,
+        dateModified: GUIDES_UPDATED,
         inLanguage: 'en',
         author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
         publisher: {
@@ -249,7 +253,7 @@ export const routeMeta: Record<string, RouteMeta> = {
   '/guides': pageEntry(
     '/guides',
     'Guides',
-    'In-depth developer guides: JSON vs XML, fixing JSON errors, regex cheat sheet, JWT, UUID versions, Unix timestamps, CSS units, SQL formatting, passwords, images and QR codes.',
+    'In-depth developer guides with sources: JSON vs XML, JSON errors, regex, JWT, UUIDs, Base64, URL encoding, hashing vs encryption, HTTP status codes, CSV, UTF-8, Unix timestamps, CSS units, SQL, passwords, images and QR codes.',
     'CollectionPage'
   ),
   ...guideEntries,

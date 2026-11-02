@@ -11,10 +11,12 @@ const Guides = () => (
     <div className="space-y-6 rounded-xl border border-gray-200 p-4 shadow-sm dark:border-gray-800 dark:bg-gray-800/60 sm:p-6">
       <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
         In-depth articles that explain the ideas behind the tools: how formats
-        such as JSON and XML differ, how JWTs and UUIDs work, how to write
-        better regular expressions and SQL, how to compress images, build QR
-        codes that scan and choose strong passwords. Each guide has a link to
-        the matching tool so you can try what you have just read.
+        such as JSON, XML and CSV differ, how JWTs, UUIDs, Base64 and hashes
+        work, how URL encoding and UTF-8 behave, what HTTP status codes mean,
+        how to write better regular expressions and SQL, compress images,
+        build QR codes that scan and choose strong passwords. Each guide lists
+        its sources and links to the matching tool so you can try what you
+        have just read.
       </p>
 
       <ul className="grid gap-4 md:grid-cols-2">
